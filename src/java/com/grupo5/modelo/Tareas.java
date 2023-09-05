@@ -4,10 +4,130 @@
  */
 package com.grupo5.modelo;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  *
  * @author brand
  */
 public class Tareas {
+    private int IdTarea;
+    private String Tarea;
+    private String Descripcion;
+    private Date FechaInicio;
+    private Date FechaFin;
+    private int Indice;
+    private int Predecesor;
+    private boolean Realizada;
+    private String UsuarioInserta;
+    private Date FechaInserta;
+    private String UsuarioActulaliza;
+    private Date FechaActuliza;
+    private List<Usuarios> UsuarioTarea;
+
+    public int getIdTarea() {
+        return IdTarea;
+    }
+
+    public void setIdTarea(int IdTarea) {
+        this.IdTarea = IdTarea;
+    }
+
+    public String getTarea() {
+        return Tarea;
+    }
+
+    public void setTarea(String Tarea) {
+        this.Tarea = Tarea;
+    }
+
+    public String getDescripcion() {
+        return Descripcion;
+    }
+
+    public void setDescripcion(String Descripcion) {
+        this.Descripcion = Descripcion;
+    }
+
+    public Date getFechaInicio() {
+        return FechaInicio;
+    }
+
+    public void setFechaInicio(Date FechaInicio) {
+        this.FechaInicio = FechaInicio;
+    }
+
+    public Date getFechaFin() {
+        return FechaFin;
+    }
+
+    public void setFechaFin(Date FechaFin) {
+        this.FechaFin = FechaFin;
+    }
+
+    public int getIndice() {
+        return Indice;
+    }
+
+    public void setIndice(int Indice) {
+        this.Indice = Indice;
+    }
+
+    public int getPredecesor() {
+        return Predecesor;
+    }
+
+    public void setPredecesor(int Predecesor) {
+        this.Predecesor = Predecesor;
+    }
+
+    public boolean isRealizada() {
+        return Realizada;
+    }
+
+    public void setRealizada(boolean Realizada) {
+        this.Realizada = Realizada;
+    }
+
+    public String getUsuarioInserta() {
+        return UsuarioInserta;
+    }
+
+    public void setUsuarioInserta(String UsuarioInserta) {
+        this.UsuarioInserta = UsuarioInserta;
+    }
+
+    public Date getFechaInserta() {
+        return FechaInserta;
+    }
+
+    public void setFechaInserta(Date FechaInserta) {
+        this.FechaInserta = FechaInserta;
+    }
+
+    public String getUsuarioActulaliza() {
+        return UsuarioActulaliza;
+    }
+
+    public void setUsuarioActulaliza(String UsuarioActulaliza) {
+        this.UsuarioActulaliza = UsuarioActulaliza;
+    }
+
+    public Date getFechaActuliza() {
+        return FechaActuliza;
+    }
+
+    public void setFechaActuliza(Date FechaActuliza) {
+        this.FechaActuliza = FechaActuliza;
+    }
+
+    public List<Usuarios> getUsuarioTarea() {
+        return UsuarioTarea;
+    }
+
+    public void setUsuarioTarea(List<Usuarios> UsuarioTarea) {
+        this.UsuarioTarea = UsuarioTarea;
+    }
     
 }

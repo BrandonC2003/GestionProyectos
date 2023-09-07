@@ -55,7 +55,6 @@
                         <i class="fa-solid fa-list-check"></i>
                         <span>Mis Tareas</span></a>
             </li>
-
             <!-- Divider -->
             <hr class="sidebar-divider">
 

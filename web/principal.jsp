@@ -29,7 +29,7 @@
             <ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
 
                 <!-- Sidebar - Brand -->
-                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="com.grupo5.vistas/inicio.jsp" target="#myFrame">
+                <a class="sidebar-brand d-flex align-items-center justify-content-center" href="PrincipalControlador?accion=inicio" target="myFrame">
                     <div class="sidebar-brand-icon rotate-n-15">
                         <i class="fa-solid fa-user"></i>
                     </div>
@@ -41,10 +41,10 @@
 
                 <!-- Nav Item - Dashboard -->
                 <li class="nav-item active">
-                    <a class="nav-link" href="index.html">
+                    <a class="nav-link" href="PrincipalControlador?accion=inicio" target="myFrame">
                         <i class="fa-solid fa-thumbtack"></i>
                         <span>Inicio</span></a>
-                    <a class="nav-link" href="index.html">
+                    <a class="nav-link" href="PrincipalControlador?accion=misTareas" target="myFrame">
                         <i class="fa-solid fa-list-check"></i>
                         <span>Mis Tareas</span></a>
                 </li>
@@ -53,32 +53,30 @@
 
                 <!-- Nav Item - Pages Collapse Menu -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="" data-toggle="collapse" data-target="#collapseTwo"
+                    <a class="nav-link collapsed" href=""  data-toggle="collapse" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                        aria-expanded="true" aria-controls="collapseTwo">
                         <i class="fa-solid fa-plus"></i>
                         <span>Proyectos</span>
                     </a>
-                    <!--<div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Custom Components:</h6>
-                            <a class="collapse-item" href="buttons.html">Buttons</a>
-                            <a class="collapse-item" href="cards.html">Cards</a>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                        <div class="bg-dark py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Proyectos:</h6>
+                            <a class="collapse-item text-white" href="PrincipalControlador?accion=proyectos" target="myFrame">Proyecto 1</a>
                         </div>
-                    </div>-->
                 </li>
 
                 <!-- Nav Item - Utilities Collapse Menu -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-bs-toggle="collapse" data-bs-target="#collapseUtilities"
                        aria-expanded="true" aria-controls="collapseUtilities">
                         <i class="fa-regular fa-folder"></i>
                         <span>Reportes</span>
                     </a>
                     <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                         data-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Custom Utilities:</h6>
-                            <a class="collapse-item" href="#">Todos los proyectos</a>
+                         data-bs-parent="#accordionSidebar">
+                        <div class="bg-dark py-2 collapse-inner rounded">
+                            <h6 class="collapse-header">Informe del proyecto:</h6>
+                            <a class="collapse-item text-white" href="PrincipalControlador?accion=informes" target="myFrame">Proyecto 1</a>
                         </div>
                     </div>
                 </li>
@@ -88,10 +86,9 @@
 
 
 
-                <!-- Nav Item - Pages Collapse Menu -->
+                <!-- Nav Item - Pages equipos -->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                       aria-expanded="true" aria-controls="collapsePages">
+                    <a class="nav-link collapsed" href="PrincipalControlador?accion=equipos" aria-controls="collapsePages" target="myFrame">
                         <i class="fa-solid fa-people-group"></i>
                         <span>Equipos</span>
                     </a>
@@ -186,7 +183,7 @@
 
                     <!-- Begin Page Content -->
                     <div class="container-fluid">
-                        <iframe id="miFrame" style="height:100%; width: 100%"></iframe>
+                        <iframe name="myFrame" style="height:100%; width: 100%"></iframe>
                     </div>
                     <!-- /.container-fluid -->
                 </div>

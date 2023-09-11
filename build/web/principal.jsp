@@ -182,22 +182,22 @@
                     <!-- End of Topbar -->
 
                     <!-- Begin Page Content -->
-                    <div class="container-fluid">
-                        <iframe name="myFrame" style="height:100%; width: 100%"></iframe>
+                    <div class="">
+                        <iframe name="myFrame" style="height:100vh; width: 100%;" frameborder="0" scrolling="no"></iframe>
                     </div>
                     <!-- /.container-fluid -->
                 </div>
                 <!-- Footer -->
-                <footer class="sticky-footer bg-white">
+<!--                <footer class="sticky-footer bg-white">
                     <div class="container my-auto">
                         <div class="copyright text-center my-auto">
                             <span>Copyright &copy; Programacion 4 </span>
                         </div>
                     </div>
                 </footer>
-                <!-- End of Footer -->
+                 End of Footer 
 
-            </div>
+            </div>-->
             <!-- End of Content Wrapper -->
 
         </div>
@@ -227,8 +227,7 @@
                 </div>
             </div>
         </div>
-
-        <script src="com.grupo5.utilidades/principal.js" type="text/javascript"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+        <script src="com.grupo5.utilidades/principal.js" type="text/javascript"></script>
     </body>
 </html>

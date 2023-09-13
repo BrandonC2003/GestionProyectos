@@ -21,6 +21,7 @@
 
         <!-- Agrega DataTables CSS -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+        <link href="com.grupo5.utilidades/principal.css" rel="stylesheet" type="text/css"/>
 
     </head>
     <body>
@@ -66,7 +67,7 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button class="btn-agregarTarea text-secondary">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
+                                <button type="button"class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
                             </div>
                         </div>
 
@@ -87,7 +88,7 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button class="btn-agregarTarea text-secondary">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
+                                <button class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
                             </div>
                         </div>
 
@@ -108,7 +109,7 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button class="btn-agregarTarea text-secondary">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
+                                <button class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
                             </div>
                         </div>
 
@@ -166,11 +167,62 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modales -->
+
+        <!-- Modal para guardar tareas -->
+        <div class="modal fade" id="agregarTareasModal" tabindex="-1" aria-labelledby="agregarTareasModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="agregarTareasModalLabel">Agregar tareas</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formAgregarTarea">
+                            <input type="reset" id="resetForm-Agregar" hidden>
+                            <div class="mb-3">
+                                <label for="tarea" class="form-label">Tarea</label>
+                                <input type="text" class="form-control" name="tarea" id="tarea">
+                            </div>
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descrpcion</label>
+                                <textarea class="form-control" name="descripcion" id="descripcion" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="fechaInicio" class="form-label">Fecha de inicio</label>
+                                <input type="date" class="form-control" name="fechaInicio" id="fechaInicio">
+                            </div>
+                            <div class="mb-3">
+                                <label for="fechaFin" class="form-label">Fecha de finalizacion</label>
+                                <input type="date" class="form-control" name="fechaFin" id="fechaFin">
+                            </div>
+                            <div class="mb-3">
+                                <label for="usuario" class="form-label">Usuario</label>
+                                <select class="form-select" name="usuario" name="usuario">
+                                    <option>Selecciona un usuario</option>
+                                    <option value="1">Usuario 1</option>
+                                    <option value="2">Usuario 2</option>
+                                    <option value="3">Usuario 3</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-guardar">Cerrar</button>
+                        <button type="submit" class="btn btn-dark" form="formAgregarTarea">Guardar Tarea</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal para modificar tareas -->
+
+
         <!-- Script para el diagrama de gantt -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        <script src="com.grupo5.utilidades/kanban.js" type="text/javascript"></script>
+        <script src="com.grupo5.utilidades/tableroK.js" type="text/javascript"></script>
         <script src="com.grupo5.utilidades/gantt.js" type="text/javascript"></script>
 
         <!-- Agrega DataTables JS -->

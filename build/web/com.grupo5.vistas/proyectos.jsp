@@ -16,8 +16,12 @@
         <!-- CDN para elaborar diagramas de gantt -->
         <link rel="stylesheet" href="https://cdn.dhtmlx.com/gantt/7.1/dhtmlxgantt.css">
         <script src="https://cdn.dhtmlx.com/gantt/7.1/dhtmlxgantt.js"></script>
-        
+
         <link href="com.grupo5.utilidades/estilosProyecto.css" rel="stylesheet" type="text/css"/>
+
+        <!-- Agrega DataTables CSS -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
     </head>
     <body>
         <div class="row">
@@ -114,12 +118,50 @@
 
                 <!--Vista de lista-->
                 <div class="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-list">
-                    Contenido de Lista
+                    <div class="container-lg">
+                        <div class="card">
+                            <div class="card-body">
+                                <table class="table" style="width: 100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Realizada</th>
+                                            <th>Tarea</th>
+                                            <th>Finalizacion</th>
+                                            <th>Usuario</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td>Tarea 3</td>
+                                            <td>30/9/2023</td>
+                                            <td>Usuario 1</td>
+                                            <td class="text-bg-danger">Por hacer</td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox"></td>
+                                            <td>Tarea 2</td>
+                                            <td>31/9/2023</td>
+                                            <td>Usuario 1</td>
+                                            <td class="text-bg-warning">En proceso</td>
+                                        </tr>
+                                        <tr>
+                                            <td><input type="checkbox" checked></td>
+                                            <td>Tarea 1</td>
+                                            <td>20/9/2023</td>
+                                            <td>Usuario 2</td>
+                                            <td class="text-bg-success">Realizado</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!--Vista de Gantt-->
                 <div class="tab-pane fade" id="gantt" role="tabpanel" aria-labelledby="gantt-list">
-                    <h1>diagrama de gantt</h1>
                     <div id="gantt_container" style="width: 100%; height: 400px;"></div>
                 </div>
             </div>
@@ -130,5 +172,9 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
         <script src="com.grupo5.utilidades/kanban.js" type="text/javascript"></script>
         <script src="com.grupo5.utilidades/gantt.js" type="text/javascript"></script>
+
+        <!-- Agrega DataTables JS -->
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+        <script src="com.grupo5.utilidades/dataTableProyectos.js" type="text/javascript"></script>
     </body>
 </html>

@@ -34,12 +34,12 @@
 #board {
   display: flex;
   align-items: flex-start;
-  justify-content: start;
+  justify-content: flex-start;
   gap: 16px;
   
   padding: 24px 32px;
   
-  overflow: auto;
+  overflow-x: scroll;
   height: 100%;
 }
 

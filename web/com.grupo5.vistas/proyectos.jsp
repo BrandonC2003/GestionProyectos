@@ -51,16 +51,30 @@
                 <div class="tab-pane fade show active" id="tablero" role="tabpanel" aria-labelledby="tablero-list">
                     <div id="board">
                         <div class="card ms-3 me-3 mt-4 swim-lane">
-                            <div class="card-header justify-content-center">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h3 class="card-title">Por Hacer</h3>
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                         aria-bs-labelledby="dropdownMenuLink">
+                                        <div class="dropdown-header">Acciones:</div>
+                                        <button class="dropdown-item" href="#">Agregar tarea</button>
+                                        <a class="dropdown-item" href="#">Editar estado</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="#">Eliminar</a>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="card-body justify-content-center swim-lane-content">
-                                <div class="card shadow-sm mb-2 task" draggable="true">
+                            <div class="card-body justify-content-center swim-lane-content" id="1">
+                                <div class="card shadow-sm mb-2 task" draggable="true" estado= "1">
                                     <div class="card-body justify-content-center task-content">
                                         Tarea 1
                                     </div>
                                 </div>
-                                <div class="card shadow-sm mb-2 task" draggable="true">
+                                <div class="card shadow-sm mb-2 task" draggable="true" estado="1">
                                     <div class="card-body justify-content-center task-content">
                                         Tarea 2
                                     </div>
@@ -75,13 +89,13 @@
                             <div class="card-header justify-content-center">
                                 <h3 class="card-title">En proceso</h3>
                             </div>
-                            <div class="card-body justify-content-center swim-lane-content">
-                                <div class="card task shadow-sm mb-2" draggable="true">
+                            <div class="card-body justify-content-center swim-lane-content" id="2">
+                                <div class="card task shadow-sm mb-2" draggable="true" estado="2">
                                     <div class="card-body justify-content-center task-content">
                                         Tarea 3
                                     </div>
                                 </div>
-                                <div class="card task shadow-sm mb-2" draggable="true">
+                                <div class="card task shadow-sm mb-2" draggable="true" estado="2">
                                     <div class="card-body justify-content-center task-content">
                                         Tarea 4
                                     </div>
@@ -96,13 +110,13 @@
                             <div class="card-header justify-content-center">
                                 <h3 class="card-title">Realizado</h3>
                             </div>
-                            <div class="card-body justify-content-center swim-lane-content">
-                                <div class="card task shadow-sm mb-2" draggable="true">
+                            <div class="card-body justify-content-center swim-lane-content" id="3">
+                                <div class="card task shadow-sm mb-2" draggable="true" estado="3">
                                     <div class="card-body justify-content-center task-content">
                                         Tarea 5
                                     </div>
                                 </div>
-                                <div class="card task shadow-sm mb-2" draggable="true">
+                                <div class="card task shadow-sm mb-2" draggable="true" estado="3">
                                     <div class="card-body justify-content-center task-content">
                                         Tarea 6
                                     </div>
@@ -183,24 +197,34 @@
                             <input type="reset" id="resetForm-Agregar" hidden>
                             <div class="mb-3">
                                 <label for="tarea" class="form-label">Tarea</label>
-                                <input type="text" class="form-control" name="tarea" id="tarea">
+                                <input type="text" class="form-control" name="tarea" id="tarea" required>
                             </div>
                             <div class="mb-3">
                                 <label for="descripcion" class="form-label">Descrpcion</label>
                                 <textarea class="form-control" name="descripcion" id="descripcion" rows="3"></textarea>
                             </div>
                             <div class="mb-3">
+                                <label for="estado" class="form-label">Estado</label>
+                                <select class="form-select" name="estado" id="estado">
+                                    <option value="0">Selecciona un estado</option>
+                                    <option value="1">Por hacer</option>
+                                    <option value="2">En proceso</option>
+                                    <option value="3">Realizado</option>
+                                </select>
+                                <span class="text-danger" id="validacion-estado"></span>
+                            </div>
+                            <div class="mb-3">
                                 <label for="fechaInicio" class="form-label">Fecha de inicio</label>
-                                <input type="date" class="form-control" name="fechaInicio" id="fechaInicio">
+                                <input type="date" class="form-control" name="fechaInicio" id="fechaInicio" required>
                             </div>
                             <div class="mb-3">
                                 <label for="fechaFin" class="form-label">Fecha de finalizacion</label>
-                                <input type="date" class="form-control" name="fechaFin" id="fechaFin">
+                                <input type="date" class="form-control" name="fechaFin" id="fechaFin" required>
                             </div>
                             <div class="mb-3">
                                 <label for="usuario" class="form-label">Usuario</label>
-                                <select class="form-select" name="usuario" name="usuario">
-                                    <option>Selecciona un usuario</option>
+                                <select class="form-select" name="usuario" id="usuario">
+                                    <option value="0">Selecciona un usuario</option>
                                     <option value="1">Usuario 1</option>
                                     <option value="2">Usuario 2</option>
                                     <option value="3">Usuario 3</option>
@@ -222,7 +246,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        <script src="com.grupo5.utilidades/tableroK.js" type="text/javascript"></script>
+        <script src="com.grupo5.utilidades/tableroKanban.js" type="text/javascript"></script>
         <script src="com.grupo5.utilidades/gantt.js" type="text/javascript"></script>
 
         <!-- Agrega DataTables JS -->

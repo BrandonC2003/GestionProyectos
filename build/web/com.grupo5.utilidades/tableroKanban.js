@@ -13,6 +13,16 @@ $(document).ready(function () {
             stop: function (event, ui) {
                 ui.item.removeClass("is-dragging");
             },
+            receive: function(event,ui){
+                var estado = $(this).attr("id");
+                
+                //colocamos el estado al que se mueve
+                ui.item.attr("estado",estado);
+                
+                //TODO:
+                //actualizar el tablero  // <------- esto voy a hacer
+                
+            },
             items: ">div"
         });
     }
@@ -105,16 +115,53 @@ $(document).ready(function () {
         e.preventDefault();
         var formData = $(this).serializeArray();
         var tarea = formData.find(item => item.name === 'tarea');
-        $("#cerrarModal-guardar").click();
-        $("#resetForm-Agregar").click();
-        var tarea = `<div class="card shadow-sm mb-2 task" draggable="true">
-    <div class="card-body justify-content-center task-content">
-        ${tarea.value}
-    </div>
-    </div>`;
-        var ultimaTarea = $("#board .swim-lane").eq(0).find('.swim-lane-content .task:last');
-        if (ultimaTarea.length !== 0) {
-            ultimaTarea.after(tarea);
+        var estado = formData.find(item => item.name === 'estado');
+        var usuario = formData.find(item => item.name === 'usuario');
+        var fechaFin = formData.find(item => item.name === 'fechaFin');
+        var textEstado = $('#estado').find('option:selected').text();
+        console.log(estado.value);
+        if (parseInt(estado.value) !== 0) {
+            $("#cerrarModal-guardar").click();
+            $("#resetForm-Agregar").click();
+            var tareaTablero = `<div class="card shadow-sm mb-2 task" draggable="true" estado = "${estado.value}">
+            <div class="card-body justify-content-center task-content">
+                ${tarea.value}j
+            </div>
+            </div>`;
+            var tareaList = `<tr>
+                            <td><input type="checkbox"></td>
+                            <td>${tarea.value}</td>
+                            <td>${fechaFin.value}</td>
+                            <td></td>
+                            <td class="${getColorEstado(estado.value)}">${textEstado}</td>
+                            </tr>`;
+            var ultimaTarea = $(`#${estado.value}`).eq(0).find('.swim-lane-content .task:last');
+            var tablero = $('.table tbody').eq(-1);
+            if (ultimaTarea.length !== 0) {
+                ultimaTarea.after(tareaTablero);
+            }
+            tablero.after(tareaList);
+            $(".table").DataTable();
+            limpiarValidaciones();
+        }else{
+            $("#validacion-estado").text("Tienes que seleccionar un estado.");
         }
+
     });
 });
+
+function limpiarValidaciones(){
+    $("#validacion-estado").text("");
+}
+
+function getColorEstado(estado){
+    if(estado==1){
+        return "text-bg-danger";
+    }
+    if(estado==2){
+        return "text-bg-warning";
+    }
+    if(estado==3){
+        return "text-bg-success";
+    }
+}

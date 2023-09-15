@@ -13,15 +13,15 @@ $(document).ready(function () {
             stop: function (event, ui) {
                 ui.item.removeClass("is-dragging");
             },
-            receive: function(event,ui){
+            receive: function (event, ui) {
                 var estado = $(this).attr("id");
-                
+
                 //colocamos el estado al que se mueve
-                ui.item.attr("estado",estado);
-                
+                ui.item.attr("estado", estado);
+
                 //TODO:
                 //actualizar el tablero  // <------- esto voy a hacer
-                
+
             },
             items: ">div"
         });
@@ -33,8 +33,22 @@ $(document).ready(function () {
     $("#btn-agregarEstado").click(function () {
         var penultimoItem = $("#board .swim-lane").eq(-1);
         let estado = `<div class="card ms-3 me-3 mt-4 swim-lane">
-    <div class="card-header justify-content-center">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
         <h3 class="card-title">Nuevo Estado</h3>
+        <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                 aria-bs-labelledby="dropdownMenuLink">
+                <div class="dropdown-header">Acciones:</div>
+                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
+                <button class="dropdown-item" href="#">Editar estado</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
+            </div>
+        </div>
     </div>
     <div class="card-body justify-content-center swim-lane-content">
         
@@ -88,26 +102,16 @@ $(document).ready(function () {
         }
     });
 
-
-    //Metodos para permitir editar el texto dentro de las tareas
-    $(document).on('dblclick', '.task-content', function () {
-        $(this).attr("contenteditable", true);
-        textAnterior = $(this).text();
-        $(this).text("");
-        $(this).focus();
+    //Mostrar el modal cuando se de click sobre la tarea.
+    $(document).on('click', '.task-content', function () {
+        $('#agregarTareasModal').modal('show');
     });
 
-    $(document).on('blur', '.task-content', function () {
-        if ($(this).text() === "") {
-            $(this).text(textAnterior);
-        }
-        $(this).attr("contenteditable", false);
-    });
 
-    $(document).on('keydown', '.task-content', function (e) {
-        if (e.which === 13) {
-            $(this).blur();
-        }
+    //evento para controlar las acciones al cerrar el modal para guardar tarea
+    $(document).on('click', '#cerrarModal-guardar', function () {
+        $("#resetForm-Agregar").click();
+        limpiarValidaciones();
     });
 
     //Evento cuando se envia el formulario para agregar tareas
@@ -122,7 +126,6 @@ $(document).ready(function () {
         console.log(estado.value);
         if (parseInt(estado.value) !== 0) {
             $("#cerrarModal-guardar").click();
-            $("#resetForm-Agregar").click();
             var tareaTablero = `<div class="card shadow-sm mb-2 task" draggable="true" estado = "${estado.value}">
             <div class="card-body justify-content-center task-content">
                 ${tarea.value}j
@@ -135,33 +138,49 @@ $(document).ready(function () {
                             <td></td>
                             <td class="${getColorEstado(estado.value)}">${textEstado}</td>
                             </tr>`;
-            var ultimaTarea = $(`#${estado.value}`).eq(0).find('.swim-lane-content .task:last');
+            var ultimaTarea = $(`#${estado.value}`).find('.task:last');
             var tablero = $('.table tbody').eq(-1);
-            if (ultimaTarea.length !== 0) {
-                ultimaTarea.after(tareaTablero);
-            }
+            ultimaTarea.after(tareaTablero);
             tablero.after(tareaList);
             $(".table").DataTable();
-            limpiarValidaciones();
-        }else{
+        } else {
             $("#validacion-estado").text("Tienes que seleccionar un estado.");
         }
 
     });
+
+    //evento click para eliminar un estado.
+    $(document).on("click", '.btn-eliminar-estado', function () {
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Una vez eliminado, no podrás recuperar este estado ni las tareas asociadas a él.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, eliminarlo",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $(this).closest(".swim-lane").remove();
+                Swal.fire("Eliminado", "El estado ha sido eliminado correctamente.", "success");
+            }
+        });
+    });
 });
 
-function limpiarValidaciones(){
+function limpiarValidaciones() {
     $("#validacion-estado").text("");
 }
 
-function getColorEstado(estado){
-    if(estado==1){
+function getColorEstado(estado) {
+    if (estado == 1) {
         return "text-bg-danger";
     }
-    if(estado==2){
+    if (estado == 2) {
         return "text-bg-warning";
     }
-    if(estado==3){
+    if (estado == 3) {
         return "text-bg-success";
     }
 }

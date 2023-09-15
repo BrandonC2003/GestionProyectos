@@ -12,17 +12,19 @@
         <title>Proyectos</title>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-
+        
         <!-- CDN para elaborar diagramas de gantt -->
         <link rel="stylesheet" href="https://cdn.dhtmlx.com/gantt/7.1/dhtmlxgantt.css">
         <script src="https://cdn.dhtmlx.com/gantt/7.1/dhtmlxgantt.js"></script>
 
         <link href="com.grupo5.utilidades/estilosProyecto.css" rel="stylesheet" type="text/css"/>
-
+  
         <!-- Agrega DataTables CSS -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
         <link href="com.grupo5.utilidades/principal.css" rel="stylesheet" type="text/css"/>
-
+        
+        <!-- agregar sweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
         <div class="row">
@@ -61,10 +63,10 @@
                                     <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                          aria-bs-labelledby="dropdownMenuLink">
                                         <div class="dropdown-header">Acciones:</div>
-                                        <button class="dropdown-item" href="#">Agregar tarea</button>
-                                        <a class="dropdown-item" href="#">Editar estado</a>
+                                        <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
+                                        <button class="dropdown-item" href="#">Editar estado</button>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Eliminar</a>
+                                        <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
                                     </div>
                                 </div>
                             </div>
@@ -86,8 +88,22 @@
                         </div>
 
                         <div class="card ms-3 me-3 mt-4 swim-lane">
-                            <div class="card-header justify-content-center">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h3 class="card-title">En proceso</h3>
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                         aria-bs-labelledby="dropdownMenuLink">
+                                        <div class="dropdown-header">Acciones:</div>
+                                        <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
+                                        <button class="dropdown-item" href="#">Editar estado</button>
+                                        <div class="dropdown-divider"></div>
+                                        <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body justify-content-center swim-lane-content" id="2">
                                 <div class="card task shadow-sm mb-2" draggable="true" estado="2">
@@ -107,8 +123,22 @@
                         </div>
 
                         <div class="card ms-3 me-3 mt-4 swim-lane">
-                            <div class="card-header justify-content-center">
+                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h3 class="card-title">Realizado</h3>
+                                <div class="dropdown no-arrow">
+                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                         aria-bs-labelledby="dropdownMenuLink">
+                                        <div class="dropdown-header">Acciones:</div>
+                                        <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
+                                        <button class="dropdown-item" href="#">Editar estado</button>
+                                        <div class="dropdown-divider"></div>
+                                        <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="card-body justify-content-center swim-lane-content" id="3">
                                 <div class="card task shadow-sm mb-2" draggable="true" estado="3">
@@ -221,15 +251,6 @@
                                 <label for="fechaFin" class="form-label">Fecha de finalizacion</label>
                                 <input type="date" class="form-control" name="fechaFin" id="fechaFin" required>
                             </div>
-                            <div class="mb-3">
-                                <label for="usuario" class="form-label">Usuario</label>
-                                <select class="form-select" name="usuario" id="usuario">
-                                    <option value="0">Selecciona un usuario</option>
-                                    <option value="1">Usuario 1</option>
-                                    <option value="2">Usuario 2</option>
-                                    <option value="3">Usuario 3</option>
-                                </select>
-                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -246,7 +267,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        <script src="com.grupo5.utilidades/tableroKanban.js" type="text/javascript"></script>
+        <script src="com.grupo5.utilidades/tabler.js" type="text/javascript"></script>
         <script src="com.grupo5.utilidades/gantt.js" type="text/javascript"></script>
 
         <!-- Agrega DataTables JS -->

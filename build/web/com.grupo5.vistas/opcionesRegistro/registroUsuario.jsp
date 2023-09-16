@@ -3,7 +3,6 @@
     Created on : 5 sep. 2023, 09:29:52
     Author     : brand
 --%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,7 +73,7 @@
                                 </a>
                             <hr>
                             <div class="text-center">
-                                <a class="small" href="forgot-password.html">Olvido su contaseña?</a>
+                                <a class="small" href="http://localhost:8080/GestionProyectos/com.grupo5.vistas/opcionesRegistro/recuperarCuenta.jsp">Olvido su contaseña?</a>
                             </div>
                             <div class="text-center">
                                 <a class="small" href="http://localhost:8080/GestionProyectos/">Si ya tiene cuenta inicie aqui!</a>

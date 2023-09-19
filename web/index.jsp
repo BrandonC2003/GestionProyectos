@@ -83,9 +83,7 @@ El index será el login
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
 
     </div>

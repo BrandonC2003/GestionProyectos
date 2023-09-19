@@ -3,10 +3,17 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/C:/Users/Cristian%20De%20Paz/Documents/NetBeansProjects/GestionProyectos/web/com.grupo5.vistas/proyectos.jsp</file>
             <file>file:/C:/Users/Cristian%20De%20Paz/Documents/NetBeansProjects/GestionProyectos/web/com.grupo5.vistas/inicio.jsp</file>
             <file>file:/C:/Users/Cristian%20De%20Paz/Documents/NetBeansProjects/GestionProyectos/web/principal.jsp</file>
             <file>file:/C:/Users/Cristian%20De%20Paz/Documents/NetBeansProjects/GestionProyectos/web/index.jsp</file>
+=======
+            <file>file:/C:/Users/elman/Desktop/Ciclo%2003%20-%202023/PROGRAMACION%20IV/GestionProyectos/web/principal.jsp</file>
+            <file>file:/C:/Users/elman/Desktop/Ciclo%2003%20-%202023/PROGRAMACION%20IV/GestionProyectos/build/web/com.grupo5.vistas/equipos.jsp</file>
+            <file>file:/C:/Users/elman/Desktop/Ciclo%2003%20-%202023/PROGRAMACION%20IV/GestionProyectos/web/com.grupo5.vistas/proyectos.jsp</file>
+            <file>file:/C:/Users/elman/Desktop/Ciclo%2003%20-%202023/PROGRAMACION%20IV/GestionProyectos/web/com.grupo5.vistas/informes.jsp</file>
+>>>>>>> 698965e4574ec583d5757b2b11418cd488432411
         </group>
     </open-files>
 </project-private>

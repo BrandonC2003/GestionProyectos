@@ -183,4 +183,5 @@ function getColorEstado(estado) {
     if (estado == 3) {
         return "text-bg-success";
     }
+
 }

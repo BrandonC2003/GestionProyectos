@@ -12,17 +12,17 @@
         <title>Proyectos</title>
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-        
+
         <!-- CDN para elaborar diagramas de gantt -->
         <link rel="stylesheet" href="https://cdn.dhtmlx.com/gantt/7.1/dhtmlxgantt.css">
         <script src="https://cdn.dhtmlx.com/gantt/7.1/dhtmlxgantt.js"></script>
 
         <link href="com.grupo5.utilidades/estilosProyecto.css" rel="stylesheet" type="text/css"/>
-  
+
         <!-- Agrega DataTables CSS -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
         <link href="com.grupo5.utilidades/principal.css" rel="stylesheet" type="text/css"/>
-        
+
         <!-- agregar sweetAlert2 -->
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
@@ -118,7 +118,7 @@
                                 </div>
                             </div>
                             <div class="card-footer">
-                                <button class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
+                                <button class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#actualizarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
                             </div>
                         </div>
 
@@ -251,6 +251,13 @@
                                 <label for="fechaFin" class="form-label">Fecha de finalizacion</label>
                                 <input type="date" class="form-control" name="fechaFin" id="fechaFin" required>
                             </div>
+                            <div class="mb-3">
+                                <label for="miembros" class="form-label">Miembros</label>
+                                <a class="btn btn-secondary btn-circle btn-popover-agregarUsuario" data-bs-toggle="popover"><i class="fa-solid fa-plus"></i></a>
+                                <div class="row content-miembros">
+
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -260,8 +267,74 @@
                 </div>
             </div>
         </div>
-        <!-- Modal para modificar tareas -->
+        <!-- Modal para ver detalles y modificar tareas -->
+        <div class="modal fade" id="actualizarTareasModal" tabindex="-1" aria-labelledby="actualizarTareasModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="actuliazarTareasModalLabel">Agregar tareas</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formAgregarTarea">
+                            <input type="reset" id="resetForm-Agregar" hidden>
+                            <div class="mb-3">
+                                <label for="tarea" class="form-label">Tarea</label>
+                                <input type="text" class="form-control" name="tarea" id="tarea" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="descripcion" class="form-label">Descrpcion</label>
+                                <textarea class="form-control" name="descripcion" id="descripcion" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="estado" class="form-label">Estado</label>
+                                <select class="form-select" name="estado" id="estado">
+                                    <option value="0">Selecciona un estado</option>
+                                    <option value="1">Por hacer</option>
+                                    <option value="2">En proceso</option>
+                                    <option value="3">Realizado</option>
+                                </select>
+                                <span class="text-danger" id="validacion-estado"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label for="fechaInicio" class="form-label">Fecha de inicio</label>
+                                <input type="date" class="form-control" name="fechaInicio" id="fechaInicio" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="fechaFin" class="form-label">Fecha de finalizacion</label>
+                                <input type="date" class="form-control" name="fechaFin" id="fechaFin" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-guardar">Cerrar</button>
+                        <button type="submit" class="btn btn-dark" form="formAgregarTarea">Guardar Tarea</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+
+
+        <div id="contenido-popover" style="display:none;">
+            <h3 id="titulo">Agregar miembros</h3>
+            <div id="contenido">
+                <p>Miembros</p>
+                <ul>
+                    <li class = "usuario-select" role="button">Usuario 1</li>
+                    <li class = "usuario-select" role="button">Usuario 2</li>
+                    <li class = "usuario-select" role="button">Usuario 3</li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="contenido-popover" style="display:none;">
+            <h3 id="titulo-usuario">Usuario</h3>
+            <div id="contenido-usuario">
+                <p>Detalles del usuario</p>
+                <a class="btn btn-danger btn-quitarUsuario">Quitar</a>
+            </div>
+        </div>
 
         <!-- Script para el diagrama de gantt -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
@@ -273,5 +346,62 @@
         <!-- Agrega DataTables JS -->
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
         <script src="com.grupo5.utilidades/dataTableProyectos.js" type="text/javascript"></script>
+        <script>
+            //crear el boton de agregar usuario en popover
+            const botonPopover = $(".btn-popover-agregarUsuario");
+            const titulo = $("#titulo").text();
+            const contenido = $('#contenido').html();
+            let config = {
+                title: titulo,
+                content: contenido,
+                html: true
+            };
+
+            const popover = new bootstrap.Popover(botonPopover, config);
+
+            //evento click para agregar un usario al proyecto
+            $(document).on("click", ".usuario-select", function (e) {
+                let usuario = $(this).text();
+
+                let btnUsuario = `<a class="btn btn-success btn-circle btn-detalleUsuario" data-bs-toggle="popover">` + usuario[0] + usuario[usuario.length - 1] + `</a>`;
+
+                $(".content-miembros").append(btnUsuario);
+                crearPopoverUsuario();
+            });
+
+            //crear popover en los usuarios agregados al proyecto
+            function crearPopoverUsuario() {
+                $(".btn-detalleUsuario").each(function () {
+                    const botonPopover_usuario = $(this);
+                    const titulo_usuario = $("#titulo-usuario").text();
+                    const contenido_usuario = $('#contenido-usuario').html();
+                    console.log(contenido_usuario);
+                    let config_usuario = {
+                        title: titulo_usuario,
+                        content: contenido_usuario,
+                        html: true
+                    };
+
+                    const popover = new bootstrap.Popover(botonPopover_usuario, config_usuario);
+                });
+            }
+
+            //gestion de evento para quitar usuario
+            $(document).on('click', '.btn-quitarUsuario', function () {
+                let btnUsuario = $(this).closest('.btn-detalleUsuario');
+                console.log(btnUsuario);
+                btnUsuario.remove();
+            });
+            // Agregar un controlador de eventos de clic al documento
+            $(document).on('click', function (e) {
+                // Verificar si se hizo clic en un popover o en su contenido
+                var popover = $(e.target).closest('[data-bs-toggle="popover"]');
+
+                // Si no se hizo clic en un popover, cerrar todos los popovers abiertos
+                if (!popover.length) {
+                    $('[data-bs-toggle="popover"]').popover('hide');
+                }
+            });
+        </script>
     </body>
 </html>

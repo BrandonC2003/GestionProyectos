@@ -13,6 +13,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Mis Tareas</title>  
+         
+        <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet"> 
+        
     </head>
     <body>
         <h1>Mis Tareas</h1>
@@ -216,23 +225,33 @@
                                                                 <img alt="avatar" src="images/avatar/avatar-3.jpg" class="rounded-circle"/>
                                                             </span>
                                                             <span class="avatar avatar-sm avatar-primary">
-        
-                        </div>
-                    <div class="px-6 border-top py-3">
-                        <div class="row">
-                            <div class="text-center text-sm-start mb-2 mb-sm-0 col-sm-6">
-                                <p class="m-0">
-                                    Made by <a href="https://codescandy.com/" target="_blank">Codescandy</a>
-                                </p>
-                            </div>
-                            <div class="text-center text-sm-end col-sm-6">
-                                <p class="m-0">
-                                    Destributed by <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
-                                </p>
-                            </div>
-                        </div>
+                                                              </span>
+                                                        </div>
+                                                    </td> 
+                                                </tr>
+                                            
+                          
+                                                <div class="px-6 border-top py-3">
+                                                    <div class="row">
+                                                        <div class="text-center text-sm-start mb-2 mb-sm-0 col-sm-6">
+                                                            <p class="m-0">
+                                                                Made by <a href="https://codescandy.com/" target="_blank">Codescandy</a>
+                                                            </p>
+                                                        </div>
+                                                        <div class="text-center text-sm-end col-sm-6">
+                                                            <p class="m-0">
+                                                                Destributed by <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>                       
+                            </div>                            
+                        </div>                                
                     </div>
-                </div>
-
+        </div>   
     </body>
 </html>

@@ -64,7 +64,7 @@
                                          aria-bs-labelledby="dropdownMenuLink">
                                         <div class="dropdown-header">Acciones:</div>
                                         <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
-                                        <button class="dropdown-item" href="#">Editar estado</button>
+                                        <button class="dropdown-item editarEstado">Editar estado</button>
                                         <div class="dropdown-divider"></div>
                                         <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
                                     </div>
@@ -99,7 +99,7 @@
                                          aria-bs-labelledby="dropdownMenuLink">
                                         <div class="dropdown-header">Acciones:</div>
                                         <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
-                                        <button class="dropdown-item" href="#">Editar estado</button>
+                                        <button class="dropdown-item editarEstado">Editar estado</button>
                                         <div class="dropdown-divider"></div>
                                         <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
                                     </div>
@@ -134,7 +134,7 @@
                                          aria-bs-labelledby="dropdownMenuLink">
                                         <div class="dropdown-header">Acciones:</div>
                                         <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
-                                        <button class="dropdown-item" href="#">Editar estado</button>
+                                        <button class="dropdown-item editarEstado">Editar estado</button>
                                         <div class="dropdown-divider"></div>
                                         <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
                                     </div>
@@ -261,7 +261,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-guardar">Cerrar</button>
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-guardarTarea">Cerrar</button>
                         <button type="submit" class="btn btn-dark" form="formAgregarTarea">Guardar Tarea</button>
                     </div>
                 </div>
@@ -313,8 +313,70 @@
                 </div>
             </div>
         </div>
+       
+        <!--Modal para agregar estados-->
+        <div class="modal fade" id="insertEstadoModal" tabindex="-1" aria-labelledby="insertEstadoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="insertEstadoModalLabel">Agregar Estado</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formInsertarEstado">
+                            <input type="reset" hidden id="btnLimpiar-agergarEstado">
+                            <div class="mb-3">
+                                <label class="form-label" for="estado">Estado</label>
+                                <input type="text" class="form-control" name="estado">
+                                <span class="text-danger" id="estadoVal"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="Color">Color</label>
+                                <input type="color" class="form-control form-control-color" name="Color" title="Escoge un color para tu estado.">
+                                <span class="text-danger" id="colorVal"></span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-guardarEstado">Cerrar</button>
+                        <button type="submit" class="btn btn-dark" form="formInsertarEstado">Guardar Tarea</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!--Modal para modificar estados-->
+        <div class="modal fade" id="modificarEstadoModal" tabindex="-1" aria-labelledby="modificarEstadoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modificarEstadoModalLabel">Modificar Estado</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formModificarEstado">
+                            <input type="reset" hidden id="btnLimpiar-modificarEstado">
+                            <div class="mb-3">
+                                <label class="form-label" for="estado">Estado</label>
+                                <input type="text" class="form-control" id="estadoEdit" name="estado">
+                                <span class="text-danger" id="estadoVal"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="Color">Color</label>
+                                <input type="color" class="form-control form-control-color" id="color" name="Color" title="Escoge un color para tu estado.">
+                                <span class="text-danger" id="colorVal"></span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-modificarEstado">Cerrar</button>
+                        <button type="submit" class="btn btn-dark" form="formModificarEstado">Guardar Tarea</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-
+        <!-- Popovers -->
 
         <div id="contenido-popover" style="display:none;">
             <h3 id="titulo">Agregar miembros</h3>
@@ -340,7 +402,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        <script src="com.grupo5.utilidades/tabler.js" type="text/javascript"></script>
+        <script src="com.grupo5.utilidades/tablero.js" type="text/javascript"></script>
         <script src="com.grupo5.utilidades/gantt.js" type="text/javascript"></script>
 
         <!-- Agrega DataTables JS -->

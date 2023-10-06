@@ -20,7 +20,6 @@ public class Proyectos {
     private Date FechaInserta;
     private List<Usuarios> ProyectoGrupo;
     private List<Estados> EstadosProyectos;
-    private List<Tareas> TareasProyectos;
 
     
 
@@ -86,13 +85,5 @@ public class Proyectos {
 
     public void setEstadosProyectos(List<Estados> EstadosProyectos) {
         this.EstadosProyectos = EstadosProyectos;
-    }
-
-    public List<Tareas> getTareasProyectos() {
-        return TareasProyectos;
-    }
-
-    public void setTareasProyectos(List<Tareas> TareasProyectos) {
-        this.TareasProyectos = TareasProyectos;
     }
 }

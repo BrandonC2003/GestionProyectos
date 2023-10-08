@@ -15,7 +15,7 @@ import java.sql.SQLException;
 public class EstadosDAO {
 
     //Declarar variables para las consultas
-    private final String BUCAR_POR_ID = "SELECT IdEstado, Estado, Color FROM estados WHERE IdEstado = ?";
+    private final String BUSCAR_POR_ID = "SELECT IdEstado, IdProyecto, Estado, Color, Indice FROM estados WHERE IdEstado = ?";
     private final String INSERTAR = "INSERT INTO estados(IdProyecto, Estado, Color, Indice) VALUES (?, ?, ?, ?)";
     private final String ACTUALIZAR = "UPDATE estados SET IdProyecto = ?, Estado = ?, Color = ? WHERE IdEstado = ?";
     private final String ELIMINAR = "DELETE FROM estados WHERE IdEstado = ?";
@@ -24,9 +24,9 @@ public class EstadosDAO {
     //Cuando el indice actual es menor que el incide anterior, primero ira el indice actual y luego el anterior.
     private final String MOVER_INDICE_MENOR = "UPDATE estados set Indice = Indice+1 WHERE IdProyecto = ? AND Indice >= ? AND Indice<= ? AND IdEstado != ?";
     //Cuando el indice actual es mayor que el indice anterior, primero ira el indice anterior y luego el indice actual.
-    private final String MOVER_INDICE_MAYOR = "UPDATE estados set Indice = Indice+1 WHERE IdProyecto = ? AND Indice <= ? AND Indice<= ? AND IdEstado != ?";
-    
-
+    private final String MOVER_INDICE_MAYOR = "UPDATE estados set Indice = Indice-1 WHERE IdProyecto = ? AND Indice >= ? AND Indice<= ? AND IdEstado != ?";
+    //Se utilizara cuando se elimine un estado, para que los indices sigan en orden.
+    private final String AJUSTAR_INDICES = "UPDATE estados SET Indice = Indice - 1 WHERE IdProyecto = ? AND Indice > ?";
     /**
      * Metodo para buscar un estado especifico por su ID
      *
@@ -38,15 +38,21 @@ public class EstadosDAO {
         Connection conexion = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
+        
+        Proyectos proyecto = new Proyectos();
+        
         try {
             conexion = Conexion.conectarse();
-            ps = conexion.prepareStatement(BUCAR_POR_ID);
+            ps = conexion.prepareStatement(BUSCAR_POR_ID);
             ps.setInt(1, idEstado);
             rs = ps.executeQuery();
             rs.next();
             estado.setIdEstado(rs.getInt("IdEstado"));
             estado.setEstado(rs.getString("Estado"));
             estado.setColor(rs.getString("Color"));
+            estado.setIndice(rs.getInt("Indice"));
+            proyecto.setIdProyecto(rs.getInt("IdProyecto"));
+            estado.setProyecto(proyecto);
         } catch (SQLException e) {
             e.printStackTrace(System.out);
         } finally {
@@ -123,10 +129,23 @@ public class EstadosDAO {
     public boolean eliminarEstado(int idEstado) {
         Connection conexion = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Estados estado = buscarPorId(idEstado);
+        Proyectos proyecto = estado.getProyecto();
         try{
+            
+            //elimino el estado
             conexion = Conexion.conectarse();
             ps = conexion.prepareStatement(ELIMINAR);
             ps.setInt(1,idEstado);
+            ps.execute();
+            
+            //ajusto los indices.
+            conexion = Conexion.conectarse();
+            ps = conexion.prepareStatement(AJUSTAR_INDICES);
+            ps.setInt(1,proyecto.getIdProyecto());
+            ps.setInt(2,estado.getIndice());
             ps.execute();
             return true;
         }catch(SQLException e){

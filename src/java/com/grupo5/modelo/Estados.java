@@ -15,7 +15,8 @@ public class Estados {
     private String Estado;
     private String color;
     private int Indice;
-    private List<Tareas> TareasEstados;
+    private Proyectos proyecto;
+    private List<Tareas> Tareas;
 
     public int getIdEstado() {
         return IdEstado;
@@ -24,7 +25,7 @@ public class Estados {
     public void setIdEstado(int IdEstado) {
         this.IdEstado = IdEstado;
     }
-
+    
     public String getEstado() {
         return Estado;
     }
@@ -49,13 +50,21 @@ public class Estados {
         this.Indice = Indice;
     }
 
-    public List<Tareas> getTareasEstados() {
-        return TareasEstados;
+    public Proyectos getProyecto() {
+        return proyecto;
     }
 
-    public void setTareasEstados(List<Tareas> TareasEstados) {
-        this.TareasEstados = TareasEstados;
+    public void setProyecto(Proyectos proyecto) {
+        this.proyecto = proyecto;
     }
+
     
+    public List<Tareas> getTareas() {
+        return Tareas;
+    }
+
+    public void setTareas(List<Tareas> Tareas) {
+        this.Tareas = Tareas;
+    }    
     
 }

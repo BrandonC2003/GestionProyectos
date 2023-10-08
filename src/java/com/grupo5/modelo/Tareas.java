@@ -24,7 +24,8 @@ public class Tareas {
     private Date FechaInserta;
     private String UsuarioActulaliza;
     private Date FechaActuliza;
-    private List<Usuarios> UsuarioTarea;
+    private Estados estado;
+    private List<Usuarios> Usuarios;
 
     public int getIdTarea() {
         return IdTarea;
@@ -122,12 +123,20 @@ public class Tareas {
         this.FechaActuliza = FechaActuliza;
     }
 
-    public List<Usuarios> getUsuarioTarea() {
-        return UsuarioTarea;
+    public Estados getEstado() {
+        return estado;
     }
 
-    public void setUsuarioTarea(List<Usuarios> UsuarioTarea) {
-        this.UsuarioTarea = UsuarioTarea;
+    public void setEstado(Estados estado) {
+        this.estado = estado;
+    }
+    
+    public List<Usuarios> getUsuarios() {
+        return Usuarios;
+    }
+
+    public void setUsuarios(List<Usuarios> Usuarios) {
+        this.Usuarios = Usuarios;
     }
     
 }

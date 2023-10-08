@@ -19,7 +19,7 @@ public class Proyectos {
     private String UsuarioInserta;
     private Date FechaInserta;
     private List<Usuarios> ProyectoGrupo;
-    private List<Estados> EstadosProyectos;
+    private List<Estados> estados;
 
     
 
@@ -78,12 +78,12 @@ public class Proyectos {
     public void setProyectoGrupo(List<Usuarios> proyectoGrupo) {
         this.ProyectoGrupo = proyectoGrupo;
     }
-    
-    public List<Estados> getEstadosProyectos() {
-        return EstadosProyectos;
+
+    public List<Estados> getEstados() {
+        return estados;
     }
 
-    public void setEstadosProyectos(List<Estados> EstadosProyectos) {
-        this.EstadosProyectos = EstadosProyectos;
+    public void setEstados(List<Estados> estados) {
+        this.estados = estados;
     }
 }

@@ -138,5 +138,11 @@ public class Tareas {
     public void setUsuarios(List<Usuarios> Usuarios) {
         this.Usuarios = Usuarios;
     }
+
+    @Override
+    public String toString() {
+        return "Tareas{" + "IdTarea=" + IdTarea + ", Tarea=" + Tarea + ", Descripcion=" + Descripcion + ", FechaInicio=" + FechaInicio + ", FechaFin=" + FechaFin + ", Indice=" + Indice + ", Predecesor=" + Predecesor + ", Realizada=" + Realizada + ", UsuarioInserta=" + UsuarioInserta + ", FechaInserta=" + FechaInserta + ", UsuarioActulaliza=" + UsuarioActulaliza + ", FechaActuliza=" + FechaActuliza + ", estado=" + estado + ", Usuarios=" + Usuarios + '}';
+    }
+    
     
 }

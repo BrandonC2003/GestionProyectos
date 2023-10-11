@@ -86,4 +86,11 @@ public class Proyectos {
     public void setEstados(List<Estados> estados) {
         this.estados = estados;
     }
+
+    @Override
+    public String toString() {
+        return "Proyectos{" + "IdProyecto=" + IdProyecto + ", Proyecto=" + Proyecto + ", Descripcion=" + Descripcion + ", Git=" + Git + ", UsuarioInserta=" + UsuarioInserta + ", FechaInserta=" + FechaInserta + ", ProyectoGrupo=" + ProyectoGrupo + ", estados=" + estados + '}';
+    }
+    
+    
 }

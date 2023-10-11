@@ -66,5 +66,10 @@ public class Estados {
     public void setTareas(List<Tareas> Tareas) {
         this.Tareas = Tareas;
     }    
+
+    @Override
+    public String toString() {
+        return "Estados{" + "IdEstado=" + IdEstado + ", Estado=" + Estado + ", color=" + color + ", Indice=" + Indice + ", proyecto=" + proyecto + ", Tareas=" + Tareas + '}';
+    }
     
 }

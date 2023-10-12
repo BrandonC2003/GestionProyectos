@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 /**
  *
@@ -27,6 +28,8 @@ public class EstadosDAO {
     private final String MOVER_INDICE_MAYOR = "UPDATE estados set Indice = Indice-1 WHERE IdProyecto = ? AND Indice >= ? AND Indice<= ? AND IdEstado != ?";
     //Se utilizara cuando se elimine un estado, para que los indices sigan en orden.
     private final String AJUSTAR_INDICES = "UPDATE estados SET Indice = Indice - 1 WHERE IdProyecto = ? AND Indice > ?";
+    
+    private final String ULTIMO_ID = "SELECT LAST_INSERT_ID();";
     /**
      * Metodo para buscar un estado especifico por su ID
      *
@@ -67,28 +70,34 @@ public class EstadosDAO {
      * Metodo para insertar Estados
      *
      * @param estado
-     * @return mensaje de nulo si esta todo bien | mensaje de error si hubo
-     * algun inconveniente
+     * @return el id generado | si hay algun error retornara 0
      */
-    public String insertarEstado(Estados estado) {
+    public int insertarEstado(Estados estado) {
         
         Proyectos proyecto = estado.getProyecto();
         Connection conexion = null;
         PreparedStatement ps = null;
+        ResultSet rs = null;
         try{
             conexion = Conexion.conectarse();
-            ps = conexion.prepareStatement(INSERTAR);
+            ps = conexion.prepareStatement(INSERTAR, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1,proyecto.getIdProyecto());
             ps.setString(2, estado.getEstado());
             ps.setString(3, estado.getColor());
             ps.setInt(4, obtenerIndice(proyecto.getIdProyecto()));
             ps.execute();
-            return null;
+            //obtengo el id generado
+             rs= ps.getGeneratedKeys();
+            if(rs.next()){
+                return rs.getInt(1);
+            }
+            return 0;
         }catch(SQLException e){
-            return e.getMessage();
+            return 0;
         }finally{
             Conexion.close(conexion);
             Conexion.close(ps);
+            Conexion.close(rs);
         }
     }
 
@@ -178,7 +187,7 @@ public class EstadosDAO {
             if(rs.next()){ //validar que el resultado no sea nulo
                 return rs.getInt("Indice") + 1;
             }
-            return 1;
+            return 1; //si el resultado es nulo, entonces me dara el indice 1.
         } catch (SQLException e) {
             e.printStackTrace(System.out);
             return 0; //si retorna 0 es porque ocurrio un error

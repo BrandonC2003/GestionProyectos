@@ -13,9 +13,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.time.LocalDate;
+import java.sql.Date;
 /**
  *
  * @author brand
@@ -111,14 +113,101 @@ public class ProyectosDAO {
     }
 
     /**
-     * Metodo para insertar un nuevo proyecto
+     * Metodo para insertar un nuevo proyecto, el cual tambien creara una 
+     * plantilla de proyecto con estados y tareas de ejemplos.
      *
      * @param proyecto
      * @return mensaje de nulo si esta todo bien | mensaje de error si hubo
      * algun inconveniente
      */
     public String insertarProyecto(Proyectos proyecto) {
-        return null;
+        Connection conexion = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        Estados estado = null;
+        EstadosDAO estadoDao = new EstadosDAO();
+        
+        Tareas tarea = null;
+        TareasDAO tareaDao = new TareasDAO();
+        
+        LocalDate fechaI = LocalDate.now();
+        Date fechaInicio = Date.valueOf(fechaI);
+        
+        LocalDate fechaF = fechaI.plusDays(5);
+        Date fechaFin = Date.valueOf(fechaF);
+        
+        try{
+            conexion = Conexion.conectarse();
+            ps = conexion.prepareStatement(INSERTAR, Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1,proyecto.getProyecto());
+            ps.setString(2, proyecto.getDescripcion());
+            ps.setString(3, proyecto.getGit());
+            ps.setString(4, proyecto.getUsuarioInserta());
+            ps.execute();
+            rs = ps.getGeneratedKeys();
+            
+            if(rs.next()){
+                proyecto.setIdProyecto(rs.getInt(1));
+                
+                //primer estado
+                estado = new Estados();
+                estado.setProyecto(proyecto);
+                estado.setEstado("Por hacer");
+                estado.setColor("bg-danger");
+                
+                estado.setIdEstado(estadoDao.insertarEstado(estado));
+                
+                tarea = new Tareas();
+                tarea.setEstado(estado);
+                tarea.setTarea("Tarea por hacer 1");
+                tarea.setDescripcion("");
+                tarea.setFechaInicio(fechaInicio);
+                tarea.setFechaFin(fechaFin);
+                
+                tareaDao.insertarTarea(tarea);
+                //Segundo estado
+                estado = new Estados();
+                estado.setProyecto(proyecto);
+                estado.setEstado("En proceso");
+                estado.setColor("bg-warning");
+                
+                estado.setIdEstado(estadoDao.insertarEstado(estado));
+                
+                tarea = new Tareas();
+                tarea.setEstado(estado);
+                tarea.setTarea("Tarea en proceso 1");
+                tarea.setDescripcion("");
+                tarea.setFechaInicio(fechaInicio);
+                tarea.setFechaFin(fechaFin);
+                
+                tareaDao.insertarTarea(tarea);
+                //Tercer estado
+                estado = new Estados();
+                estado.setProyecto(proyecto);
+                estado.setEstado("Finalizadas");
+                estado.setColor("bg-success");
+                
+                estado.setIdEstado(estadoDao.insertarEstado(estado));
+                
+                tarea = new Tareas();
+                tarea.setEstado(estado);
+                tarea.setTarea("Tarea finalizada 1");
+                tarea.setDescripcion("");
+                tarea.setFechaInicio(fechaInicio);
+                tarea.setFechaFin(fechaFin);
+                
+                tareaDao.insertarTarea(tarea);
+            }
+            
+            return null;
+        }catch(SQLException e){
+            return e.getMessage();
+        }finally{
+            Conexion.close(conexion);
+            Conexion.close(ps);
+            Conexion.close(rs);
+        }
     }
 
     /**

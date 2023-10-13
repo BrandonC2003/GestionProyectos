@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -51,43 +53,51 @@
 
                 <!--Vista de tablero-->
                 <div class="tab-pane fade show active" id="tablero" role="tabpanel" aria-labelledby="tablero-list">
+                    <c:set var="proyecto" value="${requestScope.proyecto}" />
                     <div id="board">
-                        <div class="card ms-3 me-3 mt-4 swim-lane">
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h3 class="card-title">Por Hacer</h3>
-                                <div class="dropdown no-arrow">
-                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                         aria-bs-labelledby="dropdownMenuLink">
-                                        <div class="dropdown-header">Acciones:</div>
-                                        <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
-                                        <button class="dropdown-item editarEstado">Editar estado</button>
-                                        <div class="dropdown-divider"></div>
-                                        <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
+                        <c:forEach var="estado" items="${proyecto.estados}">
+                            <div class="card ms-3 me-3 mt-4 swim-lane">
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h3 class="card-title">${estado.estado}</h3>
+                                    <div class="dropdown no-arrow">
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                           data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                             aria-bs-labelledby="dropdownMenuLink">
+                                            <div class="dropdown-header">Acciones:</div>
+                                            <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
+                                            <button class="dropdown-item editarEstado">Editar estado</button>
+                                            <div class="dropdown-divider"></div>
+                                            <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="card-body justify-content-center swim-lane-content" id="1">
-                                <div class="card shadow-sm mb-2 task" draggable="true" estado= "1">
-                                    <div class="card-body justify-content-center task-content">
-                                        Tarea 1
-                                    </div>
+                                <div class="card-body justify-content-center swim-lane-content" id="${estado.idEstado}">
+                                    <c:forEach var="tarea" items="${estado.tareas}">
+                                        <c:if test="${not empty tarea.tarea}">
+                                            <div class="card shadow-sm mb-2 task" draggable="true" estado= "${estado.idEstado}">
+                                            <div class="card-body justify-content-center task-content">
+                                                ${tarea.tarea}
+                                            </div>
+                                        </div>
+                                        </c:if>
+                                    </c:forEach>
+<!--                                    <div class="card shadow-sm mb-2 task" draggable="true" estado="${estado.idEstado}">
+                                        <div class="card-body justify-content-center task-content">
+                                            Tarea 2
+                                        </div>
+                                    </div>-->
                                 </div>
-                                <div class="card shadow-sm mb-2 task" draggable="true" estado="1">
-                                    <div class="card-body justify-content-center task-content">
-                                        Tarea 2
-                                    </div>
+                                <div class="card-footer">
+                                    <button type="button"class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                <button type="button"class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
-                            </div>
-                        </div>
+                        </c:forEach>
 
-                        <div class="card ms-3 me-3 mt-4 swim-lane">
+
+<!--                        <div class="card ms-3 me-3 mt-4 swim-lane">
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h3 class="card-title">En proceso</h3>
                                 <div class="dropdown no-arrow">
@@ -120,9 +130,9 @@
                             <div class="card-footer">
                                 <button class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#actualizarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
                             </div>
-                        </div>
+                        </div>-->
 
-                        <div class="card ms-3 me-3 mt-4 swim-lane">
+<!--                        <div class="card ms-3 me-3 mt-4 swim-lane">
                             <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                 <h3 class="card-title">Realizado</h3>
                                 <div class="dropdown no-arrow">
@@ -155,7 +165,7 @@
                             <div class="card-footer">
                                 <button class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
                             </div>
-                        </div>
+                        </div>-->
 
                         <button class="ms-3 me-3 mt-4 justify-content-center align-items-center no-sortable text-secondary" id="btn-agregarEstado">Agregar Estado <i class="fa-solid fa-plus"></i></button>
                     </div>
@@ -313,7 +323,7 @@
                 </div>
             </div>
         </div>
-       
+
         <!--Modal para agregar estados-->
         <div class="modal fade" id="insertEstadoModal" tabindex="-1" aria-labelledby="insertEstadoModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -344,7 +354,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!--Modal para modificar estados-->
         <div class="modal fade" id="modificarEstadoModal" tabindex="-1" aria-labelledby="modificarEstadoModalLabel" aria-hidden="true">
             <div class="modal-dialog">

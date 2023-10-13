@@ -238,13 +238,24 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="ProyectosControlador?accion=insertar">
-                                
+                            <form action="ProyectosControlador?accion=insertar" id="insertarProyecto">
+                                <div class="mb-3">
+                                    <label class="form-label" for="Proyecto">Proyecto</label>
+                                    <input type="text" class="form-control" name="Proyecto" id="Proyecto">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="Descripcion">Descripcion</label>
+                                    <textarea class="form-control" name="Descripcion" id="Descripcion" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="Git">Repositorio de git</label>
+                                    <input type="text" class="form-control" name="Git" id="Git" placeholder="Ejemplo: https://github.com/user/proyect.git">
+                                </div>
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
+                            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-dark" form="insertarProyecto">Crear proyecto</button>
                         </div>
                     </div>
                 </div>

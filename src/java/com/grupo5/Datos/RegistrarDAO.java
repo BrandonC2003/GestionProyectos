@@ -76,8 +76,8 @@ public class RegistrarDAO {
         System.out.println("Se ha enviado un correo de confirmación a " + correo + " con el código: " + codigo);
     }
 
-    public static void main(String[] args) {
-        Usuarios usuarioManager = new Usuarios();
-        usuarioManager.agregarNuevoUsuario("usuario@example.com", "contrasena123");
-    }
+//    public static void main(String[] args) {
+//        Usuarios usuarioManager = new Usuarios();
+//        usuarioManager.agregarNuevoUsuario("usuario@example.com", "contrasena123");
+//    }
 }

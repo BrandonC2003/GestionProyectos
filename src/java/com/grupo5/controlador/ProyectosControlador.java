@@ -61,7 +61,7 @@ public class ProyectosControlador extends HttpServlet {
         ProyectosDAO proyectoDao = new ProyectosDAO();
         switch(accion){
             case "listar":
-                proyecto = proyectoDao.obtenerProyecto(1);
+                proyecto = proyectoDao.obtenerProyecto(5);
                 request.setAttribute("proyecto",proyecto);
                 request.getRequestDispatcher("com.grupo5.vistas/proyectos.jsp").forward(request, response);
                 break;
@@ -96,7 +96,7 @@ public class ProyectosControlador extends HttpServlet {
                 proyecto.setUsuarioInserta("");//cuando se cree el login se colocara la sesion de usuario.
                 
                 proyectoDao.insertarProyecto(proyecto);
-                response.sendRedirect("ProyectosControlador?accion=listar");
+                response.sendRedirect("PrincipalControlador?accion=proyectos");
                 break;
         }
     }

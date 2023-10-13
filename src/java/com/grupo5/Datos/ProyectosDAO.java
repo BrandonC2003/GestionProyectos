@@ -25,7 +25,7 @@ import java.sql.Date;
 public class ProyectosDAO {
 
     //Declarar variables para las consultas
-    private final String LISTAR = "select p.IdProyecto, e.IdEstado,e.Estado, e.Indice AS IndiceEstado, "
+    private final String LISTAR = "select p.IdProyecto, e.IdEstado,e.Estado, e.Color, e.Indice AS IndiceEstado, "
             + "t.IdTarea,t.Tarea, t.Indice as IndiceTarea, t.FechaFin, CONCAT(u.Nombre,' ',u.Apellido) AS NombreUsuario, "
             + "t.Realizada from Proyectos p "
             + "INNER JOIN estados e ON e.IdProyecto = p.IdProyecto "
@@ -66,6 +66,7 @@ public class ProyectosDAO {
                 estado.setIdEstado(rs.getInt("IdEstado"));
                 estado.setEstado(rs.getString("Estado"));
                 estado.setIndice(rs.getInt("IndiceEstado"));
+                estado.setColor(rs.getString("Color"));
                 estado.setProyecto(proyecto);
 
                 List<Tareas> listTarea = new ArrayList<>();
@@ -164,6 +165,7 @@ public class ProyectosDAO {
                 tarea.setDescripcion("");
                 tarea.setFechaInicio(fechaInicio);
                 tarea.setFechaFin(fechaFin);
+                tarea.setUsuarioInserta(proyecto.getUsuarioInserta());
                 
                 tareaDao.insertarTarea(tarea);
                 //Segundo estado
@@ -180,6 +182,7 @@ public class ProyectosDAO {
                 tarea.setDescripcion("");
                 tarea.setFechaInicio(fechaInicio);
                 tarea.setFechaFin(fechaFin);
+                tarea.setUsuarioInserta(proyecto.getUsuarioInserta());
                 
                 tareaDao.insertarTarea(tarea);
                 //Tercer estado
@@ -196,6 +199,7 @@ public class ProyectosDAO {
                 tarea.setDescripcion("");
                 tarea.setFechaInicio(fechaInicio);
                 tarea.setFechaFin(fechaFin);
+                tarea.setUsuarioInserta(proyecto.getUsuarioInserta());
                 
                 tareaDao.insertarTarea(tarea);
             }

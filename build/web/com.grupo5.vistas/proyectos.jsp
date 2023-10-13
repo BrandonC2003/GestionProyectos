@@ -78,10 +78,10 @@
                                     <c:forEach var="tarea" items="${estado.tareas}">
                                         <c:if test="${not empty tarea.tarea}">
                                             <div class="card shadow-sm mb-2 task" draggable="true" estado= "${estado.idEstado}">
-                                            <div class="card-body justify-content-center task-content">
-                                                ${tarea.tarea}
+                                                <div class="card-body justify-content-center task-content">
+                                                    ${tarea.tarea}
+                                                </div>
                                             </div>
-                                        </div>
                                         </c:if>
                                     </c:forEach>
 <!--                                    <div class="card shadow-sm mb-2 task" draggable="true" estado="${estado.idEstado}">
@@ -97,75 +97,75 @@
                         </c:forEach>
 
 
-<!--                        <div class="card ms-3 me-3 mt-4 swim-lane">
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h3 class="card-title">En proceso</h3>
-                                <div class="dropdown no-arrow">
-                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                         aria-bs-labelledby="dropdownMenuLink">
-                                        <div class="dropdown-header">Acciones:</div>
-                                        <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
-                                        <button class="dropdown-item editarEstado">Editar estado</button>
-                                        <div class="dropdown-divider"></div>
-                                        <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body justify-content-center swim-lane-content" id="2">
-                                <div class="card task shadow-sm mb-2" draggable="true" estado="2">
-                                    <div class="card-body justify-content-center task-content">
-                                        Tarea 3
-                                    </div>
-                                </div>
-                                <div class="card task shadow-sm mb-2" draggable="true" estado="2">
-                                    <div class="card-body justify-content-center task-content">
-                                        Tarea 4
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <button class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#actualizarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
-                            </div>
-                        </div>-->
+                        <!--                        <div class="card ms-3 me-3 mt-4 swim-lane">
+                                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                                        <h3 class="card-title">En proceso</h3>
+                                                        <div class="dropdown no-arrow">
+                                                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                                            </a>
+                                                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                                                 aria-bs-labelledby="dropdownMenuLink">
+                                                                <div class="dropdown-header">Acciones:</div>
+                                                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
+                                                                <button class="dropdown-item editarEstado">Editar estado</button>
+                                                                <div class="dropdown-divider"></div>
+                                                                <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body justify-content-center swim-lane-content" id="2">
+                                                        <div class="card task shadow-sm mb-2" draggable="true" estado="2">
+                                                            <div class="card-body justify-content-center task-content">
+                                                                Tarea 3
+                                                            </div>
+                                                        </div>
+                                                        <div class="card task shadow-sm mb-2" draggable="true" estado="2">
+                                                            <div class="card-body justify-content-center task-content">
+                                                                Tarea 4
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <button class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#actualizarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
+                                                    </div>
+                                                </div>-->
 
-<!--                        <div class="card ms-3 me-3 mt-4 swim-lane">
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h3 class="card-title">Realizado</h3>
-                                <div class="dropdown no-arrow">
-                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                       data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                         aria-bs-labelledby="dropdownMenuLink">
-                                        <div class="dropdown-header">Acciones:</div>
-                                        <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
-                                        <button class="dropdown-item editarEstado">Editar estado</button>
-                                        <div class="dropdown-divider"></div>
-                                        <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-body justify-content-center swim-lane-content" id="3">
-                                <div class="card task shadow-sm mb-2" draggable="true" estado="3">
-                                    <div class="card-body justify-content-center task-content">
-                                        Tarea 5
-                                    </div>
-                                </div>
-                                <div class="card task shadow-sm mb-2" draggable="true" estado="3">
-                                    <div class="card-body justify-content-center task-content">
-                                        Tarea 6
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <button class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
-                            </div>
-                        </div>-->
+                        <!--                        <div class="card ms-3 me-3 mt-4 swim-lane">
+                                                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                                        <h3 class="card-title">Realizado</h3>
+                                                        <div class="dropdown no-arrow">
+                                                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                                                            </a>
+                                                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                                                 aria-bs-labelledby="dropdownMenuLink">
+                                                                <div class="dropdown-header">Acciones:</div>
+                                                                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
+                                                                <button class="dropdown-item editarEstado">Editar estado</button>
+                                                                <div class="dropdown-divider"></div>
+                                                                <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-body justify-content-center swim-lane-content" id="3">
+                                                        <div class="card task shadow-sm mb-2" draggable="true" estado="3">
+                                                            <div class="card-body justify-content-center task-content">
+                                                                Tarea 5
+                                                            </div>
+                                                        </div>
+                                                        <div class="card task shadow-sm mb-2" draggable="true" estado="3">
+                                                            <div class="card-body justify-content-center task-content">
+                                                                Tarea 6
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-footer">
+                                                        <button class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
+                                                    </div>
+                                                </div>-->
 
                         <button class="ms-3 me-3 mt-4 justify-content-center align-items-center no-sortable text-secondary" id="btn-agregarEstado">Agregar Estado <i class="fa-solid fa-plus"></i></button>
                     </div>
@@ -187,14 +187,18 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td><input type="checkbox"></td>
-                                            <td>Tarea 3</td>
-                                            <td>30/9/2023</td>
-                                            <td>Usuario 1</td>
-                                            <td class="text-bg-danger">Por hacer</td>
-                                        </tr>
-                                        <tr>
+                                        <c:forEach var="estado" items="${proyecto.estados}">
+                                            <c:forEach var="tarea" items="${estado.tareas}">
+                                                <tr>
+                                                    <td><input type="checkbox" selected="${tarea.realizada}"></td>
+                                                    <td>${tarea.tarea}</td>
+                                                    <td>${tarea.fechaFin}</td>
+                                                    <td>nombreu</td>
+                                                    <td class="${estado.color}">${estado.estado}</td>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:forEach>
+<!--                                        <tr>
                                             <td><input type="checkbox"></td>
                                             <td>Tarea 2</td>
                                             <td>31/9/2023</td>
@@ -207,7 +211,7 @@
                                             <td>20/9/2023</td>
                                             <td>Usuario 2</td>
                                             <td class="text-bg-success">Realizado</td>
-                                        </tr>
+                                        </tr>-->
                                     </tbody>
                                 </table>
                             </div>

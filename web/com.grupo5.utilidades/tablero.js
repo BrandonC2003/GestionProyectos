@@ -1,5 +1,6 @@
 $(document).ready(function () {
     var textAnterior = "";
+
     // Metodo para hacer los elementos sortables
     function agregarSortables() {
         $("#board").sortable({
@@ -29,38 +30,6 @@ $(document).ready(function () {
 
     agregarSortables();
 
-    // Este metodo agrega un nuevo estado al talero
-    $("#btn-agregarEstado").click(function () {
-        var penultimoItem = $("#board .swim-lane").eq(-1);
-        let estado = `<div class="card ms-3 me-3 mt-4 swim-lane">
-    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h3 class="card-title">Nuevo Estado</h3>
-        <div class="dropdown no-arrow">
-            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                 aria-bs-labelledby="dropdownMenuLink">
-                <div class="dropdown-header">Acciones:</div>
-                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
-                <button class="dropdown-item" href="#">Editar estado</button>
-                <div class="dropdown-divider"></div>
-                <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
-            </div>
-        </div>
-    </div>
-    <div class="card-body justify-content-center swim-lane-content">
-        
-    </div>
-    <div class="card-footer">
-      <button type="button"class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
-    </div>
-    </div>`;
-        penultimoItem.after(estado);
-        agregarSortables();
-    });
-
 
 //  // Este evento sirve para agregar una nueva tarea a un estado
 //  $(document).on("click",'.btn-agregarTarea', function(){
@@ -80,6 +49,61 @@ $(document).ready(function () {
 //    }
 //  });
 
+
+    //Eventos para controlar los estados.
+
+
+    // Este metodo agrega un nuevo estado al talero
+    $("#btn-agregarEstado").click(function () {
+        $('#insertEstadoModal').modal('show');
+    });
+
+    //evento click para agregar un estado.
+    $('#formInsertarEstado').submit(function (e) {
+        e.preventDefault();
+        var formData = $(this).serializeArray();
+        var estadoName = formData.find(item => item.name === 'estado');
+        if (estadoName.value === "") {
+            $('#estadoVal').text("Tienes que completar el estado.");
+            return false;
+        }
+        var penultimoItem = $("#board .swim-lane").eq(-1);
+        let estado = `<div class="card ms-3 me-3 mt-4 swim-lane">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h3 class="card-title"> ${estadoName.value}</h3>
+        <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                 aria-bs-labelledby="dropdownMenuLink">
+                <div class="dropdown-header">Acciones:</div>
+                <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
+                <button class="dropdown-item editarEstado">Editar estado</button>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body justify-content-center swim-lane-content">
+        
+    </div>
+    <div class="card-footer">
+      <button type="button"class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
+    </div>
+    </div>`;
+        penultimoItem.after(estado);
+        agregarSortables();
+        $('#cerrarModal-guardarEstado').click();
+        
+    });
+
+    //controlar el evento click de mi boton para cerrar el modal de agregar estado
+    $('#cerrarModal-guardarEstado').click(function () {
+        $('#btnLimpiar-agergarEstado').click();
+        $('#estadoVal').text("");
+    });
 
     //Metodos para permitir editar el titulo del estado
     $(document).on('dblclick', '.card-title', function () {
@@ -101,18 +125,58 @@ $(document).ready(function () {
             $(this).blur(); //proboca un clic en otro lado si se presiona enter
         }
     });
+    
+    //evento para mostrar el modal para modificar el estado
+    $(document).on('click','.editarEstado',function(){
+        let estado = $(this).closest('.card').find('.card-title').text();
+        console.log(estado);
+        $('#estadoEdit').val(estado);
+        $('#modificarEstadoModal').modal('show');
+    });
+    
+    //Evento para controlar cuando se cierre el modal para modificar el estado
+    $('#cerrarModal-modificarEstado').click(function(){
+        ('#btnLimpiar-modificarEstado').click();
+    });
+
+    //Evento submit del formulario para modificar el estado.  <----------
+    
+    
+    
+    //evento click para eliminar un estado.
+    $(document).on("click", '.btn-eliminar-estado', function () {
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Una vez eliminado, no podrás recuperar este estado ni las tareas asociadas a él.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, eliminarlo",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $(this).closest(".swim-lane").remove();
+                Swal.fire("Eliminado", "El estado ha sido eliminado correctamente.", "success");
+            }
+        });
+    });
+
+    //Eventos para Controlar las tareas.
+
 
     //Mostrar el modal cuando se de click sobre la tarea.
     $(document).on('click', '.task-content', function () {
         $('#agregarTareasModal').modal('show');
     });
 
-
     //evento para controlar las acciones al cerrar el modal para guardar tarea
-    $(document).on('click', '#cerrarModal-guardar', function () {
+    $(document).on('click', '#cerrarModal-guardarTarea', function () {
         $("#resetForm-Agregar").click();
         limpiarValidaciones();
     });
+
+
 
     //Evento cuando se envia el formulario para agregar tareas
     $(document).on("submit", "#formAgregarTarea", function (e) {
@@ -149,24 +213,7 @@ $(document).ready(function () {
 
     });
 
-    //evento click para eliminar un estado.
-    $(document).on("click", '.btn-eliminar-estado', function () {
-        Swal.fire({
-            title: "¿Estás seguro?",
-            text: "Una vez eliminado, no podrás recuperar este estado ni las tareas asociadas a él.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#d33",
-            cancelButtonColor: "#3085d6",
-            confirmButtonText: "Sí, eliminarlo",
-            cancelButtonText: "Cancelar"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                $(this).closest(".swim-lane").remove();
-                Swal.fire("Eliminado", "El estado ha sido eliminado correctamente.", "success");
-            }
-        });
-    });
+
 });
 
 function limpiarValidaciones() {
@@ -183,5 +230,6 @@ function getColorEstado(estado) {
     if (estado == 3) {
         return "text-bg-success";
     }
+
 
 }

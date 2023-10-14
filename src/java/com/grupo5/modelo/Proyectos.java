@@ -19,8 +19,7 @@ public class Proyectos {
     private String UsuarioInserta;
     private Date FechaInserta;
     private List<Usuarios> ProyectoGrupo;
-    private List<Estados> EstadosProyectos;
-    private List<Tareas> TareasProyectos;
+    private List<Estados> estados;
 
     
 
@@ -79,20 +78,19 @@ public class Proyectos {
     public void setProyectoGrupo(List<Usuarios> proyectoGrupo) {
         this.ProyectoGrupo = proyectoGrupo;
     }
+
+    public List<Estados> getEstados() {
+        return estados;
+    }
+
+    public void setEstados(List<Estados> estados) {
+        this.estados = estados;
+    }
+
+    @Override
+    public String toString() {
+        return "Proyectos{" + "IdProyecto=" + IdProyecto + ", Proyecto=" + Proyecto + ", Descripcion=" + Descripcion + ", Git=" + Git + ", UsuarioInserta=" + UsuarioInserta + ", FechaInserta=" + FechaInserta + ", ProyectoGrupo=" + ProyectoGrupo + ", estados=" + estados + '}';
+    }
     
-    public List<Estados> getEstadosProyectos() {
-        return EstadosProyectos;
-    }
-
-    public void setEstadosProyectos(List<Estados> EstadosProyectos) {
-        this.EstadosProyectos = EstadosProyectos;
-    }
-
-    public List<Tareas> getTareasProyectos() {
-        return TareasProyectos;
-    }
-
-    public void setTareasProyectos(List<Tareas> TareasProyectos) {
-        this.TareasProyectos = TareasProyectos;
-    }
+    
 }

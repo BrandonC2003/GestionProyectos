@@ -46,7 +46,14 @@ public class PrincipalControlador extends HttpServlet {
         processRequest(request, response);
         String accion = request.getParameter("accion");
         
-        request.getRequestDispatcher("com.grupo5.vistas/"+accion+".jsp").forward(request, response);
+        switch(accion){
+            case "proyectos":
+                response.sendRedirect("ProyectosControlador?accion=listar");
+                break;
+            default:
+                request.getRequestDispatcher("com.grupo5.vistas/"+accion+".jsp").forward(request, response);
+                break;
+        }
     }
 
     /**

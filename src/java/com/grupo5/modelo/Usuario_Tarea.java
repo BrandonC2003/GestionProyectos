@@ -36,4 +36,11 @@ public class Usuario_Tarea {
     public void setTarea(Tareas tarea) {
         this.tarea = tarea;
     }
+
+    @Override
+    public String toString() {
+        return "Usuario_Tarea{" + "IdusuarioTarea=" + IdusuarioTarea + ", usuario=" + usuario + ", tarea=" + tarea + '}';
+    }
+    
+    
 }

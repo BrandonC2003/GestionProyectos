@@ -4,6 +4,7 @@
  */
 package com.grupo5.modelo;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -22,9 +23,8 @@ public class Tareas {
     private boolean Realizada;
     private String UsuarioInserta;
     private Date FechaInserta;
-    private String UsuarioActulaliza;
-    private Date FechaActuliza;
-    private List<Usuarios> UsuarioTarea;
+    private Estados estado;
+    private List<Usuarios> Usuarios;
 
     public int getIdTarea() {
         return IdTarea;
@@ -106,28 +106,26 @@ public class Tareas {
         this.FechaInserta = FechaInserta;
     }
 
-    public String getUsuarioActulaliza() {
-        return UsuarioActulaliza;
+    public Estados getEstado() {
+        return estado;
     }
 
-    public void setUsuarioActulaliza(String UsuarioActulaliza) {
-        this.UsuarioActulaliza = UsuarioActulaliza;
+    public void setEstado(Estados estado) {
+        this.estado = estado;
+    }
+    
+    public List<Usuarios> getUsuarios() {
+        return Usuarios;
     }
 
-    public Date getFechaActuliza() {
-        return FechaActuliza;
+    public void setUsuarios(List<Usuarios> Usuarios) {
+        this.Usuarios = Usuarios;
     }
 
-    public void setFechaActuliza(Date FechaActuliza) {
-        this.FechaActuliza = FechaActuliza;
+    @Override
+    public String toString() {
+        return "Tareas{" + "IdTarea=" + IdTarea + ", Tarea=" + Tarea + ", Descripcion=" + Descripcion + ", FechaInicio=" + FechaInicio + ", FechaFin=" + FechaFin + ", Indice=" + Indice + ", Predecesor=" + Predecesor + ", Realizada=" + Realizada + ", UsuarioInserta=" + UsuarioInserta + ", FechaInserta=" + FechaInserta + ", estado=" + estado + ", Usuarios=" + Usuarios + '}';
     }
-
-    public List<Usuarios> getUsuarioTarea() {
-        return UsuarioTarea;
-    }
-
-    public void setUsuarioTarea(List<Usuarios> UsuarioTarea) {
-        this.UsuarioTarea = UsuarioTarea;
-    }
+    
     
 }

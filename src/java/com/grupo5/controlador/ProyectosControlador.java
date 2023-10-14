@@ -4,8 +4,11 @@
  */
 package com.grupo5.controlador;
 
+import com.grupo5.Datos.ProyectosDAO;
+import com.grupo5.modelo.Proyectos;
+import com.grupo5.modelo.Estados;
+import com.grupo5.modelo.Tareas;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,19 +33,7 @@ public class ProyectosControlador extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProyectosControlador</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProyectosControlador at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
+       
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -58,6 +49,23 @@ public class ProyectosControlador extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
+        //Obtengo el parametro que contiene la accion.
+        String accion = request.getParameter("accion");
+        
+        //Creacion de objetos y variables necesarias.
+        Proyectos proyecto = new Proyectos();
+        Estados estado = new Estados();
+        Tareas tarea = new Tareas();
+        
+        ProyectosDAO proyectoDao = new ProyectosDAO();
+        switch(accion){
+            case "listar":
+                proyecto = proyectoDao.obtenerProyecto(1);
+                request.setAttribute("proyecto",proyecto);
+                request.getRequestDispatcher("com.grupo5.vistas/proyectos.jsp").forward(request, response);
+                break;
+        }
     }
 
     /**
@@ -72,6 +80,25 @@ public class ProyectosControlador extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
+        //Obtengo el parametro que contiene la accion.
+        String accion = request.getParameter("accion");
+        
+        //Objetos y variables a utilizar.
+        Proyectos proyecto = new Proyectos();
+        ProyectosDAO proyectoDao = new ProyectosDAO();
+        
+        switch(accion){
+            case "insertar":
+                proyecto.setProyecto(request.getParameter("Proyecto"));
+                proyecto.setDescripcion(request.getParameter("Descripcion"));
+                proyecto.setGit(request.getParameter("Git"));
+                proyecto.setUsuarioInserta("");//cuando se cree el login se colocara la sesion de usuario.
+                
+                proyectoDao.insertarProyecto(proyecto);
+                response.sendRedirect("ProyectosControlador?accion=listar");
+                break;
+        }
     }
 
     /**

@@ -58,10 +58,11 @@
                         <i class="fa-solid fa-plus"></i>
                         <span>Proyectos</span>
                     </a>
-                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
                         <div class="bg-dark py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Proyectos:</h6>
                             <a class="collapse-item text-white" href="PrincipalControlador?accion=proyectos" target="myFrame">Proyecto 1</a>
+                            <a class="collapse-item text-white" href="#" data-bs-toggle="modal" data-bs-target="#insertProyectoModal">Crear proyecto <i class="fa-solid fa-plus"></i></a>
                         </div>
                 </li>
 
@@ -183,51 +184,83 @@
 
                     <!-- Begin Page Content -->
                     <div class="">
-                        <iframe name="myFrame" style="height:100vh; width: 100%; overflow-y: hidden" frameborder="0" scrolling="no"></iframe>
+                        <iframe name="myFrame" style="height:200vh; width: 100%; overflow-y: hidden" frameborder="0" scrolling="no"></iframe>
                     </div>
                     <!-- /.container-fluid -->
                 </div>
                 <!-- Footer -->
-<!--                <footer class="sticky-footer bg-white">
-                    <div class="container my-auto">
-                        <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; Programacion 4 </span>
+                <!--                <footer class="sticky-footer bg-white">
+                                    <div class="container my-auto">
+                                        <div class="copyright text-center my-auto">
+                                            <span>Copyright &copy; Programacion 4 </span>
+                                        </div>
+                                    </div>
+                                </footer>
+                                 End of Footer 
+                
+                            </div>-->
+                <!-- End of Content Wrapper -->
+
+            </div>
+            <!-- End of Page Wrapper -->
+
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
+
+            <!-- Logout Modal-->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
                         </div>
-                    </div>
-                </footer>
-                 End of Footer 
-
-            </div>-->
-            <!-- End of Content Wrapper -->
-
-        </div>
-        <!-- End of Page Wrapper -->
-
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
-
-        <!-- Logout Modal-->
-        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="login.html">Logout</a>
+                        <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <a class="btn btn-primary" href="login.html">Logout</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        <script src="com.grupo5.utilidades/principal.js" type="text/javascript"></script>
+
+            <!--Modal para Crear proyectos-->
+            <div class="modal fade" id="insertProyectoModal" tabindex="-1" aria-labelledby="insertProyectoModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="insertProyectoModalLabel">Crear Proyecto</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="ProyectosControlador?accion=insertar" id="insertarProyecto">
+                                <div class="mb-3">
+                                    <label class="form-label" for="Proyecto">Proyecto</label>
+                                    <input type="text" class="form-control" name="Proyecto" id="Proyecto">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="Descripcion">Descripcion</label>
+                                    <textarea class="form-control" name="Descripcion" id="Descripcion" rows="3"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="Git">Repositorio de git</label>
+                                    <input type="text" class="form-control" name="Git" id="Git" placeholder="Ejemplo: https://github.com/user/proyect.git">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-dark" form="insertarProyecto">Crear proyecto</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+            <script src="com.grupo5.utilidades/principal.js" type="text/javascript"></script>
     </body>
 </html>

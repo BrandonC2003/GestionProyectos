@@ -25,6 +25,7 @@ import java.sql.Date;
 public class ProyectosDAO {
 
     //Declarar variables para las consultas
+    private final String LISTAR_PROYECTOS = "SELECT IdProyecto, Proyecto FROM proyectos";
     private final String LISTAR = "select p.IdProyecto, e.IdEstado,e.Estado, e.Color, e.Indice AS IndiceEstado, "
             + "t.IdTarea,t.Tarea, t.Indice as IndiceTarea, t.FechaFin, CONCAT(u.Nombre,' ',u.Apellido) AS NombreUsuario, "
             + "t.Realizada from Proyectos p "
@@ -40,6 +41,38 @@ public class ProyectosDAO {
     private final String ACTUALIZAR = "UPDATE proyectos SET Proyecto=?, Descripcion=?, Git = ? WHERE IdProyecto = ?";
     private final String ELIMINAR = "DELETE FROM proyectos WHERE IdProyeto = ?";
 
+    
+    public List<Proyectos> listarProyectos(){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+
+        Proyectos proyecto = null;
+        List<Proyectos> listProyectos = new ArrayList<>();
+        try {
+            conn = Conexion.conectarse();
+            stmt = conn.prepareStatement(LISTAR_PROYECTOS);
+            
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                proyecto = new Proyectos();
+                
+                proyecto.setIdProyecto(rs.getInt("IdProyecto"));
+                proyecto.setProyecto(rs.getString("Proyecto"));
+                
+                listProyectos.add(proyecto);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        } finally {
+            Conexion.close(conn);
+            Conexion.close(stmt);
+            Conexion.close(rs);
+        }
+        return listProyectos;
+    }
     /**
      * Este metodo consulta a la base de datos todos los elementos
      * pertenecientes a un proyecto especifico.
@@ -118,10 +151,10 @@ public class ProyectosDAO {
      * plantilla de proyecto con estados y tareas de ejemplos.
      *
      * @param proyecto
-     * @return mensaje de nulo si esta todo bien | mensaje de error si hubo
+     * @return ultimo id generado si esta todo bien | 0 si hubo
      * algun inconveniente
      */
-    public String insertarProyecto(Proyectos proyecto) {
+    public int insertarProyecto(Proyectos proyecto) {
         Connection conexion = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -204,9 +237,9 @@ public class ProyectosDAO {
                 tareaDao.insertarTarea(tarea);
             }
             
-            return null;
+            return rs.getInt(1);
         }catch(SQLException e){
-            return e.getMessage();
+            return 0;
         }finally{
             Conexion.close(conexion);
             Conexion.close(ps);

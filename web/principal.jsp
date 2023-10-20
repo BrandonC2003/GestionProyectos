@@ -5,6 +5,8 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -61,7 +63,11 @@
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
                         <div class="bg-dark py-2 collapse-inner rounded">
                             <h6 class="collapse-header">Proyectos:</h6>
-                            <a class="collapse-item text-white" href="PrincipalControlador?accion=proyectos" target="myFrame">Proyecto 1</a>
+                            <c:set var="proyectos" value="${requestScope.proyectos}" />
+                            <c:forEach var="proyecto" items="${proyectos}">
+                                        <a class="collapse-item text-white" href="PrincipalControlador?accion=proyectos&idProyecto=${proyecto.idProyecto}" target="myFrame">${proyecto.proyecto}</a>
+                            </c:forEach>
+                            
                             <a class="collapse-item text-white" href="#" data-bs-toggle="modal" data-bs-target="#insertProyectoModal">Crear proyecto <i class="fa-solid fa-plus"></i></a>
                         </div>
                 </li>

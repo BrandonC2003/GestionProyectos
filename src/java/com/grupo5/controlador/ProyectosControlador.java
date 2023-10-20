@@ -52,6 +52,7 @@ public class ProyectosControlador extends HttpServlet {
         
         //Obtengo el parametro que contiene la accion.
         String accion = request.getParameter("accion");
+        int idProyecto = Integer.parseInt(request.getParameter("idProyecto"));
         
         //Creacion de objetos y variables necesarias.
         Proyectos proyecto = new Proyectos();
@@ -61,7 +62,7 @@ public class ProyectosControlador extends HttpServlet {
         ProyectosDAO proyectoDao = new ProyectosDAO();
         switch(accion){
             case "listar":
-                proyecto = proyectoDao.obtenerProyecto(5);
+                proyecto = proyectoDao.obtenerProyecto(idProyecto);
                 request.setAttribute("proyecto",proyecto);
                 request.getRequestDispatcher("com.grupo5.vistas/proyectos.jsp").forward(request, response);
                 break;
@@ -95,8 +96,8 @@ public class ProyectosControlador extends HttpServlet {
                 proyecto.setGit(request.getParameter("Git"));
                 proyecto.setUsuarioInserta("");//cuando se cree el login se colocara la sesion de usuario.
                 
-                proyectoDao.insertarProyecto(proyecto);
-                response.sendRedirect("PrincipalControlador?accion=proyectos");
+                int idGenerado = proyectoDao.insertarProyecto(proyecto);
+                response.sendRedirect("PrincipalControlador?accion=proyectos&idProyecto="+idGenerado);
                 break;
         }
     }

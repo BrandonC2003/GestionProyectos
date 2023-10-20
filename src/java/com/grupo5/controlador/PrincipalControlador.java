@@ -10,7 +10,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import com.grupo5.Datos.ProyectosDAO;
+import com.grupo5.modelo.Proyectos;
+import java.util.List;
 /**
  *
  * @author brand
@@ -48,7 +50,15 @@ public class PrincipalControlador extends HttpServlet {
         
         switch(accion){
             case "proyectos":
-                response.sendRedirect("ProyectosControlador?accion=listar");
+                int idProyecto = Integer.parseInt(request.getParameter("idProyecto"));
+                response.sendRedirect("ProyectosControlador?accion=listar&idProyecto="+idProyecto);
+                break;
+            case "login":
+                List<Proyectos> proyectos = new ProyectosDAO().listarProyectos();
+                
+                request.setAttribute("proyectos",proyectos);
+                
+                request.getRequestDispatcher("principal.jsp").forward(request,response);
                 break;
             default:
                 request.getRequestDispatcher("com.grupo5.vistas/"+accion+".jsp").forward(request, response);

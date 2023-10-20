@@ -14,19 +14,12 @@ import java.util.List;
  */
 public class MainPruebas {
     public static void main(String[] args) {
-        Proyectos proyecto = new ProyectosDAO().obtenerProyecto(1);
-        List<Estados> listEstado = proyecto.getEstados();
-        
-        for(Estados est : listEstado){
-            System.out.println("Estado: "+ est.getEstado());
-             List<Tareas> listTarea = est.getTareas();
-             for(Tareas tar: listTarea){
-                 System.out.println("Tarea: "+tar.getTarea());
-                 List<Usuarios> listUsuario = tar.getUsuarios();
-                 for(Usuarios us : listUsuario){
-                     System.out.println("UserName: "+us.getNombre());
-                 }
-             }
+        List<Proyectos> proyectos = new ProyectosDAO().listarProyectos();
+        for(Proyectos proy : proyectos){
+            System.out.println("id="+proy.getIdProyecto());
+            System.out.println("Proyect="+proy.getProyecto());
         }
+        
+        
     }
 }

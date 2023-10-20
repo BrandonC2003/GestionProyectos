@@ -68,7 +68,7 @@ El index será el login
                                                 <label class="custom-control-label" for="customCheck">Recordar Me</label>
                                             </div>
                                         </div>            
-                                        <a href="http://localhost:8080/GestionProyectos/principal.jsp" class="btn btn-primary btn-user btn-block">
+                                        <a href="PrincipalControlador?accion=login" class="btn btn-primary btn-user btn-block">
                                           Iniciar
                                         </a>
                                     <hr>

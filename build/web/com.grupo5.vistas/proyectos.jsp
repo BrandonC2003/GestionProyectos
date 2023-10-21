@@ -251,9 +251,9 @@
                                 <label for="estado" class="form-label">Estado</label>
                                 <select class="form-select" name="estado" id="estado">
                                     <option value="0">Selecciona un estado</option>
-                                    <option value="1">Por hacer</option>
-                                    <option value="2">En proceso</option>
-                                    <option value="3">Realizado</option>
+                                    <c:forEach var="estado" items="${proyecto.estados}">
+                                        <option value="${estado.idEstado}">${estado.estado}</option>
+                                    </c:forEach>
                                 </select>
                                 <span class="text-danger" id="validacion-estado"></span>
                             </div>
@@ -416,7 +416,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        <script src="com.grupo5.utilidades/tablero.js" type="text/javascript"></script>
+        <script src="com.grupo5.utilidades/tabler.js" type="text/javascript"></script>
         <script src="com.grupo5.utilidades/gantt.js" type="text/javascript"></script>
 
         <!-- Agrega DataTables JS -->

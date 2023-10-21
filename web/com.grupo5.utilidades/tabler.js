@@ -189,7 +189,7 @@ $(document).ready(function () {
         var textEstado = $('#estado').find('option:selected').text();
         console.log(estado.value);
         if (parseInt(estado.value) !== 0) {
-            $("#cerrarModal-guardar").click();
+            $("#cerrarModal-guardarTarea").click();
             var tareaTablero = `<div class="card shadow-sm mb-2 task" draggable="true" estado = "${estado.value}">
             <div class="card-body justify-content-center task-content">
                 ${tarea.value}j

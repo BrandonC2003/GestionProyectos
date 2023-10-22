@@ -65,8 +65,8 @@ public class TareasDAO {
             estado.setIdEstado(rs.getInt("IdEstado"));
             tarea.setEstado(estado);
             tarea.setTarea(rs.getString("Tarea"));
-            tarea.setDescripcion(rs.getString("Descrpcion"));
-            tarea.setFechaInicio(rs.getDate("FechaInciio"));
+            tarea.setDescripcion(rs.getString("Descripcion"));
+            tarea.setFechaInicio(rs.getDate("FechaInicio"));
             tarea.setFechaFin(rs.getDate("FechaFin"));
             tarea.setUsuarioInserta(rs.getString("UsuarioInserta"));
             tarea.setFechaInserta(rs.getDate("FechaInserta"));
@@ -136,12 +136,13 @@ public class TareasDAO {
      * Metodo para insertar tareas
      *
      * @param tarea
-     * @return mensaje de nulo si esta todo bien | mensaje de error si hubo
+     * @return id generado si esta todo bien | 0 si hubo
      * algun inconveniente
      */
-    public String insertarTarea(Tareas tarea) {
-         Connection conn = null;
+    public int insertarTarea(Tareas tarea) {
+        Connection conn = null;
         PreparedStatement stmt = null;
+        ResultSet rs = null;
   
         
         Estados estado = tarea.getEstado();
@@ -166,9 +167,13 @@ public class TareasDAO {
             stmt.setString(8, tarea.getUsuarioInserta());
                 
             stmt.execute();
-            return null;
+            rs= stmt.getGeneratedKeys();
+            if(rs.next()){
+                return 1;
+            }
+            return rs.getInt(1);
         } catch (SQLException | ErrorPersonalizado e) {
-            return e.getMessage();
+            return 0;
         } finally {
             Conexion.close(conn);
             Conexion.close(stmt);

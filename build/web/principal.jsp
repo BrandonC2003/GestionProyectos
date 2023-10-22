@@ -165,8 +165,8 @@
                     <!-- End of Topbar -->
 
                     <!-- Begin Page Content -->
-                    <div class="">
-                        <iframe name="myFrame" style="height:200vh; width: 100%; overflow-y: hidden" frameborder="0" scrolling="no"></iframe>
+                    <div class="" style="height:83%;" scrolling="no">
+                        <iframe name="myFrame" style="height:100%; width: 100%; overflow-y: hidden" frameborder="0" scrolling-x="no"></iframe>
                     </div>
                     <!-- /.container-fluid -->
                 </div>

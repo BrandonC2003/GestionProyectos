@@ -26,7 +26,7 @@ public class ProyectosDAO {
 
     //Declarar variables para las consultas
     private final String LISTAR_PROYECTOS = "SELECT IdProyecto, Proyecto FROM proyectos";
-    private final String LISTAR = "select p.IdProyecto, e.IdEstado,e.Estado, e.Color, e.Indice AS IndiceEstado, "
+    private final String LISTAR = "select p.IdProyecto, p.Proyecto, e.IdEstado,e.Estado, e.Color, e.Indice AS IndiceEstado, "
             + "t.IdTarea,t.Tarea, t.Indice as IndiceTarea, t.FechaFin, CONCAT(u.Nombre,' ',u.Apellido) AS NombreUsuario, "
             + "t.Realizada from Proyectos p "
             + "INNER JOIN estados e ON e.IdProyecto = p.IdProyecto "
@@ -34,7 +34,7 @@ public class ProyectosDAO {
             + "LEFT JOIN usuario_tarea ut ON ut.IdTarea = t.IdTarea "
             + "LEFT JOIN usuarios u on u.IdUsuario = ut.IdUsuario "
             + "WHERE p.IdProyecto = ? "
-            + "group BY p.IdProyecto, e.IdEstado "
+            + "group BY p.IdProyecto, e.IdEstado, t.IdTarea "
             + "ORDER BY e.Indice, t.Indice ASC";
     private final String BUCAR_POR_ID = "SELECT IdProyecto, Proyecto, Descripcion, Git, UsuarioInserta, FechaInserta  FROM proyectos WHERE IdProyecto=?";
     private final String INSERTAR = "INSERT INTO proyectos(Proyecto, Descripcion, Git, UsuarioInserta, FechaInserta) VALUES (?, ? , ?, ?, NOW())";
@@ -95,6 +95,10 @@ public class ProyectosDAO {
             List<Estados> listEstado = new ArrayList<>();
 
             while (rs.next()) {
+                
+                proyecto.setIdProyecto(rs.getInt("IdProyecto"));
+                proyecto.setProyecto(rs.getString("Proyecto"));
+                
                 Estados estado = new Estados();
                 estado.setIdEstado(rs.getInt("IdEstado"));
                 estado.setEstado(rs.getString("Estado"));

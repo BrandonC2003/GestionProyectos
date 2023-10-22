@@ -1,5 +1,9 @@
+body{
+    width: 95%;
+}
+
 #tablero{
-  width: 100%;
+  width: 105%;
   height: 83vh;
 
   background: rgb(2,0,36);

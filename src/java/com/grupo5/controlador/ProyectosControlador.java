@@ -97,7 +97,7 @@ public class ProyectosControlador extends HttpServlet {
                 proyecto.setUsuarioInserta("");//cuando se cree el login se colocara la sesion de usuario.
                 
                 int idGenerado = proyectoDao.insertarProyecto(proyecto);
-                response.sendRedirect("PrincipalControlador?accion=proyectos&idProyecto="+idGenerado);
+                response.sendRedirect("PrincipalControlador?accion=login");
                 break;
         }
     }

@@ -73,10 +73,10 @@ El index será el login
                                         </a>
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="http://localhost:8080/GestionProyectos/com.grupo5.vistas/opcionesRegistro/recuperarCuenta.jsp">Olvido su contraseña?</a>
+                                        <a class="small" href="${pageContext.request.contextPath}/com.grupo5.vistas/opcionesRegistro/recuperarCuenta.jsp">Olvido su contraseña?</a>
                                     </div>
                                     <div class="text-center">
-                                        <a class="small" href="http://localhost:8080/GestionProyectos/com.grupo5.vistas/opcionesRegistro/registroUsuario.jsp">Crear cuenta!</a>
+                                        <a class="small" href="${pageContext.request.contextPath}/com.grupo5.vistas/opcionesRegistro/registroUsuario.jsp">Crear cuenta!</a>
                                     </div>
                                 </div>
                             </div>

@@ -205,9 +205,14 @@ $(document).ready(function () {
             var ultimaTarea = $(`#${estado.value}`).find('.task:last');
             var tablero = $('.table tbody').eq(-1);
             console.log(ultimaTarea);
-            console.log(tablero);
-            ultimaTarea.after(tareaTablero);
+            if(ultimaTarea.length === 0){
+                $(`#${estado.value}`).append(tareaTablero);
+            }else{
+                ultimaTarea.after(tareaTablero);
+            }
+            
             tablero.after(tareaList);
+            
             $(".table").DataTable();
         } else {
             $("#validacion-estado").text("Tienes que seleccionar un estado.");

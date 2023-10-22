@@ -204,6 +204,8 @@ $(document).ready(function () {
                             </tr>`;
             var ultimaTarea = $(`#${estado.value}`).find('.task:last');
             var tablero = $('.table tbody').eq(-1);
+            console.log(ultimaTarea);
+            console.log(tablero);
             ultimaTarea.after(tareaTablero);
             tablero.after(tareaList);
             $(".table").DataTable();

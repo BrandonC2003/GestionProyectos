@@ -248,6 +248,7 @@
                                 <div class="mb-3">
                                     <label class="form-label" for="Proyecto">Proyecto</label>
                                     <input type="text" class="form-control" name="Proyecto" id="Proyecto">
+                                    <span class="text-danger" id="proyectoVal"></span>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label" for="Descripcion">Descripcion</label>
@@ -268,5 +269,6 @@
             </div>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
             <script src="com.grupo5.utilidades/principal.js" type="text/javascript"></script>
+            <script src="com.grupo5.utilidades/validacionesPrincipal.js" type="text/javascript"></script>
     </body>
 </html>

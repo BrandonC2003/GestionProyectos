@@ -1,6 +1,17 @@
-/* 
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
- */
-
-
+$(document).ready(function(){
+    
+    //validacion cuando se cree un proyecto
+    $("#insertarProyecto").submit(function(e){
+        e.preventDefault();
+        $("#proyectoVal").text("");
+        
+        let valorProyecto = $("#Proyecto").val().trim();
+        
+        if(valorProyecto===""){
+            $("#proyectoVal").text("El nombre del proyecto no puede quedar vacío.");
+            return false;
+        }
+        
+        $(this).unbind('submit').submit();
+    });
+});

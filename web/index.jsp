@@ -52,7 +52,7 @@ El index será el login
                                        <body style="background-color:skyblue;">
                                         <h1 class="h4 text-gray-900 mb-4">Inicio de sesion</h1>
                                     </div>
-                                    <form class="user" accion="Validar" method="POST">
+                                    <form class="user" action="UsuariosControlador?incio=ingresar" method="POST">
                                         <div class="form-group">
                                             <input type="email" name="txtEmail" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
@@ -68,13 +68,7 @@ El index será el login
                                                 <label class="custom-control-label" for="customCheck">Recordar Me</label>
                                             </div>
                                         </div>            
-<<<<<<< HEAD
-                                        <a href="PrincipalControlador?accion=login" class="btn btn-primary btn-user btn-block">
-                                          Iniciar
-                                        </a>
-=======
                                         <input type="submit" name="inicio" value="ingresar" class="btn btn-primary btn-user btn-block">  
->>>>>>> main
                                     <hr>
                                     <div class="text-center">
                                         <a class="small" href="${pageContext.request.contextPath}/com.grupo5.vistas/opcionesRegistro/recuperarCuenta.jsp">Olvido su contraseña?</a>

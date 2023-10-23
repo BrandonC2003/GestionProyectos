@@ -1,6 +1,4 @@
-
 package com.grupo5.Datos;
-package com.grupo5.modelo;
 
 import com.grupo5.config.Conexion;
 import com.grupo5.modelo.Usuarios;
@@ -13,9 +11,9 @@ public class UsuariosDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
     
-    public Usuarios validar(String email, String clave){
+    public boolean validar(String email, String clave){
        Usuarios us = new Usuarios();
-       String sql="select * from usuario where Email=? and Clave=?";
+       String sql="select * from usuarios where Email=? and Clave=?";
     try{
             conn = Conexion.conectarse();
             stmt = conn.prepareStatement(sql);
@@ -24,15 +22,13 @@ public class UsuariosDAO {
             rs = stmt.executeQuery();
             
             while(rs.next()){
-            
-                us.setEmail(rs.getString("Email"));
-                us.setEmail(rs.getString("Clave"));
+                return true;
             }
+            return false;
        }
        catch(Exception e)
        {
+           return false;
        }
-     
-        return us;
     }
 }

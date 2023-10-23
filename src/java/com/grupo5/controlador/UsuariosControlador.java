@@ -1,3 +1,4 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
@@ -7,7 +8,6 @@ package com.grupo5.controlador;
 import com.grupo5.Datos.UsuariosDAO;
 import com.grupo5.modelo.Usuarios;
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -20,8 +20,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "UsuariosControlador", urlPatterns = {"/UsuariosControlador"})
 public class UsuariosControlador extends HttpServlet {
-    
-    UsuariosDAO udao= new UsuariosDAO();
+
+    UsuariosDAO udao = new UsuariosDAO();
     Usuarios us = new Usuarios();
 
     /**
@@ -35,8 +35,8 @@ public class UsuariosControlador extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       
-        }
+        response.setContentType("text/html;charset=UTF-8");
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -65,22 +65,26 @@ public class UsuariosControlador extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String inicio=request.getParameter("inicio");
-        if (inicio.equalsIgnoreCase("ingresar")){
-            String user=request.getParameter("txtEmail");
-            String pass=request.getParameter("txtPass");
-            us=udao.validar(user, pass);
-            if(us.getEmail() != null){
-            response.sendRedirect("PrincipalControlador?accion=login");
-            
+        String inicio = request.getParameter("inicio");
+        if (inicio.equalsIgnoreCase("ingresar")) {
+            String user = request.getParameter("txtEmail");
+            String pass = request.getParameter("txtPass");
+            if (udao.validar(user, pass)) {
+                response.sendRedirect("PrincipalControlador?accion=login");
+            }else{
+                request.getRequestDispatcher("index.jsp").forward(request, response);
             }
+
+        } else {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
         }
-        else
-        {
-            request.getRequestDispatcher("com.grupo5.vistas/index.jsp").forward(request, response);
-        }
-        
     }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
     @Override
     public String getServletInfo() {
         return "Short description";

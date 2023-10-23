@@ -17,6 +17,20 @@ import java.sql.Date;
 
 public class GruposDAO {
     
+        private final String LISTAR = "select g.IdGrupos, p.IdProyectos AS p.Proyecto,u.IdUsuario AS Nombre"
+            + "CONCAT(u.Nombre,' ',u.Apellido) AS NombreUsuario, "
+            + "t.Realizada from Grupos g "
+            + "INNER JOIN grupos p ON e.IdGrupos = p.IdGrupos "
+            + "LEFT JOIN usuario_grupo ut ON ut.IdUsuario = t.IdUsuario "
+            + "LEFT JOIN usuarios u on u.IdUsuario = ut.IdUsuario "
+            + "WHERE g.IdGrupo = ? "
+            + "group BY g.IdGrupo, p.IdProyecto "
+            + "ORDER BY u.Nombre, p.grupo ASC";
+    private final String BUCAR_POR_ID = "SELECT IdProyecto, Proyecto, Descripcion, Git, UsuarioInserta, FechaInserta  FROM proyectos WHERE IdProyecto=?";
+    private final String INSERTAR = "INSERT INTO grupos(IdGrupo, IdUsuario, IdProyecto,Rol) VALUES (?, ? , ?, ?)";
+    private final String ACTUALIZAR = "UPDATE proyectos SET grupos=?, IdUsuario=?, IdProyecto = ? WHERE IdGrupo = ?";
+    private final String ELIMINAR = "DELETE FROM grupos WHERE IdGrupo = ?";
+    
     public Grupos Teams(int idGrupos, int idProyecto, int idUsuario, String rol){
     Connection conn = null;
         PreparedStatement stmt = null;
@@ -30,17 +44,20 @@ public class GruposDAO {
             conn = Conexion.conectarse();
             stmt = conn.prepareStatement(sql);
             stmt.setInt(1, idGrupos);
-            stmt.setInt(2, idProyecto);
-            stmt.setInt(3, idUsuario);
             rs = stmt.executeQuery();
             
             
             while(rs.next()){
-                teams.setIdGrupo(rs.getInt("IdGrupos"));   
+                teams.setIdGrupo(rs.getInt("IdGrupos"));
+                
             }
-         }catch(SQLException e)
-         {
-         }
+         }catch (SQLException e) {
+            e.printStackTrace(System.out);
+        } finally {
+            Conexion.close(conn);
+            Conexion.close(stmt);
+            Conexion.close(rs);
+        }
     
     return teams;
     }

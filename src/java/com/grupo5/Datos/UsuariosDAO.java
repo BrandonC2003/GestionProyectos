@@ -9,23 +9,30 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class UsuariosDAO {
-    Conexion cn = new Conexion();
-    Connection con;
-    PreparedStatement ps;
-    ResultSet rs;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
     
-   /* public Usuarios validar(){
+    public Usuarios validar(String email, String clave){
        Usuarios us = new Usuarios();
        String sql="select * from usuario where Email=? and Clave=?";
-       try{
-                     
-           ps=con.prepareStatement(sql);
-       
+    try{
+            conn = Conexion.conectarse();
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1,email);
+            stmt.setString(2, clave);
+            rs = stmt.executeQuery();
+            
+            while(rs.next()){
+            
+                us.setEmail(rs.getString("Email"));
+                us.setEmail(rs.getString("Clave"));
+            }
        }
        catch(Exception e)
        {
        }
      
         return us;
-    }*/
+    }
 }

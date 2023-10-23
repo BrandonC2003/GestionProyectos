@@ -68,9 +68,7 @@ El index será el login
                                                 <label class="custom-control-label" for="customCheck">Recordar Me</label>
                                             </div>
                                         </div>            
-                                        <a name="inicio" value="ingresar" href="http://localhost:8080/GestionProyectos/principal.jsp" class="btn btn-primary btn-user btn-block">
-                                          Iniciar
-                                        </a>
+                                        <input type="submit" name="inicio" value="ingresar" class="btn btn-primary btn-user btn-block">  
                                     <hr>
                                     <div class="text-center">
                                         <a class="small" href="http://localhost:8080/GestionProyectos/com.grupo5.vistas/opcionesRegistro/recuperarCuenta.jsp">Olvido su contraseña?</a>

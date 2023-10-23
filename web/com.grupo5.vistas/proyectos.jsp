@@ -197,7 +197,7 @@
             </div>
         </div>
         <!-- Modal para ver detalles y modificar tareas -->
-        <div class="modal fade" id="actualizarTareasModal" tabindex="-1" aria-labelledby="actualizarTareasModalLabel" aria-hidden="true">
+<!--        <div class="modal fade" id="actualizarTareasModal" tabindex="-1" aria-labelledby="actualizarTareasModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -241,7 +241,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
 
         <!--Modal para agregar estados-->
         <div class="modal fade" id="insertEstadoModal" tabindex="-1" aria-labelledby="insertEstadoModalLabel" aria-hidden="true">
@@ -254,6 +254,7 @@
                     <div class="modal-body">
                         <form id="formInsertarEstado">
                             <input type="reset" hidden id="btnLimpiar-agergarEstado">
+                            <input type="hidden" value="${proyecto.idProyecto}" name="idProyecto">
                             <div class="mb-3">
                                 <label class="form-label" for="estado">Estado</label>
                                 <input type="text" class="form-control" name="estado">
@@ -261,7 +262,7 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label" for="Color">Color</label>
-                                <input type="color" class="form-control form-control-color" name="Color" title="Escoge un color para tu estado.">
+                                <input type="color" class="form-control form-control-color" name="color" title="Escoge un color para tu estado.">
                                 <span class="text-danger" id="colorVal"></span>
                             </div>
                         </form>

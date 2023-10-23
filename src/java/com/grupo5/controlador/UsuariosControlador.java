@@ -4,6 +4,8 @@
  */
 package com.grupo5.controlador;
 
+import com.grupo5.Datos.UsuariosDAO;
+import com.grupo5.modelo.Usuarios;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
@@ -18,6 +20,9 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "UsuariosControlador", urlPatterns = {"/UsuariosControlador"})
 public class UsuariosControlador extends HttpServlet {
+    
+    UsuariosDAO udao= new UsuariosDAO();
+    Usuarios us = new Usuarios();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -30,18 +35,7 @@ public class UsuariosControlador extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UsuariosControlador</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UsuariosControlador at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+       
         }
     }
 
@@ -71,14 +65,22 @@ public class UsuariosControlador extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String inicio=request.getParameter("inicio");
+        if (inicio.equalsIgnoreCase("ingresar")){
+            String user=request.getParameter("txtEmail");
+            String pass=request.getParameter("txtPass");
+            us=udao.validar(user, pass);
+            if(us.getEmail() != null){
+            response.sendRedirect("PrincipalControlador?accion=login");
+            
+            }
+        }
+        else
+        {
+            request.getRequestDispatcher("com.grupo5.vistas/index.jsp").forward(request, response);
+        }
+        
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

@@ -14,6 +14,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -37,7 +38,7 @@ public class TareasDAO {
             + "FechaFin = ?, Predecesor = ?, Realizada = ? "
             + "WHERE IdTarea = ?";
     private final String ELIMINAR = "DELETE FROM tareas WHERE IdTarea = ?";
-    
+
     private final String OBTENER_ULTIMO_INDICE = "SELECT Indice FROM tareas WHERE IdEstado = ? ORDER BY Indice DESC LIMIT 1";
 
     /**
@@ -118,7 +119,7 @@ public class TareasDAO {
                 tarea.setUsuarioInserta(rs.getString("UsuarioInserta"));
                 tarea.setFechaInserta(rs.getDate("FechaInserta"));
                 tarea.setRealizada(rs.getBoolean("Realizada"));
-                
+
                 listTarea.add(tarea);
             }
 
@@ -136,42 +137,43 @@ public class TareasDAO {
      * Metodo para insertar tareas
      *
      * @param tarea
-     * @return id generado si esta todo bien | 0 si hubo
-     * algun inconveniente
+     * @return id generado si esta todo bien | 0 si hubo algun inconveniente
      */
     public int insertarTarea(Tareas tarea) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-  
-        
+        int idGenerado = 0;
+
         Estados estado = tarea.getEstado();
         try {
             conn = Conexion.conectarse();
-            stmt = conn.prepareStatement(INSERTAR);
+            stmt = conn.prepareStatement(INSERTAR, Statement.RETURN_GENERATED_KEYS);
             stmt.setInt(1, estado.getIdEstado());
             stmt.setString(2, tarea.getTarea());
             stmt.setString(3, tarea.getDescripcion());
             stmt.setDate(4, (Date) tarea.getFechaInicio());
             stmt.setDate(5, (Date) tarea.getFechaFin());
-            
+
             int ultimoIndice = obtenerIndice(estado.getIdEstado());
-            
-            if(ultimoIndice != 0){
-                stmt.setInt(6,ultimoIndice);
-            }else{
+
+            if (ultimoIndice != 0) {
+                stmt.setInt(6, ultimoIndice);
+            } else {
                 throw new ErrorPersonalizado("Error al obtener el indice");
             }
-            
+
             stmt.setInt(7, tarea.getPredecesor());
             stmt.setString(8, tarea.getUsuarioInserta());
-                
+
             stmt.execute();
-            rs= stmt.getGeneratedKeys();
-            if(rs.next()){
-                return 1;
+
+            // Recuperar las claves generadas
+            rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                idGenerado = rs.getInt(1);
             }
-            return rs.getInt(1);
+            return idGenerado;
         } catch (SQLException | ErrorPersonalizado e) {
             return 0;
         } finally {
@@ -188,10 +190,9 @@ public class TareasDAO {
      * algun inconveniente
      */
     public String actualizarTarea(Tareas tarea) {
-         Connection conn = null;
+        Connection conn = null;
         PreparedStatement stmt = null;
-  
-        
+
         Estados estado = tarea.getEstado();
         try {
             conn = Conexion.conectarse();
@@ -203,8 +204,8 @@ public class TareasDAO {
             stmt.setDate(5, (Date) tarea.getFechaFin());
             stmt.setInt(6, tarea.getPredecesor());
             stmt.setBoolean(7, tarea.isRealizada());
-            stmt.setInt(8,tarea.getIdTarea());
-                
+            stmt.setInt(8, tarea.getIdTarea());
+
             stmt.execute();
             return null;
         } catch (SQLException e) {
@@ -222,13 +223,13 @@ public class TareasDAO {
      * @return true | false
      */
     public boolean eliminarTarea(int IdTarea) {
-         Connection conn = null;
+        Connection conn = null;
         PreparedStatement stmt = null;
         try {
             conn = Conexion.conectarse();
             stmt = conn.prepareStatement(ACTUALIZAR);
             stmt.setInt(1, IdTarea);
-                
+
             stmt.execute();
             return true;
         } catch (SQLException e) {
@@ -255,8 +256,8 @@ public class TareasDAO {
             ps = conexion.prepareStatement(OBTENER_ULTIMO_INDICE);
             ps.setInt(1, idEstado);
             rs = ps.executeQuery();
-            
-            if(rs.next()){ //validar que el resultado no sea nulo
+
+            if (rs.next()) { //validar que el resultado no sea nulo
                 return rs.getInt("Indice") + 1;
             }
             return 1;

@@ -178,60 +178,61 @@ $(document).ready(function () {
 
 
 
-    //Evento cuando se envia el formulario para agregar tareas
-//    $(document).on("submit", "#formAgregarTarea", function (e) {
-//        e.preventDefault();
-//        var formData = $(this).serializeArray();
-//        console.log(formData);
-//        var tarea = formData.find(item => item.name === 'tarea');
-//        var estado = formData.find(item => item.name === 'estado');
-//        var usuario = formData.find(item => item.name === 'usuario');
-//        var fechaFin = formData.find(item => item.name === 'fechaFin');
-//        var textEstado = $('#estado').find('option:selected').text();
-//
-//        $.ajax({
-//            url: "TareasControlador?accion=insertar", // Reemplaza con la URL de tu servlet
-//            type: "POST", // Puedes usar POST para enviar datos al servidor
-//            data: formData, // Convierte el objeto de datos a JSON
-//            contentType: "application/json; charset=utf-8", // Indica el tipo de contenido
-//            dataType: "json", // Espera una respuesta en formato JSON
-//            success: function (data) {
-//                if (parseInt(estado.value) !== 0) {
-//                    $("#cerrarModal-guardarTarea").click();
-//                    var tareaTablero = `<div class="card shadow-sm mb-2 task" draggable="true" estado = "${estado.value}" id="${data.idEstado}">
-//            <div class="card-body justify-content-center task-content">
-//                ${tarea.value}j
-//            </div>
-//            </div>`;
-//                    var tareaList = `<tr>
-//                            <td><input type="checkbox"></td>
-//                            <td>${tarea.value}</td>
-//                            <td>${fechaFin.value}</td>
-//                            <td></td>
-//                            <td class="${getColorEstado(estado.value)}">${textEstado}</td>
-//                            </tr>`;
-//                    var ultimaTarea = $(`#${estado.value}`).find('.task:last');
-//                    var tablero = $('.table tbody').eq(-1);
-//                    console.log(ultimaTarea);
-//                    if (ultimaTarea.length === 0) {
-//                        $(`#${estado.value}`).append(tareaTablero);
-//                    } else {
-//                        ultimaTarea.after(tareaTablero);
-//                    }
-//
-//                    tablero.after(tareaList);
-//
-//                    $(".table").DataTable();
-//                } else {
-//                    $("#validacion-estado").text("Tienes que seleccionar un estado.");
-//                }
-//            },
-//            error: function () {
-//                Swal.fire("Error", "Ocurrio un error al agregar la tarea", "error");
-//            }
-//        });
-//
-//    });
+    $(document).on("submit", "#formAgregarTarea", function (e) {
+        e.preventDefault();
+        var formData = $(this).serializeArray();
+        console.log(formData);
+        var tarea = formData.find(item => item.name === 'tarea');
+        var estado = formData.find(item => item.name === 'estado');
+        var usuario = formData.find(item => item.name === 'usuario');
+        var fechaFin = formData.find(item => item.name === 'fechaFin');
+        var textEstado = $('#estado').find('option:selected').text();
+
+        if (parseInt(estado.value) !== 0) {
+            $("#validacion-estado").text("");
+            $.ajax({
+                url: "TareasControlador?accion=insertar", // Reemplaza con la URL de tu servlet
+                type: "POST", // Puedes usar POST para enviar datos al servidor
+                data: formData, // Convierte el objeto de datos a JSON
+                contentType: "application/json; charset=utf-8", // Indica el tipo de contenido
+                dataType: "json", // Espera una respuesta en formato JSON
+                success: function (data) {
+
+                    $("#cerrarModal-guardarTarea").click();
+                    var tareaTablero = `<div class="card shadow-sm mb-2 task" draggable="true" estado = "${estado.value}" id="${data.idEstado}">
+            <div class="card-body justify-content-center task-content">
+                ${tarea.value}j
+            </div>
+            </div>`;
+                    var tareaList = `<tr>
+                            <td><input type="checkbox"></td>
+                            <td>${tarea.value}</td>
+                            <td>${fechaFin.value}</td>
+                            <td></td>
+                            <td class="${getColorEstado(estado.value)}">${textEstado}</td>
+                            </tr>`;
+                    var ultimaTarea = $(`#${estado.value}`).find('.task:last');
+                    var tablero = $('.table tbody').eq(-1);
+                    console.log(ultimaTarea);
+                    if (ultimaTarea.length === 0) {
+                        $(`#${estado.value}`).append(tareaTablero);
+                    } else {
+                        ultimaTarea.after(tareaTablero);
+                    }
+
+                    tablero.after(tareaList);
+
+                    $(".table").DataTable();
+                },
+                error: function () {
+                    Swal.fire("Error", "Ocurrio un error al agregar la tarea", "error");
+                }
+            });
+        } else {
+            $("#validacion-estado").text("Tienes que seleccionar un estado.");
+        }
+
+    });
 
 
 });

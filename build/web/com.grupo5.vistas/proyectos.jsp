@@ -332,7 +332,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        <script src="com.grupo5.utilidades/tabler.js" type="text/javascript"></script>
+        <script src="com.grupo5.utilidades/tablero.js" type="text/javascript"></script>
         <script src="com.grupo5.utilidades/gantt.js" type="text/javascript"></script>
 
         <!-- Agrega DataTables JS -->

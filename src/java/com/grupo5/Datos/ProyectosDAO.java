@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDate;
 import java.sql.Date;
+
 /**
  *
  * @author brand
@@ -26,7 +27,7 @@ public class ProyectosDAO {
 
     //Declarar variables para las consultas
     private final String LISTAR_PROYECTOS = "SELECT IdProyecto, Proyecto FROM proyectos";
-    private final String LISTAR = "select p.IdProyecto, e.IdEstado,e.Estado, e.Color, e.Indice AS IndiceEstado, "
+    private final String LISTAR = "select p.IdProyecto, p.Proyecto, e.IdEstado,e.Estado, e.Color, e.Indice AS IndiceEstado, "
             + "t.IdTarea,t.Tarea, t.Indice as IndiceTarea, t.FechaFin, CONCAT(u.Nombre,' ',u.Apellido) AS NombreUsuario, "
             + "t.Realizada from Proyectos p "
             + "INNER JOIN estados e ON e.IdProyecto = p.IdProyecto "
@@ -34,15 +35,14 @@ public class ProyectosDAO {
             + "LEFT JOIN usuario_tarea ut ON ut.IdTarea = t.IdTarea "
             + "LEFT JOIN usuarios u on u.IdUsuario = ut.IdUsuario "
             + "WHERE p.IdProyecto = ? "
-            + "group BY p.IdProyecto, e.IdEstado "
+            + "group BY p.IdProyecto, e.IdEstado, t.IdTarea "
             + "ORDER BY e.Indice, t.Indice ASC";
     private final String BUCAR_POR_ID = "SELECT IdProyecto, Proyecto, Descripcion, Git, UsuarioInserta, FechaInserta  FROM proyectos WHERE IdProyecto=?";
     private final String INSERTAR = "INSERT INTO proyectos(Proyecto, Descripcion, Git, UsuarioInserta, FechaInserta) VALUES (?, ? , ?, ?, NOW())";
     private final String ACTUALIZAR = "UPDATE proyectos SET Proyecto=?, Descripcion=?, Git = ? WHERE IdProyecto = ?";
     private final String ELIMINAR = "DELETE FROM proyectos WHERE IdProyeto = ?";
 
-    
-    public List<Proyectos> listarProyectos(){
+    public List<Proyectos> listarProyectos() {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -52,15 +52,15 @@ public class ProyectosDAO {
         try {
             conn = Conexion.conectarse();
             stmt = conn.prepareStatement(LISTAR_PROYECTOS);
-            
+
             rs = stmt.executeQuery();
 
             while (rs.next()) {
                 proyecto = new Proyectos();
-                
+
                 proyecto.setIdProyecto(rs.getInt("IdProyecto"));
                 proyecto.setProyecto(rs.getString("Proyecto"));
-                
+
                 listProyectos.add(proyecto);
             }
 
@@ -73,6 +73,7 @@ public class ProyectosDAO {
         }
         return listProyectos;
     }
+
     /**
      * Este metodo consulta a la base de datos todos los elementos
      * pertenecientes a un proyecto especifico.
@@ -85,6 +86,14 @@ public class ProyectosDAO {
         PreparedStatement stmt = null;
         ResultSet rs = null;
 
+        //aqui se almacenaran los id de estados, para que no se repitan los datos.
+        List<Integer> idsEstados = new ArrayList<>();
+        int idEstados;
+        
+        List<Tareas> listTarea= null;
+        Estados estado = null;
+        boolean existsEstado = false;
+
         Proyectos proyecto = new Proyectos();
         try {
             conn = Conexion.conectarse();
@@ -95,14 +104,25 @@ public class ProyectosDAO {
             List<Estados> listEstado = new ArrayList<>();
 
             while (rs.next()) {
-                Estados estado = new Estados();
-                estado.setIdEstado(rs.getInt("IdEstado"));
-                estado.setEstado(rs.getString("Estado"));
-                estado.setIndice(rs.getInt("IndiceEstado"));
-                estado.setColor(rs.getString("Color"));
-                estado.setProyecto(proyecto);
+                existsEstado=false;
+                proyecto.setIdProyecto(rs.getInt("IdProyecto"));
+                proyecto.setProyecto(rs.getString("Proyecto"));
 
-                List<Tareas> listTarea = new ArrayList<>();
+                idEstados = rs.getInt("IdEstado");
+
+                //Valido si el estado recuperado aun no esta registrado en mi lista
+                if (idsEstados.indexOf(idEstados) == -1) {
+                    idsEstados.add(idEstados);
+                    estado = new Estados();
+                    estado.setIdEstado(idEstados);
+                    estado.setEstado(rs.getString("Estado"));
+                    estado.setIndice(rs.getInt("IndiceEstado"));
+                    estado.setColor(rs.getString("Color"));
+                    estado.setProyecto(proyecto);
+                    
+                    listTarea = new ArrayList<>();
+                    existsEstado=true;
+                }
 
                 Tareas tarea = new Tareas();
                 tarea.setIdTarea(rs.getInt("IdTarea"));
@@ -120,7 +140,10 @@ public class ProyectosDAO {
                 listTarea.add(tarea);
 
                 estado.setTareas(listTarea);
-                listEstado.add(estado);
+                
+                 if (existsEstado) {
+                     listEstado.add(estado);
+                 }
             }
 
             proyecto.setIdProyecto(idProyecto);
@@ -147,51 +170,51 @@ public class ProyectosDAO {
     }
 
     /**
-     * Metodo para insertar un nuevo proyecto, el cual tambien creara una 
+     * Metodo para insertar un nuevo proyecto, el cual tambien creara una
      * plantilla de proyecto con estados y tareas de ejemplos.
      *
      * @param proyecto
-     * @return ultimo id generado si esta todo bien | 0 si hubo
-     * algun inconveniente
+     * @return ultimo id generado si esta todo bien | 0 si hubo algun
+     * inconveniente
      */
     public int insertarProyecto(Proyectos proyecto) {
         Connection conexion = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         Estados estado = null;
         EstadosDAO estadoDao = new EstadosDAO();
-        
+
         Tareas tarea = null;
         TareasDAO tareaDao = new TareasDAO();
-        
+
         LocalDate fechaI = LocalDate.now();
         Date fechaInicio = Date.valueOf(fechaI);
-        
+
         LocalDate fechaF = fechaI.plusDays(5);
         Date fechaFin = Date.valueOf(fechaF);
-        
-        try{
+
+        try {
             conexion = Conexion.conectarse();
             ps = conexion.prepareStatement(INSERTAR, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,proyecto.getProyecto());
+            ps.setString(1, proyecto.getProyecto());
             ps.setString(2, proyecto.getDescripcion());
             ps.setString(3, proyecto.getGit());
             ps.setString(4, proyecto.getUsuarioInserta());
             ps.execute();
             rs = ps.getGeneratedKeys();
-            
-            if(rs.next()){
+
+            if (rs.next()) {
                 proyecto.setIdProyecto(rs.getInt(1));
-                
+
                 //primer estado
                 estado = new Estados();
                 estado.setProyecto(proyecto);
                 estado.setEstado("Por hacer");
                 estado.setColor("bg-danger");
-                
+
                 estado.setIdEstado(estadoDao.insertarEstado(estado));
-                
+
                 tarea = new Tareas();
                 tarea.setEstado(estado);
                 tarea.setTarea("Tarea por hacer 1");
@@ -199,16 +222,16 @@ public class ProyectosDAO {
                 tarea.setFechaInicio(fechaInicio);
                 tarea.setFechaFin(fechaFin);
                 tarea.setUsuarioInserta(proyecto.getUsuarioInserta());
-                
+
                 tareaDao.insertarTarea(tarea);
                 //Segundo estado
                 estado = new Estados();
                 estado.setProyecto(proyecto);
                 estado.setEstado("En proceso");
                 estado.setColor("bg-warning");
-                
+
                 estado.setIdEstado(estadoDao.insertarEstado(estado));
-                
+
                 tarea = new Tareas();
                 tarea.setEstado(estado);
                 tarea.setTarea("Tarea en proceso 1");
@@ -216,16 +239,16 @@ public class ProyectosDAO {
                 tarea.setFechaInicio(fechaInicio);
                 tarea.setFechaFin(fechaFin);
                 tarea.setUsuarioInserta(proyecto.getUsuarioInserta());
-                
+
                 tareaDao.insertarTarea(tarea);
                 //Tercer estado
                 estado = new Estados();
                 estado.setProyecto(proyecto);
                 estado.setEstado("Finalizadas");
                 estado.setColor("bg-success");
-                
+
                 estado.setIdEstado(estadoDao.insertarEstado(estado));
-                
+
                 tarea = new Tareas();
                 tarea.setEstado(estado);
                 tarea.setTarea("Tarea finalizada 1");
@@ -233,14 +256,14 @@ public class ProyectosDAO {
                 tarea.setFechaInicio(fechaInicio);
                 tarea.setFechaFin(fechaFin);
                 tarea.setUsuarioInserta(proyecto.getUsuarioInserta());
-                
+
                 tareaDao.insertarTarea(tarea);
             }
-            
+
             return rs.getInt(1);
-        }catch(SQLException e){
+        } catch (SQLException e) {
             return 0;
-        }finally{
+        } finally {
             Conexion.close(conexion);
             Conexion.close(ps);
             Conexion.close(rs);

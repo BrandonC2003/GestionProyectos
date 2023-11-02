@@ -779,6 +779,19 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         </macrodef>
     </target>
     <target name="-init-taskdefs">
+<<<<<<< HEAD
+=======
+        <fail unless="libs.CopyLibs.classpath">
+The libs.CopyLibs.classpath property is not set up.
+This property must point to 
+org-netbeans-modules-java-j2seproject-copylibstask.jar file which is part
+of NetBeans IDE installation and is usually located at 
+&lt;netbeans_installation&gt;/java&lt;version&gt;/ant/extra folder.
+Either open the project in the IDE and make sure CopyLibs library
+exists or setup the property manually. For example like this:
+ ant -Dlibs.CopyLibs.classpath=a/path/to/org-netbeans-modules-java-j2seproject-copylibstask.jar
+                </fail>
+>>>>>>> b63af32992a6831d62581a11f8d424dd07a77725
         <taskdef classpath="${libs.CopyLibs.classpath}" resource="org/netbeans/modules/java/j2seproject/copylibstask/antlib.xml"/>
     </target>
     <target name="-init-ap-cmdline-properties">
@@ -841,9 +854,15 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <copy todir="${build.web.dir}">
             <fileset dir="${web.docbase.dir}" excludes="${build.web.excludes},${excludes}" includes="${includes}"/>
         </copy>
+<<<<<<< HEAD
         <copy todir="${build.web.dir}/WEB-INF">
             <fileset dir="${webinf.dir}" excludes="${build.web.excludes}"/>
         </copy>
+=======
+        <!--<copy todir="${build.web.dir}/WEB-INF">
+            <fileset dir="${webinf.dir}" excludes="${build.web.excludes}"/>
+        </copy>-->
+>>>>>>> b63af32992a6831d62581a11f8d424dd07a77725
     </target>
     <target depends="init, deps-jar, -pre-pre-compile, -pre-compile, -copy-manifest, -copy-persistence-xml, -copy-webdir, library-inclusion-in-archive,library-inclusion-in-manifest" if="have.sources" name="-do-compile">
         <webproject2:javac destdir="${build.classes.dir}" gensrcdir="${build.generated.sources.dir}"/>
@@ -972,11 +991,20 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target depends="init,compile,compile-jsps,-pre-dist,-do-dist-with-manifest,-do-dist-without-manifest" name="do-dist"/>
     <target depends="init" if="dist.ear.dir" name="library-inclusion-in-manifest">
+<<<<<<< HEAD
+=======
+        <copyfiles files="${libs.javaee-web-api-8.0.classpath}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
+>>>>>>> b63af32992a6831d62581a11f8d424dd07a77725
         <copyfiles files="${file.reference.mysql-connector-j-8.0.33.jar}" iftldtodir="${build.web.dir}/WEB-INF" todir="${dist.ear.dir}/lib"/>
         <mkdir dir="${build.web.dir}/META-INF"/>
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
+<<<<<<< HEAD
+=======
+        <copyfiles files="${libs.javaee-web-api-8.0.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
+        
+>>>>>>> b63af32992a6831d62581a11f8d424dd07a77725
     </target>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">
         <delete dir="${build.web.dir}/WEB-INF/lib"/>
@@ -1019,7 +1047,11 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
     </target>
     <target depends="init,-init-cos,compile,compile-jsps,-do-compile-single-jsp,-pre-dist,-do-tmp-dist-with-manifest,-do-tmp-dist-without-manifest,-pre-run-deploy,-pre-nbmodule-run-deploy,-run-deploy-nb,-init-deploy-ant,-deploy-ant,-run-deploy-am,-post-nbmodule-run-deploy,-post-run-deploy,-do-update-breakpoints" name="run-deploy"/>
     <target if="netbeans.home" name="-run-deploy-nb">
+<<<<<<< HEAD
         <!--nbdeploy clientUrlPart="${client.urlPart}" debugmode="false" forceRedeploy="${forceRedeploy}"/-->
+=======
+        <nbdeploy clientUrlPart="${client.urlPart}" debugmode="false" forceRedeploy="${forceRedeploy}"/>
+>>>>>>> b63af32992a6831d62581a11f8d424dd07a77725
     </target>
     <target name="-init-deploy-ant" unless="netbeans.home">
         <property name="deploy.ant.archive" value="${dist.war}"/>
@@ -1058,7 +1090,11 @@ or ant -Dj2ee.platform.classpath=&lt;server_classpath&gt; (where no properties f
         <nbbrowse url="${client.url}"/>
     </target>
     <target if="do.display.browser.nb" name="-display-browser-nb">
+<<<<<<< HEAD
         <!--nbbrowse context="${browser.context}" url="${client.url}" urlPath="${client.urlPart}"/-->
+=======
+        <nbbrowse context="${browser.context}" url="${client.url}" urlPath="${client.urlPart}"/>
+>>>>>>> b63af32992a6831d62581a11f8d424dd07a77725
     </target>
     <target if="do.display.browser.cl" name="-get-browser" unless="browser">
         <condition property="browser" value="rundll32">

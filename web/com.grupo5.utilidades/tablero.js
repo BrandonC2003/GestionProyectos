@@ -1,6 +1,5 @@
 $(document).ready(function () {
     var textAnterior = "";
-
     // Metodo para hacer los elementos sortables
     function agregarSortables() {
         $("#board").sortable({
@@ -31,25 +30,6 @@ $(document).ready(function () {
     agregarSortables();
 
 
-//  // Este evento sirve para agregar una nueva tarea a un estado
-//  $(document).on("click",'.btn-agregarTarea', function(){
-//    var tablero = $(this).closest(".swim-lane");
-//    var tarea = `<div class="card shadow-sm mb-2 task" draggable="true">
-//    <div class="card-body justify-content-center task-content">
-//        Nueva Tarea
-//    </div>
-//    </div>`;
-//    var ultimaTarea=tablero.find('.swim-lane-content .task:last');
-//    console.log(ultimaTarea)
-//    if(ultimaTarea.length != 0){
-//      ultimaTarea.after(tarea);
-//      console.log("esto se ejecuto")
-//    }else{
-//      tablero.find('.swim-lane-content').html(tarea);
-//    }
-//  });
-
-
     //Eventos para controlar los estados.
 
 
@@ -61,16 +41,32 @@ $(document).ready(function () {
     //evento click para agregar un estado.
     $('#formInsertarEstado').submit(function (e) {
         e.preventDefault();
-        var formData = $(this).serializeArray();
-        var estadoName = formData.find(item => item.name === 'estado');
-        if (estadoName.value === "") {
+        var formData = $(this).serialize();
+        console.log(formData);
+
+        var params = new URLSearchParams(formData);
+        var datos = {};
+
+        for (const [key, value] of params) {
+            datos[key] = value;
+        }
+
+        console.log(datos.estado);
+        $('#estadoVal').text("");
+        if (datos.estado.trim() === "") {
             $('#estadoVal').text("Tienes que completar el estado.");
             return false;
         }
-        var penultimoItem = $("#board .swim-lane").eq(-1);
-        let estado = `<div class="card ms-3 me-3 mt-4 swim-lane">
+        $.ajax({
+            url: "EstadosControlador?accion=insertar", // Reemplaza con la URL de tu servlet
+            type: "POST", // Puedes usar POST para enviar datos al servidor
+            data: formData, // Convierte el objeto de datos a JSON
+            dataType: "json", // Espera una respuesta en formato JSON
+            success: function (data) {
+                var penultimoItem = $("#board .swim-lane").eq(-1);
+                let estado = `<div class="card ms-3 me-3 mt-4 swim-lane">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h3 class="card-title"> ${estadoName.value}</h3>
+        <h3 class="card-title"> ${datos.estado}</h3>
         <div class="dropdown no-arrow">
             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -86,17 +82,22 @@ $(document).ready(function () {
             </div>
         </div>
     </div>
-    <div class="card-body justify-content-center swim-lane-content">
+    <div class="card-body justify-content-center swim-lane-content" id="${data.idEstado}">
         
     </div>
     <div class="card-footer">
       <button type="button"class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
     </div>
     </div>`;
-        penultimoItem.after(estado);
-        agregarSortables();
-        $('#cerrarModal-guardarEstado').click();
-        
+                penultimoItem.after(estado);
+                agregarSortables();
+                $('#cerrarModal-guardarEstado').click();
+
+            },
+            error: function () {
+                Swal.fire("Error", "Ocurrio un error al agregar el estado", "error");
+            }
+        });
     });
 
     //controlar el evento click de mi boton para cerrar el modal de agregar estado
@@ -114,7 +115,7 @@ $(document).ready(function () {
     });
 
     $(document).on('blur', '.card-title', function () {
-        if ($(this).text() == "") {
+        if ($(this).text() === "") {
             $(this).text(textAnterior);
         }
         $(this).attr("contenteditable", false);
@@ -125,24 +126,24 @@ $(document).ready(function () {
             $(this).blur(); //proboca un clic en otro lado si se presiona enter
         }
     });
-    
+
     //evento para mostrar el modal para modificar el estado
-    $(document).on('click','.editarEstado',function(){
+    $(document).on('click', '.editarEstado', function () {
         let estado = $(this).closest('.card').find('.card-title').text();
         console.log(estado);
         $('#estadoEdit').val(estado);
         $('#modificarEstadoModal').modal('show');
     });
-    
+
     //Evento para controlar cuando se cierre el modal para modificar el estado
-    $('#cerrarModal-modificarEstado').click(function(){
+    $('#cerrarModal-modificarEstado').click(function () {
         ('#btnLimpiar-modificarEstado').click();
     });
 
     //Evento submit del formulario para modificar el estado.  <----------
-    
-    
-    
+
+
+
     //evento click para eliminar un estado.
     $(document).on("click", '.btn-eliminar-estado', function () {
         Swal.fire({
@@ -165,10 +166,10 @@ $(document).ready(function () {
     //Eventos para Controlar las tareas.
 
 
-    //Mostrar el modal cuando se de click sobre la tarea.
-    $(document).on('click', '.task-content', function () {
-        $('#agregarTareasModal').modal('show');
-    });
+    //Mostrar el modal cuando se de click sobre la tarea. este sera para acutualizar la tarea
+//    $(document).on('click', '.task-content', function () {
+//        $('#agregarTareasModal').modal('show');
+//    });
 
     //evento para controlar las acciones al cerrar el modal para guardar tarea
     $(document).on('click', '#cerrarModal-guardarTarea', function () {
@@ -178,42 +179,61 @@ $(document).ready(function () {
 
 
 
-    //Evento cuando se envia el formulario para agregar tareas
     $(document).on("submit", "#formAgregarTarea", function (e) {
         e.preventDefault();
-        var formData = $(this).serializeArray();
-        var tarea = formData.find(item => item.name === 'tarea');
-        var estado = formData.find(item => item.name === 'estado');
-        var usuario = formData.find(item => item.name === 'usuario');
-        var fechaFin = formData.find(item => item.name === 'fechaFin');
+        var formData = $(this).serialize();
+        console.log(formData);
+
+        var params = new URLSearchParams(formData);
+        var datos = {};
+
+        for (const [key, value] of params) {
+            datos[key] = value;
+        }
+
+        console.log(datos.estado);
         var textEstado = $('#estado').find('option:selected').text();
-        console.log(estado.value);
-        if (parseInt(estado.value) !== 0) {
-            $("#cerrarModal-guardarTarea").click();
-            var tareaTablero = `<div class="card shadow-sm mb-2 task" draggable="true" estado = "${estado.value}">
+
+        if (parseInt(datos.estado) !== 0) {
+            $("#validacion-estado").text("");
+            $.ajax({
+                url: "TareasControlador?accion=insertar", // Reemplaza con la URL de tu servlet
+                type: "POST", // Puedes usar POST para enviar datos al servidor
+                data: formData, // Convierte el objeto de datos a JSON
+                dataType: "json", // Espera una respuesta en formato JSON
+                success: function (data) {
+
+                    $("#cerrarModal-guardarTarea").click();
+                    var tareaTablero = `<div class="card shadow-sm mb-2 task" draggable="true" estado = "${datos.estado}" id="${data.idTarea}">
             <div class="card-body justify-content-center task-content">
-                ${tarea.value}j
+                ${datos.tarea}
             </div>
             </div>`;
-            var tareaList = `<tr>
+                    var tareaList = `<tr>
                             <td><input type="checkbox"></td>
-                            <td>${tarea.value}</td>
-                            <td>${fechaFin.value}</td>
+                            <td>${datos.tarea}</td>
+                            <td>${datos.fechaFin}</td>
                             <td></td>
-                            <td class="${getColorEstado(estado.value)}">${textEstado}</td>
+                            <td class="">${textEstado}</td>
                             </tr>`;
-            var ultimaTarea = $(`#${estado.value}`).find('.task:last');
-            var tablero = $('.table tbody').eq(-1);
-            console.log(ultimaTarea);
-            if(ultimaTarea.length === 0){
-                $(`#${estado.value}`).append(tareaTablero);
-            }else{
-                ultimaTarea.after(tareaTablero);
-            }
-            
-            tablero.after(tareaList);
-            
-            $(".table").DataTable();
+                    var ultimaTarea = $(`#${data.estado}`).find('.task:last');
+                    var tablero = $('.table tbody').eq(-1);
+                    console.log(ultimaTarea);
+                    if (ultimaTarea.length === 0) {
+                        $(`#${datos.estado}`).append(tareaTablero);
+                    } else {
+                        ultimaTarea.after(tareaTablero);
+                    }
+
+                    tablero.after(tareaList);
+
+                    $(".table").DataTable();
+                    $('#cerrarModal-guardarTarea').click();
+                },
+                error: function () {
+                    Swal.fire("Error", "Ocurrio un error al agregar la tarea", "error");
+                }
+            });
         } else {
             $("#validacion-estado").text("Tienes que seleccionar un estado.");
         }
@@ -225,18 +245,4 @@ $(document).ready(function () {
 
 function limpiarValidaciones() {
     $("#validacion-estado").text("");
-}
-
-function getColorEstado(estado) {
-    if (estado == 1) {
-        return "text-bg-danger";
-    }
-    if (estado == 2) {
-        return "text-bg-warning";
-    }
-    if (estado == 3) {
-        return "text-bg-success";
-    }
-
-
 }

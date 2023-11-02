@@ -4,8 +4,13 @@
  */
 package com.grupo5.controlador;
 
+import com.grupo5.Datos.EstadosDAO;
+import com.grupo5.modelo.Estados;
+import com.grupo5.modelo.Proyectos;
 import java.io.IOException;
-import java.io.PrintWriter;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -30,19 +35,6 @@ public class EstadosControlador extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet EstadosControlador</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet EstadosControlador at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -71,7 +63,41 @@ public class EstadosControlador extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.setCharacterEncoding("UTF-8");
+        String accion = request.getParameter("accion");
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        Estados estado = new Estados();
+        EstadosDAO estadosDao = new EstadosDAO();
+        Proyectos proyecto = new Proyectos();
+
+        switch (accion) {
+            case "insertar":
+
+                estado.setEstado(request.getParameter("estado"));
+                estado.setColor(request.getParameter("color"));
+                proyecto.setIdProyecto(Integer.parseInt(request.getParameter("idProyecto")));
+                estado.setProyecto(proyecto);
+
+                estado.setIdEstado(estadosDao.insertarEstado(estado));
+
+                if (estado.getIdEstado() != 0) {
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                builder.add("idEstado", estado.getIdEstado());
+                JsonObject jsonObject = builder.build();
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                
+                response.getWriter().write(jsonObject.toString());
+                break;
+            case "actualizar":
+                break;
+            case "eliminar":
+                break;
+        }
     }
 
     /**

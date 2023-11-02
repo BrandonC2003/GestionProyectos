@@ -11,6 +11,14 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.grupo5.Datos.TareasDAO;
+import com.grupo5.modelo.Estados;
+import com.grupo5.modelo.Tareas;
+import java.math.BigDecimal;
+import java.sql.Date;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 
 /**
  *
@@ -30,19 +38,6 @@ public class TareasControlador extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try ( PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet TareasControlador</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet TareasControlador at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -71,7 +66,45 @@ public class TareasControlador extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.setCharacterEncoding("UTF-8");
+        String accion = request.getParameter("accion");
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        Tareas tarea = new Tareas();
+        Estados estado = new Estados();
+        TareasDAO tareasDao = new TareasDAO();
+
+        switch (accion) {
+            case "insertar":
+
+                tarea.setTarea(request.getParameter("tarea"));
+                tarea.setDescripcion(request.getParameter("descripcion"));
+                estado.setIdEstado(Integer.parseInt(request.getParameter("estado")));
+                tarea.setEstado(estado);
+                tarea.setFechaInicio(Date.valueOf(request.getParameter("fechaInicio")));
+                tarea.setFechaFin(Date.valueOf(request.getParameter("fechaFin")));
+                tarea.setUsuarioInserta("");
+
+                tarea.setIdTarea(tareasDao.insertarTarea(tarea));
+
+                if (tarea.getIdTarea() != 0) {
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                builder.add("idTarea", tarea.getIdTarea());
+                JsonObject jsonObject = builder.build();
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                
+                response.getWriter().write(jsonObject.toString());
+                break;
+            case "actualizar":
+                break;
+            case "eliminar":
+                break;
+        }
+
     }
 
     /**

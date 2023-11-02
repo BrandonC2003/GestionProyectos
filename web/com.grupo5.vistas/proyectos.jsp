@@ -63,7 +63,7 @@
                             </c:if>
                             <div class="card ms-3 me-3 mt-4 swim-lane">
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h3 class="card-title">${estado.estado}</h3>
+                                    <h3 class="card-title" id-estado="${estado.idEstado}">${estado.estado}</h3>
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -73,9 +73,9 @@
                                              aria-bs-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones:</div>
                                             <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
-                                            <button class="dropdown-item editarEstado">Editar estado</button>
+                                            <button class="dropdown-item editarEstado" id-estado="${estado.idEstado}">Editar estado</button>
                                             <div class="dropdown-divider"></div>
-                                            <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
+                                            <button class="dropdown-item btn-eliminar-estado" id-estado="${estado.idEstado}">Eliminar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -287,13 +287,14 @@
                         <form id="formModificarEstado">
                             <input type="reset" hidden id="btnLimpiar-modificarEstado">
                             <div class="mb-3">
+                                <input type="hidden" name="idEstado"  id="idEstadoEdit">
                                 <label class="form-label" for="estado">Estado</label>
                                 <input type="text" class="form-control" id="estadoEdit" name="estado">
-                                <span class="text-danger" id="estadoVal"></span>
+                                <span class="text-danger" id="estadoEditVal"></span>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="Color">Color</label>
-                                <input type="color" class="form-control form-control-color" id="color" name="Color" title="Escoge un color para tu estado.">
+                                <label class="form-label" for="color">Color</label>
+                                <input type="color" class="form-control form-control-color" id="colorEdit" name="color" title="Escoge un color para tu estado.">
                                 <span class="text-danger" id="colorVal"></span>
                             </div>
                         </form>
@@ -333,7 +334,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        <script src="com.grupo5.utilidades/tablero.js" type="text/javascript"></script>
+        <script src="com.grupo5.utilidades/tabler.js" type="text/javascript"></script>
         <script src="com.grupo5.utilidades/gantt.js" type="text/javascript"></script>
 
         <!-- Agrega DataTables JS -->

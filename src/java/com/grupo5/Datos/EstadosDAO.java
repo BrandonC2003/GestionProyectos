@@ -18,7 +18,7 @@ public class EstadosDAO {
     //Declarar variables para las consultas
     private final String BUSCAR_POR_ID = "SELECT IdEstado, IdProyecto, Estado, Color, Indice FROM estados WHERE IdEstado = ?";
     private final String INSERTAR = "INSERT INTO estados(IdProyecto, Estado, Color, Indice) VALUES (?, ?, ?, ?)";
-    private final String ACTUALIZAR = "UPDATE estados SET IdProyecto = ?, Estado = ?, Color = ? WHERE IdEstado = ?";
+    private final String ACTUALIZAR = "UPDATE estados SET Estado = ?, Color = ? WHERE IdEstado = ?";
     private final String ELIMINAR = "DELETE FROM estados WHERE IdEstado = ?";
     private final String OBTENER_ULTIMO_INDICE = "SELECT Indice FROM estados WHERE IdProyecto = ? ORDER BY Indice DESC LIMIT 1";
     private final String ACTUALIZAR_INDICE = "UPDATE estados set Indice = ? where IdEstado = ?";
@@ -115,10 +115,9 @@ public class EstadosDAO {
         try{
             conexion = Conexion.conectarse();
             ps = conexion.prepareStatement(ACTUALIZAR);
-            ps.setInt(1,proyecto.getIdProyecto());
-            ps.setString(2, estado.getEstado());
-            ps.setString(3, estado.getColor());
-            ps.setInt(4, estado.getIdEstado());
+            ps.setString(1, estado.getEstado());
+            ps.setString(2, estado.getColor());
+            ps.setInt(3, estado.getIdEstado());
             ps.execute();
             return null;
         }catch(SQLException e){

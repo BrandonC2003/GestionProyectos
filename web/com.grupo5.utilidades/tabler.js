@@ -1,5 +1,6 @@
 $(document).ready(function () {
     var textAnterior = "";
+    var idEstado = 0;
     // Metodo para hacer los elementos sortables
     function agregarSortables() {
         $("#board").sortable({
@@ -66,7 +67,7 @@ $(document).ready(function () {
                 var penultimoItem = $("#board .swim-lane").eq(-1);
                 let estado = `<div class="card ms-3 me-3 mt-4 swim-lane">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-        <h3 class="card-title"> ${datos.estado}</h3>
+        <h3 class="card-title" id-estado="${data.idEstado}"> ${datos.estado}</h3>
         <div class="dropdown no-arrow">
             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -76,9 +77,9 @@ $(document).ready(function () {
                  aria-bs-labelledby="dropdownMenuLink">
                 <div class="dropdown-header">Acciones:</div>
                 <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
-                <button class="dropdown-item editarEstado">Editar estado</button>
+                <button class="dropdown-item editarEstado" id-estado="${data.idEstado}">Editar estado</button>
                 <div class="dropdown-divider"></div>
-                <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
+                <button class="dropdown-item btn-eliminar-estado" id-estado="${data.idEstado}">Eliminar</button>
             </div>
         </div>
     </div>
@@ -89,6 +90,10 @@ $(document).ready(function () {
       <button type="button"class="btn-agregarTarea text-secondary" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
     </div>
     </div>`;
+                //Para actualizar las opciones en el formulario para iinsertar tareas.
+                let optionInsert = `<option value="${data.idEstado}">${datos.estado}</option>`;
+                $("#estado").append(optionInsert);
+                
                 penultimoItem.after(estado);
                 agregarSortables();
                 $('#cerrarModal-guardarEstado').click();
@@ -110,6 +115,7 @@ $(document).ready(function () {
     $(document).on('dblclick', '.card-title', function () {
         $(this).attr("contenteditable", true);
         textAnterior = $(this).text();
+        idEstado = $(this).attr("id-estado");
         $(this).text("");
         $(this).focus();
     });
@@ -117,6 +123,19 @@ $(document).ready(function () {
     $(document).on('blur', '.card-title', function () {
         if ($(this).text() === "") {
             $(this).text(textAnterior);
+        } else {
+            $.ajax({
+                url: "EstadosControlador?accion=actualizar2",
+                type: "POST",
+                data: "idEstado=" + idEstado + "&estado=" + $(this).text(),
+                dataType: "json",
+                success: function () {
+                    console.log("Success");
+                },
+                error: function (data) {
+                    Swal.fire("Error", data.resp, "error");
+                }
+            });
         }
         $(this).attr("contenteditable", false);
     });
@@ -129,23 +148,65 @@ $(document).ready(function () {
 
     //evento para mostrar el modal para modificar el estado
     $(document).on('click', '.editarEstado', function () {
-        let estado = $(this).closest('.card').find('.card-title').text();
-        console.log(estado);
-        $('#estadoEdit').val(estado);
+        let id = $(this).attr("id-estado");
+        $.ajax({
+            url: "EstadosControlador?accion=encontrar&idEstado=" + id,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                $("#idEstadoEdit").val(data.idEstado);
+                $("#estadoEdit").val(data.estado);
+                $("#colorEdit").val(data.color);
+            },
+            error: function () {
+                Swal.fire("Error", "No se pudo realizar la accion", "error");
+            }
+        });
         $('#modificarEstadoModal').modal('show');
     });
 
     //Evento para controlar cuando se cierre el modal para modificar el estado
     $('#cerrarModal-modificarEstado').click(function () {
-        ('#btnLimpiar-modificarEstado').click();
+        $('#btnLimpiar-modificarEstado').click();
     });
 
     //Evento submit del formulario para modificar el estado.  <----------
+    $("#formModificarEstado").submit(function (e) {
+        e.preventDefault();
+        $("#estadoEditVal").text("");
+        let data = $(this).serialize();
 
+        var params = new URLSearchParams(data);
+        var datos = {};
+
+        for (const [key, value] of params) {
+            datos[key] = value;
+        }
+        if (datos.estado.trim() === "") {
+            $("#estadoEditVal").text("El estado no puede quedar vacío");
+            return false;
+        }
+
+        $.ajax({
+            url: "EstadosControlador?accion=actualizar",
+            type: "POST",
+            data: data,
+            dataType: "json",
+            success: function () {
+                $("#cerrarModal-modificarEstado").click();
+                $(`h3[id-estado="${datos.idEstado}"]`).text(datos.estado);
+            },
+            error: function () {
+                Swal.fire("Error", "Ocurrio un error al modificar el estado", "error");
+            }
+        });
+    });
 
 
     //evento click para eliminar un estado.
     $(document).on("click", '.btn-eliminar-estado', function () {
+        var estadoSwimLane = $(this).closest(".swim-lane");
         Swal.fire({
             title: "¿Estás seguro?",
             text: "Una vez eliminado, no podrás recuperar este estado ni las tareas asociadas a él.",
@@ -157,8 +218,20 @@ $(document).ready(function () {
             cancelButtonText: "Cancelar"
         }).then((result) => {
             if (result.isConfirmed) {
-                $(this).closest(".swim-lane").remove();
-                Swal.fire("Eliminado", "El estado ha sido eliminado correctamente.", "success");
+                let id = $(this).attr("id-estado");
+                $.ajax({
+                    url: "EstadosControlador?accion=eliminar",
+                    type: "POST",
+                    data: "idEstado=" + id,
+                    dataType: "json",
+                    success: function () {
+                        estadoSwimLane.remove();
+                        Swal.fire("Eliminado", "El estado ha sido eliminado correctamente.", "success");
+                    },
+                    error: function () {
+                        Swal.fire("Error", "Ocurrio un error al eliminar el estado", "error");
+                    }
+                });
             }
         });
     });

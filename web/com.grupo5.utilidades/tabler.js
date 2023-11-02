@@ -1,9 +1,36 @@
 $(document).ready(function () {
     var textAnterior = "";
     var idEstado = 0;
+    var antIndexEstado = 0;
+    var idProyecto = $("#hIdProyecto").attr("id-proyecto");
     // Metodo para hacer los elementos sortables
     function agregarSortables() {
         $("#board").sortable({
+            start: function (event, ui) {
+                antIndexEstado = ui.item.index();
+            },
+            stop: function (event, ui) {
+                let indice = ui.item.index();
+
+                let id = ui.item.attr("id-estado");
+                console.log(id);
+                if (indice !== antIndexEstado) {
+                    $.ajax({
+                        url: "EstadosControlador?accion=desplazarIndices",
+                        type: "POST",
+                        data: "idProyecto="+idProyecto+"&idEstado="+id+"&indice="+(indice+1)+"&indiceAnt="+(antIndexEstado+1),
+                        dataType: "json",
+                        success: function () {
+                        }
+                    });
+                } else {
+                    console.log("no");
+                }
+            },
+            recieive: function (event, ui) {
+                let indice = ui.item.index();
+                console.log(indice);
+            },
             items: ">div"
         });
         $(".swim-lane-content").sortable({
@@ -65,7 +92,7 @@ $(document).ready(function () {
             dataType: "json", // Espera una respuesta en formato JSON
             success: function (data) {
                 var penultimoItem = $("#board .swim-lane").eq(-1);
-                let estado = `<div class="card ms-3 me-3 mt-4 swim-lane">
+                let estado = `<div class="card ms-3 me-3 mt-4 swim-lane" id-estado="${data.idEstado}">
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
         <h3 class="card-title" id-estado="${data.idEstado}"> ${datos.estado}</h3>
         <div class="dropdown no-arrow">
@@ -93,7 +120,7 @@ $(document).ready(function () {
                 //Para actualizar las opciones en el formulario para iinsertar tareas.
                 let optionInsert = `<option value="${data.idEstado}">${datos.estado}</option>`;
                 $("#estado").append(optionInsert);
-                
+
                 penultimoItem.after(estado);
                 agregarSortables();
                 $('#cerrarModal-guardarEstado').click();

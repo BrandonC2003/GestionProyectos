@@ -988,10 +988,7 @@ exists or setup the property manually. For example like this:
         <manifest file="${build.web.dir}/META-INF/MANIFEST.MF" mode="update"/>
     </target>
     <target depends="init" name="library-inclusion-in-archive" unless="dist.ear.dir">
-<<<<<<< HEAD
         <copyfiles files="${file.reference.mysql-connector-j-8.0.33.jar}" todir="${build.web.dir}/WEB-INF/lib"/>
-=======
->>>>>>> b63af32992a6831d62581a11f8d424dd07a77725
         <copyfiles files="${libs.javaee-web-api-8.0.classpath}" todir="${build.web.dir}/WEB-INF/lib"/>
     </target>
     <target depends="init" if="dist.ear.dir" name="-clean-webinf-lib">

@@ -28,8 +28,6 @@ public class EstadosDAO {
     private final String MOVER_INDICE_MAYOR = "UPDATE estados set Indice = Indice-1 WHERE IdProyecto = ? AND Indice >= ? AND Indice<= ? AND IdEstado != ?";
     //Se utilizara cuando se elimine un estado, para que los indices sigan en orden.
     private final String AJUSTAR_INDICES = "UPDATE estados SET Indice = Indice - 1 WHERE IdProyecto = ? AND Indice > ?";
-    
-    private final String ULTIMO_ID = "SELECT LAST_INSERT_ID();";
     /**
      * Metodo para buscar un estado especifico por su ID
      *

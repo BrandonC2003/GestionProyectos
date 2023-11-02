@@ -32,7 +32,7 @@
     <body>
          <c:set var="proyecto" value="${requestScope.proyecto}" />
         <div class="row">
-            <h1>${proyecto.proyecto}</h1>
+            <h1 id="hIdProyecto" id-proyecto="${proyecto.idProyecto}">${proyecto.proyecto}</h1>
         </div>
         <!--Nav para seleccionar la vista-->
         <div class="row">
@@ -61,7 +61,7 @@
                             <c:if test="${not fn:contains(estadosProcesados, estado.estado)}">
                                 <c:set var="estadosProcesados" value="${estadosProcesados},${estado.estado}" />
                             </c:if>
-                            <div class="card ms-3 me-3 mt-4 swim-lane">
+                            <div class="card ms-3 me-3 mt-4 swim-lane" id-estado="${estado.idEstado}">
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                                     <h3 class="card-title" id-estado="${estado.idEstado}">${estado.estado}</h3>
                                     <div class="dropdown no-arrow">

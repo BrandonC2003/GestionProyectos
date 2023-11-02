@@ -99,6 +99,7 @@ public class EstadosControlador extends HttpServlet {
         Proyectos proyecto = new Proyectos();
         String resp;
         JsonObject jsonObject;
+        int indiceAnt;
 
         switch (accion) {
             case "insertar":
@@ -166,6 +167,24 @@ public class EstadosControlador extends HttpServlet {
             case "eliminar":
                 estado.setIdEstado(Integer.parseInt(request.getParameter("idEstado")));
                 if(estadosDao.eliminarEstado(estado.getIdEstado())){
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                }else{
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                jsonObject = builder.build();
+                
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(jsonObject.toString());
+                break;
+            case "desplazarIndices":
+                estado.setIdEstado(Integer.parseInt(request.getParameter("idEstado")));
+                estado.setIndice(Integer.parseInt(request.getParameter("indice")));
+                proyecto.setIdProyecto(Integer.parseInt(request.getParameter("idProyecto")));
+                estado.setProyecto(proyecto);
+                indiceAnt = Integer.parseInt(request.getParameter("indiceAnt"));
+                
+                if(estadosDao.desplazarIndices(estado, indiceAnt)){
                     response.setStatus(HttpServletResponse.SC_CREATED);
                 }else{
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);

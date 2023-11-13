@@ -18,7 +18,7 @@ $(document).ready(function () {
                     $.ajax({
                         url: "EstadosControlador?accion=desplazarIndices",
                         type: "POST",
-                        data: "idProyecto="+idProyecto+"&idEstado="+id+"&indice="+(indice+1)+"&indiceAnt="+(antIndexEstado+1),
+                        data: "idProyecto=" + idProyecto + "&idEstado=" + id + "&indice=" + (indice + 1) + "&indiceAnt=" + (antIndexEstado + 1),
                         dataType: "json",
                         success: function () {
                         }
@@ -169,7 +169,7 @@ $(document).ready(function () {
 
     $(document).on('keydown', '.card-title', function (e) {
         if (e.which === 13) {
-            $(this).blur(); //proboca un clic en otro lado si se presiona enter
+            $(this).blur(); //provoca un clic en otro lado si se presiona enter
         }
     });
 
@@ -267,9 +267,45 @@ $(document).ready(function () {
 
 
     //Mostrar el modal cuando se de click sobre la tarea. este sera para acutualizar la tarea
-//    $(document).on('click', '.task-content', function () {
-//        $('#agregarTareasModal').modal('show');
-//    });
+    $(document).on('click', '.task-content', function () {
+        let id = $(this).attr("id-tarea");
+        $.ajax({
+            url: "TareasControlador?accion=encontrar&idTarea=" + id + "&idProyecto=" + idProyecto,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                // Limpiar el elemento select antes de llenarlo de nuevo
+                $("#editEstadoTarea").empty();
+                let estados = data.estados;
+                console.log(estados);
+                console.log(data.idEstado);
+
+                $("#editIdTarea").val(data.idTarea);
+                $("#editTarea").val(data.tarea);
+                $("#editDescripcion").val(data.descripcion);
+
+                //Para llenar el select de los estados
+                estados.forEach(function (estado) {
+                    let option = $("<option>");
+                    option.val(estado.idEstado);
+                    option.text(estado.estado);
+
+                    if (estado.idEstado === data.idEstado) {
+                        option.attr('selected', true);
+                    }
+                    $("#editEstadoTarea").append(option);
+                });
+
+                $("#editFechaInicio").val(data.fechaInicio);
+                $("#editFechaFin").val(data.fechaFin);
+
+                $('#actualizarTareasModal').modal('show');
+            },
+            error: function () {
+                Swal.fire("Error", "Ocurrio un error al obtener los datos de la tarea", "error");
+            }
+        });
+    });
 
     //evento para controlar las acciones al cerrar el modal para guardar tarea
     $(document).on('click', '#cerrarModal-guardarTarea', function () {
@@ -305,7 +341,7 @@ $(document).ready(function () {
 
                     $("#cerrarModal-guardarTarea").click();
                     var tareaTablero = `<div class="card shadow-sm mb-2 task" draggable="true" estado = "${datos.estado}" id="${data.idTarea}">
-            <div class="card-body justify-content-center task-content">
+            <div class="card-body justify-content-center task-content" id-tarea="${data.idTarea}">
                 ${datos.tarea}
             </div>
             </div>`;

@@ -5,7 +5,6 @@
 package com.grupo5.controlador;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,11 +13,15 @@ import javax.servlet.http.HttpServletResponse;
 import com.grupo5.Datos.TareasDAO;
 import com.grupo5.modelo.Estados;
 import com.grupo5.modelo.Tareas;
+import com.grupo5.Datos.EstadosDAO;
 import java.math.BigDecimal;
 import java.sql.Date;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
+import javax.json.JsonValue;
+import java.util.List;
+import javax.json.JsonArrayBuilder;
 
 /**
  *
@@ -52,7 +55,62 @@ public class TareasControlador extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String accion = request.getParameter("accion");
+        Tareas tarea;
+        Estados estado;
+        List<Estados> estados;
+        TareasDAO tareaDao = new TareasDAO();
+        EstadosDAO estadosDao = new EstadosDAO();
+        JsonObject jsonObject;
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        JsonArrayBuilder builderArray = Json.createArrayBuilder();
+        int idProyecto;
+        int id;
+        
+        
+        switch(accion){
+            case "encontrar":
+                id = Integer.parseInt(request.getParameter("idTarea"));
+                idProyecto = Integer.parseInt(request.getParameter("idProyecto"));
+                
+                tarea = tareaDao.buscarPorId(id);
+                estado = tarea.getEstado();
+                
+                if(tarea.getIdTarea() > 0){
+                    response.setStatus(HttpServletResponse.SC_ACCEPTED);
+                }else{
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                //Tengo que modificar la consulta para que me muestre todos los usuarios pertenecientes a la tarea. 
+                builder.add("idTarea", tarea.getIdTarea());
+                builder.add("tarea", tarea.getTarea());
+                builder.add("descripcion", tarea.getDescripcion());
+                builder.add("fechaInicio", tarea.getFechaInicio().toString());
+                builder.add("fechaFin", tarea.getFechaFin().toString());
+                builder.add("realizada", tarea.isRealizada());
+                builder.add("idEstado",estado.getIdEstado());
+                
+                estados = estadosDao.buscarPorProyecto(idProyecto);
+                
+                for(Estados est : estados){
+                    JsonObjectBuilder builder2 = Json.createObjectBuilder()
+                            .add("idEstado",est.getIdEstado())
+                            .add("estado",est.getEstado());
+                    
+                    builderArray.add(builder2);
+                }
+                
+                builder.add("estados", builderArray);
+                jsonObject = builder.build();
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                response.getWriter().write(jsonObject.toString());
+                
+                //Me falta obtener la lista de usuarios asociados a la tarea
+                break;
+        }
     }
 
     /**

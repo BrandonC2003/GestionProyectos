@@ -49,7 +49,35 @@ public class EstadosControlador extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String accion = request.getParameter("accion");
+        Estados estado = new Estados();
+        EstadosDAO estadosDao = new EstadosDAO();
+        JsonObject jsonObject;
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+
+        switch (accion) {
+            case "encontrar":
+                estado.setIdEstado(Integer.parseInt(request.getParameter("idEstado")));
+
+                estado = estadosDao.buscarPorId(estado.getIdEstado());
+
+                if (estado.getIdEstado() != 0) {
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                builder.add("idEstado", estado.getIdEstado());
+                builder.add("estado", estado.getEstado());
+                builder.add("color", estado.getColor());
+                jsonObject = builder.build();
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                response.getWriter().write(jsonObject.toString());
+
+                break;
+        }
     }
 
     /**
@@ -69,6 +97,9 @@ public class EstadosControlador extends HttpServlet {
         Estados estado = new Estados();
         EstadosDAO estadosDao = new EstadosDAO();
         Proyectos proyecto = new Proyectos();
+        String resp;
+        JsonObject jsonObject;
+        int indiceAnt;
 
         switch (accion) {
             case "insertar":
@@ -86,16 +117,83 @@ public class EstadosControlador extends HttpServlet {
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 }
                 builder.add("idEstado", estado.getIdEstado());
-                JsonObject jsonObject = builder.build();
+                jsonObject = builder.build();
 
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-                
+
                 response.getWriter().write(jsonObject.toString());
                 break;
             case "actualizar":
+                estado.setIdEstado(Integer.parseInt(request.getParameter("idEstado")));
+                estado.setEstado(request.getParameter("estado"));
+                estado.setColor(request.getParameter("color"));
+
+                resp = estadosDao.actualizarEstado(estado);
+
+                if (resp == null) {
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                jsonObject = builder.build();
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                response.getWriter().write(jsonObject.toString());
+                break;
+            case "actualizar2":
+                estado.setIdEstado(Integer.parseInt(request.getParameter("idEstado")));
+                resp = request.getParameter("estado");
+                
+                estado = estadosDao.buscarPorId(estado.getIdEstado());
+                estado.setEstado(resp);
+
+                resp = estadosDao.actualizarEstado(estado);
+
+                if (resp == null) {
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                jsonObject = builder.build();
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
+                response.getWriter().write(jsonObject.toString());
                 break;
             case "eliminar":
+                estado.setIdEstado(Integer.parseInt(request.getParameter("idEstado")));
+                if(estadosDao.eliminarEstado(estado.getIdEstado())){
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                }else{
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                jsonObject = builder.build();
+                
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(jsonObject.toString());
+                break;
+            case "desplazarIndices":
+                estado.setIdEstado(Integer.parseInt(request.getParameter("idEstado")));
+                estado.setIndice(Integer.parseInt(request.getParameter("indice")));
+                proyecto.setIdProyecto(Integer.parseInt(request.getParameter("idProyecto")));
+                estado.setProyecto(proyecto);
+                indiceAnt = Integer.parseInt(request.getParameter("indiceAnt"));
+                
+                if(estadosDao.desplazarIndices(estado, indiceAnt)){
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                }else{
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                jsonObject = builder.build();
+                
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                response.getWriter().write(jsonObject.toString());
                 break;
         }
     }

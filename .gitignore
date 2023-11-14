@@ -1,3 +1,18 @@
-/nbproject/private/
-/dist/
-/build/
+# Directorios a ignorar
+/target/
+/bin/
+/.idea/
+/.vscode/
+/out/
+/.classpath
+/.project
+
+# Archivos a ignorar
+*.class
+*.jar
+*.war
+*.ear
+*.log
+*.iml
+*.ipr
+*.iws

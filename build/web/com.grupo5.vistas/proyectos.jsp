@@ -32,7 +32,7 @@
     <body>
          <c:set var="proyecto" value="${requestScope.proyecto}" />
         <div class="row">
-            <h1>${proyecto.proyecto}</h1>
+            <h1 id="hIdProyecto" id-proyecto="${proyecto.idProyecto}">${proyecto.proyecto}</h1>
         </div>
         <!--Nav para seleccionar la vista-->
         <div class="row">
@@ -61,9 +61,9 @@
                             <c:if test="${not fn:contains(estadosProcesados, estado.estado)}">
                                 <c:set var="estadosProcesados" value="${estadosProcesados},${estado.estado}" />
                             </c:if>
-                            <div class="card ms-3 me-3 mt-4 swim-lane">
+                            <div class="card ms-3 me-3 mt-4 swim-lane" id-estado="${estado.idEstado}">
                                 <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h3 class="card-title">${estado.estado}</h3>
+                                    <h3 class="card-title" id-estado="${estado.idEstado}">${estado.estado}</h3>
                                     <div class="dropdown no-arrow">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -73,9 +73,9 @@
                                              aria-bs-labelledby="dropdownMenuLink">
                                             <div class="dropdown-header">Acciones:</div>
                                             <button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar tarea</button>
-                                            <button class="dropdown-item editarEstado">Editar estado</button>
+                                            <button class="dropdown-item editarEstado" id-estado="${estado.idEstado}">Editar estado</button>
                                             <div class="dropdown-divider"></div>
-                                            <button class="dropdown-item btn-eliminar-estado">Eliminar</button>
+                                            <button class="dropdown-item btn-eliminar-estado" id-estado="${estado.idEstado}">Eliminar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -83,7 +83,7 @@
                                     <c:forEach var="tarea" items="${estado.tareas}">
                                         <c:if test="${not empty tarea.tarea}">
                                             <div class="card shadow-sm mb-2 task" draggable="true" estado= "${estado.idEstado}">
-                                                <div class="card-body justify-content-center task-content">
+                                                <div class="card-body justify-content-center task-content" id-tarea="${tarea.idTarea}">
                                                     ${tarea.tarea}
                                                 </div>
                                             </div>
@@ -197,51 +197,49 @@
             </div>
         </div>
         <!-- Modal para ver detalles y modificar tareas -->
-<!--        <div class="modal fade" id="actualizarTareasModal" tabindex="-1" aria-labelledby="actualizarTareasModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
+        <div class="modal fade" id="actualizarTareasModal" tabindex="-1" aria-labelledby="actualizarTareasModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="actuliazarTareasModalLabel">Agregar tareas</h1>
+                        <h1 class="modal-title fs-5" id="actuliazarTareasModalLabel">Modificar tareas</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="formAgregarTarea">
+                        <form id="formModificarTarea">
+                            <input type="hidden" id="editIdTarea" name="idTarea"/>
                             <input type="reset" id="resetForm-Agregar" hidden>
                             <div class="mb-3">
                                 <label for="tarea" class="form-label">Tarea</label>
-                                <input type="text" class="form-control" name="tarea" id="tarea" required>
+                                <input type="text" class="form-control" name="tarea" id="editTarea" required>
                             </div>
                             <div class="mb-3">
-                                <label for="descripcion" class="form-label">Descrpcion</label>
-                                <textarea class="form-control" name="descripcion" id="descripcion" rows="3"></textarea>
+                                <label for="descripcion" class="form-label">Descripcion</label>
+                                <textarea class="form-control" name="descripcion" id="editDescripcion" rows="3"></textarea>
                             </div>
-                            <div class="mb-3">
-                                <label for="estado" class="form-label">Estado</label>
-                                <select class="form-select" name="estado" id="estado">
+                            <div class="">
+                                <label for="estado" class="form-label" hidden>Estado</label>
+                                <select class="form-select" name="estado" id="editEstadoTarea" hidden>
                                     <option value="0">Selecciona un estado</option>
-                                    <option value="1">Por hacer</option>
-                                    <option value="2">En proceso</option>
-                                    <option value="3">Realizado</option>
                                 </select>
                                 <span class="text-danger" id="validacion-estado"></span>
                             </div>
                             <div class="mb-3">
                                 <label for="fechaInicio" class="form-label">Fecha de inicio</label>
-                                <input type="date" class="form-control" name="fechaInicio" id="fechaInicio" required>
+                                <input type="date" class="form-control" name="fechaInicio" id="editFechaInicio" required>
                             </div>
                             <div class="mb-3">
                                 <label for="fechaFin" class="form-label">Fecha de finalizacion</label>
-                                <input type="date" class="form-control" name="fechaFin" id="fechaFin" required>
-                            </div>
+                                <input type="date" class="form-control" name="fechaFin" id="editFechaFin" required>
+                            </div> 
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-guardar">Cerrar</button>
-                        <button type="submit" class="btn btn-dark" form="formAgregarTarea">Guardar Tarea</button>
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-actualizarTarea">Cerrar</button>
+                        <button type="submit" class="btn btn-dark" form="formModificarTarea">Guardar Cambios</button>
                     </div>
                 </div>
             </div>
-        </div>-->
+        </div>
 
         <!--Modal para agregar estados-->
         <div class="modal fade" id="insertEstadoModal" tabindex="-1" aria-labelledby="insertEstadoModalLabel" aria-hidden="true">
@@ -287,13 +285,14 @@
                         <form id="formModificarEstado">
                             <input type="reset" hidden id="btnLimpiar-modificarEstado">
                             <div class="mb-3">
+                                <input type="hidden" name="idEstado"  id="idEstadoEdit">
                                 <label class="form-label" for="estado">Estado</label>
                                 <input type="text" class="form-control" id="estadoEdit" name="estado">
-                                <span class="text-danger" id="estadoVal"></span>
+                                <span class="text-danger" id="estadoEditVal"></span>
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="Color">Color</label>
-                                <input type="color" class="form-control form-control-color" id="color" name="Color" title="Escoge un color para tu estado.">
+                                <label class="form-label" for="color">Color</label>
+                                <input type="color" class="form-control form-control-color" id="colorEdit" name="color" title="Escoge un color para tu estado.">
                                 <span class="text-danger" id="colorVal"></span>
                             </div>
                         </form>
@@ -333,7 +332,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        <script src="com.grupo5.utilidades/tablero.js" type="text/javascript"></script>
+        <script src="com.grupo5.utilidades/tabler.js" type="text/javascript"></script>
         <script src="com.grupo5.utilidades/gantt.js" type="text/javascript"></script>
 
         <!-- Agrega DataTables JS -->
@@ -398,3 +397,4 @@
         </script>
     </body>
 </html>
+ 

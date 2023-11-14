@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,8 +19,9 @@ public class EstadosDAO {
 
     //Declarar variables para las consultas
     private final String BUSCAR_POR_ID = "SELECT IdEstado, IdProyecto, Estado, Color, Indice FROM estados WHERE IdEstado = ?";
+    private final String BUSCAR_POR_PROYECTO = "SELECT IdEstado, IdProyecto, Estado, Color, Indice FROM estados WHERE IdProyecto = ?";
     private final String INSERTAR = "INSERT INTO estados(IdProyecto, Estado, Color, Indice) VALUES (?, ?, ?, ?)";
-    private final String ACTUALIZAR = "UPDATE estados SET IdProyecto = ?, Estado = ?, Color = ? WHERE IdEstado = ?";
+    private final String ACTUALIZAR = "UPDATE estados SET Estado = ?, Color = ? WHERE IdEstado = ?";
     private final String ELIMINAR = "DELETE FROM estados WHERE IdEstado = ?";
     private final String OBTENER_ULTIMO_INDICE = "SELECT Indice FROM estados WHERE IdProyecto = ? ORDER BY Indice DESC LIMIT 1";
     private final String ACTUALIZAR_INDICE = "UPDATE estados set Indice = ? where IdEstado = ?";
@@ -28,8 +31,7 @@ public class EstadosDAO {
     private final String MOVER_INDICE_MAYOR = "UPDATE estados set Indice = Indice-1 WHERE IdProyecto = ? AND Indice >= ? AND Indice<= ? AND IdEstado != ?";
     //Se utilizara cuando se elimine un estado, para que los indices sigan en orden.
     private final String AJUSTAR_INDICES = "UPDATE estados SET Indice = Indice - 1 WHERE IdProyecto = ? AND Indice > ?";
-    
-    private final String ULTIMO_ID = "SELECT LAST_INSERT_ID();";
+
     /**
      * Metodo para buscar un estado especifico por su ID
      *
@@ -41,9 +43,9 @@ public class EstadosDAO {
         Connection conexion = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         Proyectos proyecto = new Proyectos();
-        
+
         try {
             conexion = Conexion.conectarse();
             ps = conexion.prepareStatement(BUSCAR_POR_ID);
@@ -66,6 +68,45 @@ public class EstadosDAO {
         return estado;
     }
 
+    public List<Estados> buscarPorProyecto(int idProyecto) {
+        Estados estado;
+        Connection conexion = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        Proyectos proyecto;
+        
+        List<Estados> estados; 
+        estados = new ArrayList<>();
+
+        try {
+            conexion = Conexion.conectarse();
+            ps = conexion.prepareStatement(BUSCAR_POR_PROYECTO);
+            ps.setInt(1, idProyecto);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                estado = new Estados();
+                proyecto = new Proyectos();
+                
+                estado.setIdEstado(rs.getInt("IdEstado"));
+                estado.setEstado(rs.getString("Estado"));
+                estado.setColor(rs.getString("Color"));
+                estado.setIndice(rs.getInt("Indice"));
+                proyecto.setIdProyecto(rs.getInt("IdProyecto"));
+                estado.setProyecto(proyecto);
+                
+                estados.add(estado);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        } finally {
+            Conexion.close(conexion);
+            Conexion.close(ps);
+            Conexion.close(rs);
+        }
+        return estados;
+    }
+
     /**
      * Metodo para insertar Estados
      *
@@ -73,28 +114,28 @@ public class EstadosDAO {
      * @return el id generado | si hay algun error retornara 0
      */
     public int insertarEstado(Estados estado) {
-        
+
         Proyectos proyecto = estado.getProyecto();
         Connection conexion = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        try{
+        try {
             conexion = Conexion.conectarse();
             ps = conexion.prepareStatement(INSERTAR, Statement.RETURN_GENERATED_KEYS);
-            ps.setInt(1,proyecto.getIdProyecto());
+            ps.setInt(1, proyecto.getIdProyecto());
             ps.setString(2, estado.getEstado());
             ps.setString(3, estado.getColor());
             ps.setInt(4, obtenerIndice(proyecto.getIdProyecto()));
             ps.execute();
             //obtengo el id generado
-             rs= ps.getGeneratedKeys();
-            if(rs.next()){
+            rs = ps.getGeneratedKeys();
+            if (rs.next()) {
                 return rs.getInt(1);
             }
             return 0;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             return 0;
-        }finally{
+        } finally {
             Conexion.close(conexion);
             Conexion.close(ps);
             Conexion.close(rs);
@@ -109,21 +150,19 @@ public class EstadosDAO {
      * algun inconveniente
      */
     public String actualizarEstado(Estados estado) {
-        Proyectos proyecto = estado.getProyecto();
         Connection conexion = null;
         PreparedStatement ps = null;
-        try{
+        try {
             conexion = Conexion.conectarse();
             ps = conexion.prepareStatement(ACTUALIZAR);
-            ps.setInt(1,proyecto.getIdProyecto());
-            ps.setString(2, estado.getEstado());
-            ps.setString(3, estado.getColor());
-            ps.setInt(4, estado.getIdEstado());
+            ps.setString(1, estado.getEstado());
+            ps.setString(2, estado.getColor());
+            ps.setInt(3, estado.getIdEstado());
             ps.execute();
             return null;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             return e.getMessage();
-        }finally{
+        } finally {
             Conexion.close(conexion);
             Conexion.close(ps);
         }
@@ -138,28 +177,27 @@ public class EstadosDAO {
     public boolean eliminarEstado(int idEstado) {
         Connection conexion = null;
         PreparedStatement ps = null;
-        ResultSet rs = null;
-        
+
         Estados estado = buscarPorId(idEstado);
         Proyectos proyecto = estado.getProyecto();
-        try{
-            
+        try {
+
             //elimino el estado
             conexion = Conexion.conectarse();
             ps = conexion.prepareStatement(ELIMINAR);
-            ps.setInt(1,idEstado);
+            ps.setInt(1, idEstado);
             ps.execute();
-            
+
             //ajusto los indices.
             conexion = Conexion.conectarse();
             ps = conexion.prepareStatement(AJUSTAR_INDICES);
-            ps.setInt(1,proyecto.getIdProyecto());
-            ps.setInt(2,estado.getIndice());
+            ps.setInt(1, proyecto.getIdProyecto());
+            ps.setInt(2, estado.getIndice());
             ps.execute();
             return true;
-        }catch(SQLException e){
+        } catch (SQLException e) {
             return false;
-        }finally{
+        } finally {
             Conexion.close(conexion);
             Conexion.close(ps);
         }
@@ -183,8 +221,8 @@ public class EstadosDAO {
             ps = conexion.prepareStatement(OBTENER_ULTIMO_INDICE);
             ps.setInt(1, idProyecto);
             rs = ps.executeQuery();
-            
-            if(rs.next()){ //validar que el resultado no sea nulo
+
+            if (rs.next()) { //validar que el resultado no sea nulo
                 return rs.getInt("Indice") + 1;
             }
             return 1; //si el resultado es nulo, entonces me dara el indice 1.
@@ -203,7 +241,7 @@ public class EstadosDAO {
      * del tablero, se recibira el estado con el indice al cual se desplazo, y
      * desde ese indice hacia arriba o hacia abajo, se moveran en una posicion
      *
-     * @param estado 
+     * @param estado
      * @param indiceAnterior
      * @return true si todo esta bien | false si ocurre algun error
      */
@@ -211,26 +249,26 @@ public class EstadosDAO {
         Connection conexion = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        
+
         Proyectos proyecto = estado.getProyecto();
         try {
             conexion = Conexion.conectarse();
             ps = conexion.prepareStatement(ACTUALIZAR_INDICE);
             ps.setInt(1, estado.getIndice());
-            ps.setInt(2,estado.getIdEstado());
+            ps.setInt(2, estado.getIdEstado());
             ps.execute();
             //validar si el indice actual es menor que el indice anterior o biceversa.
-            if(estado.getIndice() < indiceAnterior){
+            if (estado.getIndice() < indiceAnterior) {
                 ps = conexion.prepareStatement(MOVER_INDICE_MENOR);
                 ps.setInt(1, proyecto.getIdProyecto());
-                ps.setInt(2,estado.getIndice());
+                ps.setInt(2, estado.getIndice());
                 ps.setInt(3, indiceAnterior);
                 ps.setInt(4, estado.getIdEstado());
                 ps.execute();
-            }else{
-               ps = conexion.prepareStatement(MOVER_INDICE_MAYOR);
+            } else {
+                ps = conexion.prepareStatement(MOVER_INDICE_MAYOR);
                 ps.setInt(1, proyecto.getIdProyecto());
-                ps.setInt(2,indiceAnterior);
+                ps.setInt(2, indiceAnterior);
                 ps.setInt(3, estado.getIndice());
                 ps.setInt(4, estado.getIdEstado());
                 ps.execute();

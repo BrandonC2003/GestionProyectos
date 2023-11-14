@@ -376,8 +376,35 @@ $(document).ready(function () {
 
     });
 
+    //Evento para modificar las tareas
+    $(document).on("submit", "#formModificarTarea", function (e) {
+        e.preventDefault();
 
+        var formData = $(this).serialize();
+
+        var params = new URLSearchParams(formData);
+        var datos = {};
+
+        for (const [key, value] of params) {
+            datos[key] = value;
+        }
+        $.ajax({
+            url: "TareasControlador?accion=actualizar",  
+                type: "POST", 
+                data: formData, 
+                dataType: "json", 
+                success: function (data) {
+                    let tarea = $(`.task-content[id-tarea=${datos.idTarea}]`);
+                    tarea.text(datos.tarea);
+                    $('#cerrarModal-actualizarTarea').click();
+                },
+                error: function(){
+                     Swal.fire("Error", "Ocurrio un error al agregar la modificar la tarea", "error");
+                }
+        });
+    });
 });
+
 
 function limpiarValidaciones() {
     $("#validacion-estado").text("");

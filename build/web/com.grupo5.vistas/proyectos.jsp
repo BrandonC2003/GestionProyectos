@@ -198,7 +198,7 @@
         </div>
         <!-- Modal para ver detalles y modificar tareas -->
         <div class="modal fade" id="actualizarTareasModal" tabindex="-1" aria-labelledby="actualizarTareasModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-xl">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="actuliazarTareasModalLabel">Modificar tareas</h1>
@@ -206,7 +206,7 @@
                     </div>
                     <div class="modal-body">
                         <form id="formModificarTarea">
-                            <input type="hidden" id="editIdTarea"/>
+                            <input type="hidden" id="editIdTarea" name="idTarea"/>
                             <input type="reset" id="resetForm-Agregar" hidden>
                             <div class="mb-3">
                                 <label for="tarea" class="form-label">Tarea</label>
@@ -216,9 +216,9 @@
                                 <label for="descripcion" class="form-label">Descripcion</label>
                                 <textarea class="form-control" name="descripcion" id="editDescripcion" rows="3"></textarea>
                             </div>
-                            <div class="mb-3">
-                                <label for="estado" class="form-label">Estado</label>
-                                <select class="form-select" name="estado" id="editEstadoTarea">
+                            <div class="">
+                                <label for="estado" class="form-label" hidden>Estado</label>
+                                <select class="form-select" name="estado" id="editEstadoTarea" hidden>
                                     <option value="0">Selecciona un estado</option>
                                 </select>
                                 <span class="text-danger" id="validacion-estado"></span>
@@ -230,12 +230,12 @@
                             <div class="mb-3">
                                 <label for="fechaFin" class="form-label">Fecha de finalizacion</label>
                                 <input type="date" class="form-control" name="fechaFin" id="editFechaFin" required>
-                            </div>
+                            </div> 
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-guardar">Cerrar</button>
-                        <button type="submit" class="btn btn-dark" form="formAgregarTarea">Guardar Cambios</button>
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-actualizarTarea">Cerrar</button>
+                        <button type="submit" class="btn btn-dark" form="formModificarTarea">Guardar Cambios</button>
                     </div>
                 </div>
             </div>
@@ -332,7 +332,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        <script src="com.grupo5.utilidades/tablero.js" type="text/javascript"></script>
+        <script src="com.grupo5.utilidades/tabler.js" type="text/javascript"></script>
         <script src="com.grupo5.utilidades/gantt.js" type="text/javascript"></script>
 
         <!-- Agrega DataTables JS -->

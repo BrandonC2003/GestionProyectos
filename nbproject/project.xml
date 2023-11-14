@@ -7,7 +7,11 @@
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <web-module-libraries>
                 <library dirs="200">
+<<<<<<< HEAD
+                    <file>${file.reference.mysql-connector-j-8.0.33.jar-2}</file>
+=======
                     <file>${libs.javaee-web-api-8.0.classpath}</file>
+>>>>>>> e55b867c954507092f6d82f5f9690ad00bcd8db3
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">

@@ -130,6 +130,8 @@ public class TareasControlador extends HttpServlet {
         Tareas tarea = new Tareas();
         Estados estado = new Estados();
         TareasDAO tareasDao = new TareasDAO();
+        JsonObject jsonObject;
+        String message;
 
         switch (accion) {
             case "insertar":
@@ -150,7 +152,7 @@ public class TareasControlador extends HttpServlet {
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 }
                 builder.add("idTarea", tarea.getIdTarea());
-                JsonObject jsonObject = builder.build();
+                jsonObject = builder.build();
 
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
@@ -158,6 +160,29 @@ public class TareasControlador extends HttpServlet {
                 response.getWriter().write(jsonObject.toString());
                 break;
             case "actualizar":
+                tarea.setIdTarea(Integer.parseInt(request.getParameter("idTarea")));
+                tarea.setTarea(request.getParameter("tarea"));
+                tarea.setDescripcion(request.getParameter("descripcion"));
+                estado.setIdEstado(Integer.parseInt(request.getParameter("estado")));
+                tarea.setEstado(estado);
+                tarea.setFechaInicio(Date.valueOf(request.getParameter("fechaInicio")));
+                tarea.setFechaFin(Date.valueOf(request.getParameter("fechaFin")));
+                tarea.setUsuarioInserta("");
+
+                message = tareasDao.actualizarTarea(tarea);
+
+                if (message == null) {
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                builder.add("idTarea", tarea.getIdTarea());
+                jsonObject = builder.build();
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                
+                response.getWriter().write(jsonObject.toString());
                 break;
             case "eliminar":
                 break;

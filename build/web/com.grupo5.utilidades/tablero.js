@@ -3,6 +3,7 @@ $(document).ready(function () {
     var idEstado = 0;
     var antIndexEstado = 0;
     var idProyecto = $("#hIdProyecto").attr("id-proyecto");
+    var selectedTarea;
     // Metodo para hacer los elementos sortables
     function agregarSortables() {
         $("#board").sortable({
@@ -269,6 +270,7 @@ $(document).ready(function () {
     //Mostrar el modal cuando se de click sobre la tarea. este sera para acutualizar la tarea
     $(document).on('click', '.task-content', function () {
         let id = $(this).attr("id-tarea");
+        selectedTarea = $(this);
         $.ajax({
             url: "TareasControlador?accion=encontrar&idTarea=" + id + "&idProyecto=" + idProyecto,
             type: "GET",
@@ -401,6 +403,38 @@ $(document).ready(function () {
                 error: function(){
                      Swal.fire("Error", "Ocurrio un error al agregar la modificar la tarea", "error");
                 }
+        });
+    });
+    
+    //evento para eliminar las tareas
+    $(document).on("click","#eliminarTarea",function(){
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Una vez eliminada no la podrás recuperar.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, eliminarlo",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let id = selectedTarea.attr("id-tarea");
+                $.ajax({
+                    url: "TareasControlador?accion=eliminar",
+                    type: "POST",
+                    data: "idTarea=" + id,
+                    dataType: "json",
+                    success: function () {
+                        selectedTarea.closest('.task').remove();
+                        Swal.fire("Eliminado", "la tarea ha sido eliminada correctamente.", "success");
+                        $("#cerrarModal-actualizarTarea").click();
+                    },
+                    error: function () {
+                        Swal.fire("Error", "Ocurrio un error al eliminar la tarea", "error");
+                    }
+                });
+            }
         });
     });
 });

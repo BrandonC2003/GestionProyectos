@@ -185,6 +185,20 @@ public class TareasControlador extends HttpServlet {
                 response.getWriter().write(jsonObject.toString());
                 break;
             case "eliminar":
+                tarea.setIdTarea(Integer.parseInt(request.getParameter("idTarea")));
+                
+                if(tareasDao.eliminarTarea(tarea.getIdTarea())){
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                }else{
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                builder.add("idTarea", tarea.getIdTarea());
+                jsonObject = builder.build();
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                
+                response.getWriter().write(jsonObject.toString());
                 break;
         }
 

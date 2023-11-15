@@ -227,7 +227,7 @@ public class TareasDAO {
         PreparedStatement stmt = null;
         try {
             conn = Conexion.conectarse();
-            stmt = conn.prepareStatement(ACTUALIZAR);
+            stmt = conn.prepareStatement(ELIMINAR);
             stmt.setInt(1, IdTarea);
 
             stmt.execute();

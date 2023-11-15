@@ -78,6 +78,36 @@ public class UsuariosControlador extends HttpServlet {
         } else {
             request.getRequestDispatcher("index.jsp").forward(request, response);
         }
+        
+            
+        // Nueva Forma
+        //int id = Integer.parseInt(request.getParameter("id"));
+        /*String update = request.getParameter("modificar");
+        
+        if (update.equalsIgnoreCase("Guardar Cuenta")) {
+            String nombres = request.getParameter("txtNombre");
+            String apellidos = request.getParameter("txtApellido");
+            String email = request.getParameter("txtEmail");
+            String clave = request.getParameter("txtClave");
+            String confirmacion = request.getParameter("txtConfirmacion");
+            if (udao.modificar(nombres, apellidos, email, clave, confirmacion)) {
+                response.sendRedirect("PrincipalControlador?accion=login");
+            }else{
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+            }
+
+        } else {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        }*/
+        
+
+       // UsuariosDAO usuari = new UsuariosDAO();
+        //usuari.modificar(nombres, apellidos, email, clave, confirmacion);
+
+        // Redirigir o mostrar la vista actualizada
+        //response.sendRedirect("editarPerfil.jsp");
+        
+        
     }
 
     /**

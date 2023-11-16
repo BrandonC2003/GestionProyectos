@@ -61,17 +61,10 @@ El index será el login
                                         <div class="form-group">
                                             <input type="password" name="txtPass" class="form-control form-control-user"
                                                 id="exampleInputPassword" placeholder="contraseña">
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox small">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck">
-                                                <label class="custom-control-label" for="customCheck">Recordar Me</label>
-                                            </div>
-                                        </div>            
+                                        </div>         
                                         <input type="submit" name="inicio" value="ingresar" class="btn btn-primary btn-user btn-block">  
                                     <hr>
                                     <div class="text-center">
-                                        <a class="small" href="${pageContext.request.contextPath}/com.grupo5.vistas/opcionesRegistro/recuperarCuenta.jsp">Olvido su contraseña?</a>
                                     </div>
                                     <div class="text-center">
                                         <a class="small" href="${pageContext.request.contextPath}/com.grupo5.vistas/opcionesRegistro/registroUsuario.jsp">Crear cuenta!</a>

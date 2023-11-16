@@ -72,21 +72,6 @@
                         </div>
                 </li>
 
-                <!-- Nav Item - Utilities Collapse Menu -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-bs-toggle="collapse" data-bs-target="#collapseUtilities"
-                       aria-expanded="true" aria-controls="collapseUtilities">
-                        <i class="fa-regular fa-folder"></i>
-                        <span>Reportes</span>
-                    </a>
-                    <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                         data-bs-parent="#accordionSidebar">
-                        <div class="bg-dark py-2 collapse-inner rounded">
-                            <h6 class="collapse-header">Informe del proyecto:</h6>
-                            <a class="collapse-item text-white" href="PrincipalControlador?accion=informes" target="myFrame">Proyecto 1</a>
-                        </div>
-                    </div>
-                </li>
 
                 <!-- Divider -->
                 <hr class="sidebar-divider">
@@ -142,14 +127,6 @@
                                     <a class="dropdown-item" href="${pageContext.request.contextPath}/com.grupo5.vistas/opcionesRegistro/editarPerfil.jsp"">
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Perfil
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Opciones
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Actividad
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">

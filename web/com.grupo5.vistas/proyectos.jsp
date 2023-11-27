@@ -298,6 +298,8 @@
                 </div>
             </div>
         </div>
+        
+        <!--Modal para modificar el proyecto-->
         <div class="modal fade" id="modificarProyectoModal" tabindex="-1" aria-labelledby="modificarProyectoModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -314,8 +316,13 @@
                                 <input type="text" class="form-control" id="proyectoEdit" name="Proyecto" value="${proyecto.proyecto}">
                                 <span class="text-danger" id="proyectoEditVal"></span>
                             </div>
+                                <div class="mb-3">
+                                <label class="form-label" for="proyectoDescripcion">Descripcion</label>
+                                <input type="text" class="form-control" id="proyectoDescripcion" name="descripcion" value="${proyecto.descripcion}">
+                                <span class="text-danger" id="gitVal"></span>
+                            </div>
                             <div class="mb-3">
-                                <label class="form-label" for="color">GIT</label>
+                                <label class="form-label" for="gitEdit">GIT</label>
                                 <input type="text" class="form-control" id="gitEdit" name="git" value="${proyecto.git}">
                                 <span class="text-danger" id="gitVal"></span>
                             </div>

@@ -99,6 +99,16 @@ public class ProyectosControlador extends HttpServlet {
                 int idGenerado = proyectoDao.insertarProyecto(proyecto);
                 response.sendRedirect("PrincipalControlador?accion=login");
                 break;
+            case "modificar":
+                proyecto.setIdProyecto(Integer.parseInt(request.getParameter("idProyecto")));
+                proyecto.setProyecto(request.getParameter("Proyecto"));
+                proyecto.setDescripcion(request.getParameter("Descripcion"));
+                proyecto.setGit(request.getParameter("Git"));
+                
+                String resp = proyectoDao.actualizarProyecto(proyecto);
+                
+                //Enviar la respuesta json para hacer el update con javascript
+                break;
         }
     }
 

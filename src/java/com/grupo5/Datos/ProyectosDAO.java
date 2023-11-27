@@ -277,8 +277,26 @@ public class ProyectosDAO {
      * @return mensaje de nulo si esta todo bien | mensaje de error si hubo
      * algun inconveniente
      */
-    public String actulizarProyecto(Proyectos proyecto) {
-        return null;
+    public String actualizarProyecto(Proyectos proyecto) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = Conexion.conectarse();
+            stmt = conn.prepareStatement(ACTUALIZAR);
+            stmt.setString(1, proyecto.getProyecto());
+            stmt.setString(2, proyecto.getDescripcion());
+            stmt.setString(3, proyecto.getGit());
+            stmt.setInt(4, proyecto.getIdProyecto());
+
+            stmt.execute();
+            return null;
+        } catch (SQLException e) {
+            return e.getMessage();
+        } finally {
+            Conexion.close(conn);
+            Conexion.close(stmt);
+        }
     }
 
     /**

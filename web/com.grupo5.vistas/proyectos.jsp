@@ -16,9 +16,6 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" type="text/css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
-        <!-- CDN para elaborar diagramas de gantt -->
-        <link rel="stylesheet" href="https://cdn.dhtmlx.com/gantt/7.1/dhtmlxgantt.css">
-        <script src="https://cdn.dhtmlx.com/gantt/7.1/dhtmlxgantt.js"></script>
 
         <link href="com.grupo5.utilidades/stylesProyecto.css" rel="stylesheet" type="text/css"/>
 
@@ -32,7 +29,10 @@
     <body>
          <c:set var="proyecto" value="${requestScope.proyecto}" />
         <div class="row">
-            <h1 id="hIdProyecto" id-proyecto="${proyecto.idProyecto}">${proyecto.proyecto}</h1>
+            <h1 id="hIdProyecto" id-proyecto="${proyecto.idProyecto}">
+                <i class="fa-solid fa-circle-info" id="infoProyect" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#modificarProyectoModal"></i>
+                ${proyecto.proyecto}
+            </h1>
         </div>
         <!--Nav para seleccionar la vista-->
         <div class="row">
@@ -42,9 +42,6 @@
                 </li>
                 <li class="nav-link">
                     <a href="#lista" class="nav-link text-secondary icon-link" id="lista-list" role="tab"  data-bs-toggle="list" aria-controls="lista"><i class="fa-solid fa-table"></i>Lista</a>
-                </li>
-                <li class="nav-link">
-                    <a href="#gantt" class="nav-link text-secondary icon-link" id="gantt-list" role="tab"  data-bs-toggle="list" aria-controls="gantt"><i class="fa-solid fa-chart-gantt"></i>Gantt</a>
                 </li>
             </ul>
             <hr>
@@ -132,11 +129,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <!--Vista de Gantt-->
-                <div class="tab-pane fade" id="gantt" role="tabpanel" aria-labelledby="gantt-list">
-                    <div id="gantt_container" style="width: 100%; height: 400px;"></div>
                 </div>
             </div>
         </div>
@@ -306,7 +298,38 @@
                 </div>
             </div>
         </div>
-
+        <div class="modal fade" id="modificarProyectoModal" tabindex="-1" aria-labelledby="modificarProyectoModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="modificarProyectoModalLabel">Proyecto</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formModificarProyecto">
+                            <input type="reset" hidden id="btnLimpiar-modificarProyecto">
+                            <div class="mb-3">
+                                <input type="hidden" name="idProyecto"  id="idProyecto" value="${Proyecto.idProyecto}">
+                                <label class="form-label" for="estado">Proyecto</label>
+                                <input type="text" class="form-control" id="proyectoEdit" name="Proyecto" value="${proyecto.proyecto}">
+                                <span class="text-danger" id="proyectoEditVal"></span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="color">GIT</label>
+                                <input type="text" class="form-control" id="gitEdit" name="git" value="${proyecto.git}">
+                                <span class="text-danger" id="gitVal"></span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-modificarEstado">Cerrar</button>
+                        <button type="submit" class="btn btn-dark" form="formModificarProyecto">Modificar Proyecto</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Modal para mostrar los detalles y modificar los datos del proyecto-->
+        
         <!-- Popovers -->
 
         <div id="contenido-popover" style="display:none;">
@@ -335,7 +358,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
         <script src="com.grupo5.utilidades/tablero.js" type="text/javascript"></script>
-        <script src="com.grupo5.utilidades/gantt.js" type="text/javascript"></script>
 
         <!-- Agrega DataTables JS -->
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>

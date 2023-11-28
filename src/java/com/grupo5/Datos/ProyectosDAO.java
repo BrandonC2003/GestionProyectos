@@ -27,7 +27,7 @@ public class ProyectosDAO {
 
     //Declarar variables para las consultas
     private final String LISTAR_PROYECTOS = "SELECT IdProyecto, Proyecto FROM proyectos";
-    private final String LISTAR = "select p.IdProyecto, p.Proyecto, e.IdEstado,e.Estado, e.Color, e.Indice AS IndiceEstado, "
+    private final String LISTAR = "select p.IdProyecto, p.Proyecto, p.Descripcion, p.Git, e.IdEstado,e.Estado, e.Color, e.Indice AS IndiceEstado, "
             + "t.IdTarea,t.Tarea, t.Indice as IndiceTarea, t.FechaFin, CONCAT(u.Nombre,' ',u.Apellido) AS NombreUsuario, "
             + "t.Realizada from Proyectos p "
             + "INNER JOIN estados e ON e.IdProyecto = p.IdProyecto "
@@ -107,6 +107,8 @@ public class ProyectosDAO {
                 existsEstado=false;
                 proyecto.setIdProyecto(rs.getInt("IdProyecto"));
                 proyecto.setProyecto(rs.getString("Proyecto"));
+                proyecto.setDescripcion(rs.getString("Descripcion"));
+                proyecto.setGit(rs.getString("Git"));
 
                 idEstados = rs.getInt("IdEstado");
 

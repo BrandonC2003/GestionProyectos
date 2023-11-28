@@ -101,6 +101,9 @@
                 <div class="tab-pane fade" id="lista" role="tabpanel" aria-labelledby="lista-list">
                     <div class="container-lg">
                         <div class="card">
+                            <div class="card-header">
+                                 <button type="button"class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
+                            </div>
                             <div class="card-body">
                                 <table class="table" style="width: 100%">
                                     <thead>
@@ -120,7 +123,7 @@
                                                     <td>${tarea.tarea}</td>
                                                     <td>${tarea.fechaFin}</td>
                                                     <td>nombreu</td>
-                                                    <td class="${estado.color}">${estado.estado}</td>
+                                                    <td class="${estado.color}" style="background-color:${estado.color};">${estado.estado}</td>
                                                 </tr>
                                             </c:forEach>
                                         </c:forEach>
@@ -311,9 +314,9 @@
                         <form id="formModificarProyecto">
                             <input type="reset" hidden id="btnLimpiar-modificarProyecto">
                             <div class="mb-3">
-                                <input type="hidden" name="idProyecto"  id="idProyecto" value="${Proyecto.idProyecto}">
+                                <input type="hidden" name="idProyecto"  id="idProyecto" value="${proyecto.idProyecto}">
                                 <label class="form-label" for="estado">Proyecto</label>
-                                <input type="text" class="form-control" id="proyectoEdit" name="Proyecto" value="${proyecto.proyecto}">
+                                <input type="text" class="form-control" id="proyectoEdit" name="proyecto" value="${proyecto.proyecto}">
                                 <span class="text-danger" id="proyectoEditVal"></span>
                             </div>
                                 <div class="mb-3">
@@ -329,7 +332,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-modificarEstado">Cerrar</button>
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-modificarProyecto">Cerrar</button>
                         <button type="submit" class="btn btn-dark" form="formModificarProyecto">Modificar Proyecto</button>
                     </div>
                 </div>

@@ -9,6 +9,9 @@ import com.grupo5.modelo.Proyectos;
 import com.grupo5.modelo.Estados;
 import com.grupo5.modelo.Tareas;
 import java.io.IOException;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -88,6 +91,8 @@ public class ProyectosControlador extends HttpServlet {
         //Objetos y variables a utilizar.
         Proyectos proyecto = new Proyectos();
         ProyectosDAO proyectoDao = new ProyectosDAO();
+         JsonObjectBuilder builder = Json.createObjectBuilder();
+        JsonObject jsonObject;
         
         switch(accion){
             case "insertar":
@@ -101,13 +106,24 @@ public class ProyectosControlador extends HttpServlet {
                 break;
             case "modificar":
                 proyecto.setIdProyecto(Integer.parseInt(request.getParameter("idProyecto")));
-                proyecto.setProyecto(request.getParameter("Proyecto"));
-                proyecto.setDescripcion(request.getParameter("Descripcion"));
-                proyecto.setGit(request.getParameter("Git"));
+                proyecto.setProyecto(request.getParameter("proyecto"));
+                proyecto.setDescripcion(request.getParameter("descripcion"));
+                proyecto.setGit(request.getParameter("git"));
                 
                 String resp = proyectoDao.actualizarProyecto(proyecto);
                 
-                //Enviar la respuesta json para hacer el update con javascript
+                if(resp == null){
+                    response.setStatus(HttpServletResponse.SC_OK);
+                }else{
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                builder.add("resp", resp == null ? "" : resp);
+                jsonObject = builder.build();
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                
+                response.getWriter().write(jsonObject.toString());
                 break;
         }
     }

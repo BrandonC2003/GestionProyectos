@@ -437,6 +437,36 @@ $(document).ready(function () {
             }
         });
     });
+    
+    
+    //Eventos para las tareas
+    
+    //Evento para modificar las tareas
+    $(document).on("submit","#formModificarProyecto", function(e){
+        e.preventDefault();
+
+        var formData = $(this).serialize();
+
+        var params = new URLSearchParams(formData);
+        var datos = {};
+
+        for (const [key, value] of params) {
+            datos[key] = value;
+        }
+        $.ajax({
+            url: "ProyectosControlador?accion=modificar",  
+                type: "POST", 
+                data: formData, 
+                dataType: "json", 
+                success: function (data) {
+                    $("#cerrarModal-modificarProyecto").click();
+                },
+                error: function(){
+                     Swal.fire("Error", "Ocurrio un error al agregar la modificar el proyecto", "error");
+                }
+        });
+    });
+    
 });
 
 

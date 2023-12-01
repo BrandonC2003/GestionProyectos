@@ -8,11 +8,15 @@ package com.grupo5.controlador;
 import com.grupo5.Datos.UsuariosDAO;
 import com.grupo5.modelo.Usuarios;
 import java.io.IOException;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -65,56 +69,71 @@ public class UsuariosControlador extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String inicio = request.getParameter("inicio");
-        if (inicio.equalsIgnoreCase("ingresar")) {
-            String user = request.getParameter("txtEmail");
-            String pass = request.getParameter("txtPass");
-            if (udao.validar(user, pass)) {
-                response.sendRedirect("PrincipalControlador?accion=login");
-            }else{
-                request.getRequestDispatcher("index.jsp").forward(request, response);
-            }
+        String accion = request.getParameter("accion");
 
-        } else {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+        switch (accion) {
+            case "ingresar":
+
+                String user = request.getParameter("txtEmail");
+                String pass = request.getParameter("txtPass");
+                if (udao.validar(user, pass)) {
+                    response.sendRedirect("PrincipalControlador?accion=login");
+                } else {
+                    request.getRequestDispatcher("index.jsp").forward(request, response);
+                }
+                break;
+
+            /*case "modificar":
+                UsuariosDAO modificar = new UsuariosDAO();
+
+                String nombres = request.getParameter("txtNombre");
+                String apellidos = request.getParameter("txtApellido");
+
+                modificar.modificar(nombres, apellidos);
+
+                response.sendRedirect("PrincipalControlador?accion=login");
+                break;
+            case "clave":
+                UsuariosDAO contra = new UsuariosDAO();
+
+                String clave = request.getParameter("txtClave");
+
+                //contra.clave(clave, Integer.parseInt(request.getParameter("IdUsuario")));
+                response.sendRedirect("PrincipalControlador?accion=login");
+                break;*/
+            case "insertar":
+                UsuariosDAO dao = new UsuariosDAO();
+                Usuarios usuario = new Usuarios();
+
+                usuario.setNombre(request.getParameter("Name"));
+                usuario.setApellido(request.getParameter("Apell"));
+                usuario.setEmail(request.getParameter("Email"));
+                usuario.setClave(request.getParameter("Password"));
+
+                boolean resultado = dao.InsertarUsuario(usuario);
+                //System.out.println("Resultado de la inserción: " + resultado);
+                /* proyecto.setProyecto(request.getParameter("Proyecto"));
+                proyecto.setDescripcion(request.getParameter("Descripcion"));
+                proyecto.setGit(request.getParameter("Git"));
+                proyecto.setUsuarioInserta("");//cuando se cree el login se colocara la sesion de usuario.
+                
+                int idGenerado = proyectoDao.insertarProyecto(proyecto);*/
+                /*String name = request.getParameter("txtName");
+                String surname = request.getParameter("txtApell");
+                String corr = request.getParameter("txtEmail");
+                String contrasena = request.getParameter("txtPassword");
+
+                into.Insertar(name, surname, corr, contrasena);*/
+                response.sendRedirect("PrincipalControlador?accion=login");
+                //request.getRequestDispatcher("index.jsp").forward(request, response);
+                break;
+
+            default:
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+
         }
-        
-            
-        // Nueva Forma
-        //int id = Integer.parseInt(request.getParameter("id"));
-        /*String update = request.getParameter("modificar");
-        
-        if (update.equalsIgnoreCase("Guardar Cuenta")) {
-            String nombres = request.getParameter("txtNombre");
-            String apellidos = request.getParameter("txtApellido");
-            String email = request.getParameter("txtEmail");
-            String clave = request.getParameter("txtClave");
-            String confirmacion = request.getParameter("txtConfirmacion");
-            if (udao.modificar(nombres, apellidos, email, clave, confirmacion)) {
-                response.sendRedirect("PrincipalControlador?accion=login");
-            }else{
-                request.getRequestDispatcher("index.jsp").forward(request, response);
-            }
-
-        } else {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
-        }*/
-        
-
-       // UsuariosDAO usuari = new UsuariosDAO();
-        //usuari.modificar(nombres, apellidos, email, clave, confirmacion);
-
-        // Redirigir o mostrar la vista actualizada
-        //response.sendRedirect("editarPerfil.jsp");
-        
-        
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";

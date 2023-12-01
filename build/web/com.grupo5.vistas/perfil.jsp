@@ -1,14 +1,16 @@
 <%-- 
-    Document   : registroUsuario
-    Created on : 5 sep. 2023, 09:29:52
-    Author     : brand
+    Document   : perfil
+    Created on : 11 oct. 2023, 23:57:04
+    Author     : elman
 --%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html lang="en">
-     <link href="../../com.grupo5.utilidades/principal.css" rel="stylesheet" type="text/css"/>
-     <script src="../../com.grupo5.utilidades/principal.js" type="text/javascript"></script>
-<head>
+
+<html>
+     <link href="com.grupo5.utilidades/principal.css" rel="stylesheet" type="text/css"/>
+     <link href="com.grupo5.utilidades/principal.js" rel="stylesheet" type="text/css"/>
+    
 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -41,36 +43,33 @@
                     <div class="col-lg-7">
                         <div class="p-5">
                             <div class="text-center">
-                                <h1 class="h4 text-gray-900 mb-4">Crear cuenta</h1>
+                                <h1 class="h4 text-gray-900 mb-4">Ajustes</h1>
                             </div>
-                            <form class="user" action=" ../../UsuariosControlador?accion=insertar" method="POST">
+                            <form class="user">
                                 <div class="form-group row">
                                     <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="text" name="Name" class="form-control form-control-user" id="exampleFirstName"
+                                        <input type="text" class="form-control form-control-user" id="exampleFirstName"
                                             placeholder="Nombres">
                                     </div>
                                     <div class="col-sm-6">
-                                        <input type="text" name="Apell" class="form-control form-control-user" id="exampleLastName"
+                                        <input type="text" class="form-control form-control-user" id="exampleLastName"
                                             placeholder="Apellidos">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <input type="email" name="Email" class="form-control form-control-user" id="exampleInputEmail"
+                                    <input type="email" class="form-control form-control-user" id="exampleInputEmail"
                                         placeholder="Ingrese su Email">
                                 </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" name="Password" class="form-control form-control-user"
-                                            id="exampleInputPassword" placeholder="contraseña">
-                                    </div>
-                                </div>
-                                <input type="submit" name="Insertar" value="insertar" class="btn btn-primary btn-user btn-block">
+                                
+                                <a href="login.html" class="btn btn-primary btn-user btn-block">
+                                    Guardar Cambios
+                                </a>
                             <hr>
                             <div class="text-center">
-                                <a class="small" href="http://localhost:8080/GestionProyectos/com.grupo5.vistas/opcionesRegistro/recuperarCuenta.jsp">Olvido su contaseña?</a>
+                                <a class="small" href="http://localhost:8080/GestionProyectos/PrincipalControlador?accion=inicio">Regresar al Menu Principal</a>
                             </div>
                             <div class="text-center">
-                                <a class="small" href="http://localhost:8080/GestionProyectos/">Si ya tiene cuenta inicie aqui!</a>
+                                <a class="small" href="http://localhost:8080/GestionProyectos/PrincipalControlador?accion=contra1">Cambiar Contraseña</a>
                             </div>
                         </div>
                     </div>

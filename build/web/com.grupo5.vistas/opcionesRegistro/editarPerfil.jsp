@@ -39,8 +39,12 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Modificar cuenta</h1>
                             </div>
-                            <form class="user">
-                                <div class="form-group row">
+                            <form class="user" action="UsuariosControlador?accion=modificar" method="POST">
+                                
+                                <input type="hidden" id="editIdUsuario" name="IdUsuario" value="${usuario.idUsuario}">
+                                <input type="reset" id="resetForm-Agregar" hidden>
+                                
+                                <div class="form-group row">                                                                       
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="text" name="txtNombre" class="form-control form-control-user" id="exampleFirstName"
                                             placeholder="Nombres">
@@ -49,25 +53,10 @@
                                         <input type="text" name="txtApellido" class="form-control form-control-user" id="exampleLastName"
                                             placeholder="Apellidos">
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <input type="email" name="txtEmail" class="form-control form-control-user" id="exampleInputEmail"
-                                        placeholder="Ingrese su Email">
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0">
-                                        <input type="password" name="txtClave" class="form-control form-control-user"
-                                            id="exampleInputPacssword" placeholder="contraseña">
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <input type="password" name="txtConfirmacion" class="form-control form-control-user"
-                                            id="exampleRepeatPassword" placeholder="Repita la contraseña">
-                                    </div>
-                                </div>
-                                <input type="submit" name="modificar" value="Guardar Cuenta" class="btn btn-primary btn-user btn-block"> 
-                                <!--a href="login.html" class="btn btn-primary btn-user btn-block">
-                                    Guardar Cuenta
-                                </a-->
+                                </div>                               
+                               
+                                <input type="submit" name="modificar" value="modificar" class="btn btn-primary btn-user btn-block"> 
+                                
                             <hr>
                             
                             <div class="text-center">

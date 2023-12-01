@@ -52,7 +52,8 @@ El index será el login
                                        <body style="background-color:skyblue;">
                                         <h1 class="h4 text-gray-900 mb-4">Inicio de sesion</h1>
                                     </div>
-                                    <form class="user" action="UsuariosControlador?inicio=ingresar" method="POST">
+
+                                    <form class="user" action="UsuariosControlador?accion=ingresar" method="POST">
                                         <div class="form-group">
                                             <input type="email" name="txtEmail" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"

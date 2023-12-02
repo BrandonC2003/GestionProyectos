@@ -113,6 +113,7 @@
                                             <th>Finalizacion</th>
                                             <th>Usuario</th>
                                             <th>Estado</th>
+                                            <<th>Opciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -124,6 +125,7 @@
                                                     <td>${tarea.fechaFin}</td>
                                                     <td>nombreu</td>
                                                     <td class="${estado.color}" style="background-color:${estado.color};">${estado.estado}</td>
+                                                    <td><i class="fa-solid fa-pen-to-square btnEditTarea" id-tarea="${tarea.idTarea}"></i></td>
                                                 </tr>
                                             </c:forEach>
                                         </c:forEach>
@@ -309,7 +311,7 @@
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="modificarProyectoModalLabel">Proyecto</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
+                    </div> 
                     <div class="modal-body">
                         <form id="formModificarProyecto">
                             <input type="reset" hidden id="btnLimpiar-modificarProyecto">

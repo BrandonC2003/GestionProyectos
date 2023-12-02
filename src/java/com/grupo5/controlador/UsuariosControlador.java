@@ -68,8 +68,12 @@ public class UsuariosControlador extends HttpServlet {
             case "modificar":
                int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
                usuario = usuarioDao.obtenerUsuario(idUsuario);
-                request.setAttribute("Nombre",usuario);
-                request.setAttribute("Apellido",usuario);
+               //establecer los atributos
+                request.setAttribute("Nombre",usuario.getNombre());
+                request.setAttribute("Apellido",usuario.getApellido());
+                // Establecer el objeto usuario completo si es necesario
+                request.setAttribute("usuario", usuario);
+                // Redirigir a la página de edición de perfil
                 request.getRequestDispatcher("com.grupo5.vistas/editarPerfil.jsp").forward(request, response);
                 break;
         }

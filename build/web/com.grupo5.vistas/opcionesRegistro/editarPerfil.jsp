@@ -43,7 +43,7 @@
                                 <h1 class="h4 text-gray-900 mb-4">Modificar cuenta</h1>
                             </div>
                             <form class="user" action=" ../../UsuariosControlador?accion=modificar" method="POST">
-                                <input type="reset" hidden id="btnLimpiar-modificarUsuario">                          
+                                <!--input type="reset" hidden id="btnLimpiar-modificarUsuario"-->                          
                                 <div class="form-group row">                                                                       
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="hidden" id="idUsuario" name="idUsuario" value="${usuario.idUsuario}"> 

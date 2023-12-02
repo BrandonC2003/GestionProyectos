@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class MainPruebas {
     public static void main(String[] args) {
+        
         List<Proyectos> proyectos = new ProyectosDAO().listarProyectos();
         
         for(Proyectos proy : proyectos){
@@ -24,5 +25,7 @@ public class MainPruebas {
         Tareas tareas = new TareasDAO().buscarPorId(31);
         
         System.out.println(tareas.getTarea());
+        
+        
     }
 }

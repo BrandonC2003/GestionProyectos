@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.swing.JOptionPane;
 
 /**
@@ -59,22 +60,21 @@ public class UsuariosControlador extends HttpServlet {
         
         
         String accion = request.getParameter("accion");
-        
+         HttpSession session = request.getSession(false);
         
         Usuarios usuario = new Usuarios();
         UsuariosDAO usuarioDao = new UsuariosDAO();          
         
         switch(accion){
             case "modificar":
-               int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
-               usuario = usuarioDao.obtenerUsuario(idUsuario);
+               if(session != null){
+                  int idUsuario = (int) session.getAttribute("idUsuario");
+                usuario = usuarioDao.obtenerUsuario(idUsuario);
                //establecer los atributos
-                request.setAttribute("Nombre",usuario.getNombre());
-                request.setAttribute("Apellido",usuario.getApellido());
-                // Establecer el objeto usuario completo si es necesario
-                request.setAttribute("usuario", usuario);
+                request.setAttribute("usuarios", usuario);
                 // Redirigir a la página de edición de perfil
-                request.getRequestDispatcher("com.grupo5.vistas/editarPerfil.jsp").forward(request, response);
+                request.getRequestDispatcher("com.grupo5.vistas/opcionesRegistro/editarPerfil.jsp").forward(request, response);
+               }
                 break;
         }
     }
@@ -91,14 +91,21 @@ public class UsuariosControlador extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
+        Usuarios us = new Usuarios();
+        
+         HttpSession sesion = request.getSession(true);
 
         switch (accion) {
             case "ingresar":
 
                 String user = request.getParameter("txtEmail");
                 String pass = request.getParameter("txtPass");
-                if (udao.validar(user, pass)) {
+                us = udao.validar(user, pass);
+                if (us != null) {
                     response.sendRedirect("PrincipalControlador?accion=login");
+                    
+                    sesion.setAttribute("idUsuario", us.getIdUsuario());
+                    sesion.setAttribute("mail",us.getEmail());
                 } else {
                     request.getRequestDispatcher("index.jsp").forward(request, response);
                 }

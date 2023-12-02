@@ -19,7 +19,7 @@ public class UsuariosDAO {
     PreparedStatement stmt = null;
     ResultSet rs = null;
 
-    public boolean validar(String email, String clave) {
+    public Usuarios validar(String email, String clave) {
         Usuarios us = new Usuarios();
         String sql = "select * from usuarios where Email=? and Clave=?";
         try {
@@ -29,12 +29,14 @@ public class UsuariosDAO {
             stmt.setString(2, clave);
             rs = stmt.executeQuery();
 
-            while (rs.next()) {
-                return true;
-            }
-            return false;
-        } catch (Exception e) {
-            return false;
+            rs.next();
+            
+            us.setIdUsuario(rs.getInt("IdUsuario"));
+            us.setEmail(rs.getString("Email"));
+            
+            return us;
+        } catch (Exception e) { 
+            return us;
         }
     }
 
@@ -117,7 +119,8 @@ public class UsuariosDAO {
                 // Datos de usuario
                 us.setIdUsuario(rs.getInt("IdUsuario"));               
                 us.setNombre(rs.getString("Nombre"));
-                us.setNombre(rs.getString("Apellido"));
+                us.setApellido(rs.getString("Apellido"));
+                us.setClave(rs.getString("Clave"));
     
             }
 

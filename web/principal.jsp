@@ -23,7 +23,7 @@
     </head>
 
     <body id="page-top">
-
+         
         <!-- Page Wrapper -->
         <div id="wrapper">
 
@@ -124,7 +124,7 @@
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                      aria-labelledby="userDropdown">
-                                    <a class="dropdown-item" href="${pageContext.request.contextPath}/com.grupo5.vistas/opcionesRegistro/editarPerfil.jsp"">
+                                    <a class="dropdown-item" href="UsuariosControlador?accion=modificar">
                                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                         Perfil
                                     </a>
@@ -140,13 +140,12 @@
 
                     </nav>
                     <!-- End of Topbar -->
-
+           
                     <!-- Begin Page Content -->
                     <div class="" style="height:83%;" scrolling="no">
                         <iframe name="myFrame" style="height:100%; width: 100%; overflow-y: hidden" frameborder="0" scrolling-x="no"></iframe>
                     </div>
-                    <!-- /.container-fluid -->
-                </div>
+                    <!-- /.container-fluid -->            
                 <!-- Footer -->
                 <!--                <footer class="sticky-footer bg-white">
                                     <div class="container my-auto">
@@ -161,8 +160,8 @@
                 <!-- End of Content Wrapper -->
 
             </div>
-            <!-- End of Page Wrapper -->
-
+            <!-- End of Page Wrapper -->            
+         
             <!-- Scroll to Top Button-->
             <a class="scroll-to-top rounded" href="#page-top">
                 <i class="fas fa-angle-up"></i>
@@ -186,7 +185,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>           
 
             <!--Modal para Crear proyectos-->
             <div class="modal fade" id="insertProyectoModal" tabindex="-1" aria-labelledby="insertProyectoModalLabel" aria-hidden="true">

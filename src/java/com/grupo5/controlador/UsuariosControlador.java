@@ -59,18 +59,18 @@ public class UsuariosControlador extends HttpServlet {
         
         
         String accion = request.getParameter("accion");
-        int idUsuario = Integer.parseInt(request.getParameter("IdUsuario"));
+        
         
         Usuarios usuario = new Usuarios();
-        UsuariosDAO usuarioDao = new UsuariosDAO(); 
-         
+        UsuariosDAO usuarioDao = new UsuariosDAO();          
         
         switch(accion){
             case "modificar":
+                int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
                usuario = usuarioDao.obtenerUsuario(idUsuario);
                 request.setAttribute("Nombre",usuario);
                 request.setAttribute("Apellido",usuario);
-                request.getRequestDispatcher("com.grupo5.vistas/principal.jsp").forward(request, response);
+                request.getRequestDispatcher("com.grupo5.vistas/editarPerfil.jsp").forward(request, response);
                 break;
         }
     }
@@ -106,10 +106,11 @@ public class UsuariosControlador extends HttpServlet {
                 UsuariosDAO da = new UsuariosDAO();
                 Usuarios usuari = new Usuarios();
                 
-                usuari.setNombre(request.getParameter("txtNombre"));
-                usuari.setApellido(request.getParameter("txtApellido"));
+                usuari.setIdUsuario(Integer.parseInt(request.getParameter("idUsuario"))); //request.getParameter("IdUsuario")
+                usuari.setNombre(request.getParameter("Nombre"));
+                usuari.setApellido(request.getParameter("Apellido"));
                 
-                boolean resultad = da.modificar(usuari);
+                String resultad = da.modificar(usuari);
 
                 response.sendRedirect("PrincipalControlador?accion=login");
                 break;

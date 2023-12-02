@@ -38,7 +38,7 @@ public class UsuariosDAO {
         }
     }
 
-    public boolean modificar(Usuarios use) {
+    public String modificar(Usuarios use) {
         Usuarios us = new Usuarios();
         //String sql = "UPDATE usuarios SET Nombre = ?, Apellido = ? WHERE IdUsuario = ?";
         try {
@@ -47,14 +47,15 @@ public class UsuariosDAO {
             stmt.setString(1, use.getNombre());
             stmt.setString(2, use.getApellido());
             stmt.setInt(3, use.getIdUsuario());
-            rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                return true;
-            }
-            return false;
-        } catch (Exception e) {
-            return false;
+            stmt.execute();
+           
+            return null;
+            
+        } catch (SQLException e) {
+            return e.getMessage();
+        }finally {
+            Conexion.close(conn);
+            Conexion.close(stmt);
         }
     }
 

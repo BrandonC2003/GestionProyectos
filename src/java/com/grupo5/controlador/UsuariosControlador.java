@@ -66,7 +66,7 @@ public class UsuariosControlador extends HttpServlet {
         
         switch(accion){
             case "modificar":
-                int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
+               int idUsuario = Integer.parseInt(request.getParameter("idUsuario"));
                usuario = usuarioDao.obtenerUsuario(idUsuario);
                 request.setAttribute("Nombre",usuario);
                 request.setAttribute("Apellido",usuario);

@@ -15,6 +15,7 @@ public class UsuariosDAO {
     //private final String ACTUALIZAR = "UPDATE usuarios SET Nombre = ?, Apellido = ? Email = ?, Clave = ? WHERE IdUsuario = ?";
     private final String ACTUALIZAR = "UPDATE usuarios SET Nombre = ?, Apellido = ? WHERE IdUsuario = ?";
     private final String OBTENER_USUARIO = "SELECT IdUsuario, Nombre, Apellido, Email, Clave FROM usuarios WHERE IdUsuario = ?";
+    private final String CAMBIAR_CLAVE = "UPDATE usuario SET Clave=? WHERE IdUsuario = ?";
     Connection conn = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;

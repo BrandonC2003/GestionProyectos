@@ -39,9 +39,9 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Modificar cuenta</h1>
                             </div>
-                            <form class="user" action="UsuariosControlador?accion=modificar" method="POST">
+                            <form class="user" action=" ../../UsuariosControlador?accion=modificar" method="POST">
                                 
-                                <input type="hidden" id="editIdUsuario" name="IdUsuario" value="${usuario.idUsuario}">
+                                <input type="hidden" id="editIdUsuario" name="IdUsuario" value="${usuario.IdUsuario}">
                                 <input type="reset" id="resetForm-Agregar" hidden>
                                 
                                 <div class="form-group row">                                                                       

@@ -57,16 +57,19 @@ public class UsuariosControlador extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
         
+        
         String accion = request.getParameter("accion");
         int idUsuario = Integer.parseInt(request.getParameter("IdUsuario"));
         
-        
         Usuarios usuario = new Usuarios();
-         UsuariosDAO usuarioDao = new UsuariosDAO();
+        UsuariosDAO usuarioDao = new UsuariosDAO(); 
+         
+        
         switch(accion){
-            case "listar":
+            case "modificar":
                usuario = usuarioDao.obtenerUsuario(idUsuario);
-                request.setAttribute("usuario",usuario);
+                request.setAttribute("Nombre",usuario);
+                request.setAttribute("Apellido",usuario);
                 request.getRequestDispatcher("com.grupo5.vistas/principal.jsp").forward(request, response);
                 break;
         }
@@ -99,11 +102,14 @@ public class UsuariosControlador extends HttpServlet {
 
             case "modificar":
                 UsuariosDAO modificar = new UsuariosDAO();
-
-                String nombres = request.getParameter("txtNombre");
-                String apellidos = request.getParameter("txtApellido");
-
-                modificar.modificar(nombres, apellidos);
+                
+                UsuariosDAO da = new UsuariosDAO();
+                Usuarios usuari = new Usuarios();
+                
+                usuari.setNombre(request.getParameter("txtNombre"));
+                usuari.setApellido(request.getParameter("txtApellido"));
+                
+                boolean resultad = da.modificar(usuari);
 
                 response.sendRedirect("PrincipalControlador?accion=login");
                 break;

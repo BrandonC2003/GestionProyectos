@@ -13,6 +13,7 @@ public class UsuariosDAO {
      private final String INSERTAR="INSERT INTO usuarios(Nombre, Apellido, Email, Clave) VALUES(?, ?, ?, ?)";
     //private final String LISTAR_USUARIO = "SELECT IdUsuario, Nombre FROM usuarios";
     //private final String ACTUALIZAR = "UPDATE usuarios SET Nombre = ?, Apellido = ? Email = ?, Clave = ? WHERE IdUsuario = ?";
+    private final String ACTUALIZAR = "UPDATE usuarios SET Nombre = ?, Apellido = ? WHERE IdUsuario = ?";
     private final String OBTENER_USUARIO = "SELECT IdUsuario, Nombre, Apellido, Email, Clave FROM usuarios WHERE IdUsuario = ?";
     Connection conn = null;
     PreparedStatement stmt = null;
@@ -37,17 +38,15 @@ public class UsuariosDAO {
         }
     }
 
-    public boolean modificar(String nombres, String apellidos) {
+    public boolean modificar(Usuarios use) {
         Usuarios us = new Usuarios();
-        String sql = "UPDATE usuarios SET Nombres = ?, Apellidos = ? Email = ?, Clave = ? Confirmacion = ? WHERE IdUsuario = ?";
+        //String sql = "UPDATE usuarios SET Nombre = ?, Apellido = ? WHERE IdUsuario = ?";
         try {
             conn = Conexion.conectarse();
-            stmt = conn.prepareStatement(sql);
-            stmt.setString(1, nombres);
-            stmt.setString(2, apellidos);
-            /*stmt.setString(3,email);
-            stmt.setString(4, clave);
-            stmt.setString(5,confirmacion);*/
+            stmt = conn.prepareStatement(ACTUALIZAR);
+            stmt.setString(1, use.getNombre());
+            stmt.setString(2, use.getApellido());
+            stmt.setInt(3, use.getIdUsuario());
             rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -116,8 +115,8 @@ public class UsuariosDAO {
                 us = new Usuarios();
                 // Datos de usuario
                 us.setIdUsuario(rs.getInt("IdUsuario"));               
-                us.setNombre(rs.getString("Nombres"));
-                us.setNombre(rs.getString("Apellidos"));
+                us.setNombre(rs.getString("Nombre"));
+                us.setNombre(rs.getString("Apellido"));
     
             }
 

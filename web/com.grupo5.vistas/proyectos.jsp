@@ -27,7 +27,8 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     </head>
     <body>
-         <c:set var="proyecto" value="${requestScope.proyecto}" />
+        <c:set var="proyecto" value="${requestScope.proyecto}" />
+        <c:set var="grupo" value="${requestScope.grupo}" />
         <div class="row">
             <h1 id="hIdProyecto" id-proyecto="${proyecto.idProyecto}">
                 <i class="fa-solid fa-circle-info" id="infoProyect" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#modificarProyectoModal"></i>
@@ -42,6 +43,9 @@
                 </li>
                 <li class="nav-link">
                     <a href="#lista" class="nav-link text-secondary icon-link" id="lista-list" role="tab"  data-bs-toggle="list" aria-controls="lista"><i class="fa-solid fa-table"></i>Lista</a>
+                </li>
+                <li class="nav-link">
+                    <a href="#equipo" class="nav-link text-secondary icon-link" id="lista-equipo" role="tab"  data-bs-toggle="list" aria-controls="equipo"><i class="fa-solid fa-table"></i>Equipo</a>
                 </li>
             </ul>
             <hr>
@@ -102,32 +106,69 @@
                     <div class="container-lg">
                         <div class="card">
                             <div class="card-header">
-                                 <button type="button"class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
+                                <button type="button"class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#agregarTareasModal">Agregar Tarea <i class="fa-solid fa-plus"></i></button>
                             </div>
                             <div class="card-body">
                                 <table class="table" style="width: 100%">
                                     <thead>
                                         <tr>
-                                            <th>Realizada</th>
                                             <th>Tarea</th>
                                             <th>Finalizacion</th>
-                                            <th>Usuario</th>
                                             <th>Estado</th>
-                                            <<th>Opciones</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <c:forEach var="estado" items="${proyecto.estados}">
                                             <c:forEach var="tarea" items="${estado.tareas}">
                                                 <tr>
-                                                    <td><input type="checkbox" selected="${tarea.realizada}"></td>
                                                     <td>${tarea.tarea}</td>
                                                     <td>${tarea.fechaFin}</td>
-                                                    <td>nombreu</td>
                                                     <td class="${estado.color}" style="background-color:${estado.color};">${estado.estado}</td>
-                                                    <td><i class="fa-solid fa-pen-to-square btnEditTarea" id-tarea="${tarea.idTarea}"></i></td>
                                                 </tr>
                                             </c:forEach>
+                                        </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--Vista de los equipos-->
+                <div class="tab-pane fade" id="equipo" role="tabpanel" aria-labelledby="lista-equipo">
+                    <div class="container-lg">
+                        <div class="card">
+                            <div class="card-header">
+                                <button type="button"class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#agregarUsuarioModal">Agregar usuario<i class="fa-solid fa-plus"></i></button>
+                            </div>
+                            <div class="card-body">
+                                <table class="" style="width: 100%" id="miTabla">
+                                    <thead>
+                                        <tr>
+                                            <th>Usuario</th>
+                                            <th>Rol</th>
+                                            <th>Opciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:forEach var="item" items="${grupo.proyectoGrupo}">
+                                            <tr>
+                                                <td>${item.usuario.nombre} ${item.usuario.apellido}</td>
+                                                <td>
+                                                    <select class="form-control" id="select-update-rol" id-usuario="${item.usuario.idUsuario}">
+                                                        <c:if test="${item.rol == 'Administrador'}">
+                                                            <option value="Administrador" selected>Administrador</option>
+                                                            <option value="Miembro">Miembro</option>
+                                                        </c:if>
+                                                        <c:if test="${item.rol == 'Miembro'}">
+                                                            <option value="Administrador" selected>Administrador</option>
+                                                            <option value="Miembro" selected>Miembro</option>
+                                                        </c:if>
+
+                                                    </select>
+                                                </td>
+                                                <td><button id-usuario="${item.usuario.idUsuario}" class="btn btn-outline-danger btn-eliminar-grupo"><i class="fa-solid fa-trash-can"></i></button></td>
+                                            </tr>
                                         </c:forEach>
                                     </tbody>
                                 </table>
@@ -179,10 +220,12 @@
                             </div>
                             <div class="mb-3">
                                 <label for="miembros" class="form-label">Miembros</label>
-                                <a class="btn btn-secondary btn-circle btn-popover-agregarUsuario" data-bs-toggle="popover"><i class="fa-solid fa-plus"></i></a>
-                                <div class="row content-miembros">
-
-                                </div>
+                                <select class="form-control" name="IdUsuario">
+                                    <option value="0">Asignar miembro</option>
+                                    <c:forEach var="item" items="${grupo.proyectoGrupo}">
+                                        <option value="${item.usuario.idUsuario}">${item.usuario.nombre}</option>
+                                    </c:forEach>
+                                </select>
                             </div>
                         </form>
                     </div>
@@ -228,13 +271,21 @@
                                 <label for="fechaFin" class="form-label">Fecha de finalizacion</label>
                                 <input type="date" class="form-control" name="fechaFin" id="editFechaFin" required>
                             </div> 
+                            <div class="mb-3">
+                                <label for="miembros" class="form-label">Miembros</label>
+                                <select class="form-control" name="IdUsuario">
+                                    <c:forEach var="item" items="${grupo.proyectoGrupo}">
+                                        <option value="${item.usuario.idUsuario}">${item.usuario.nombre}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" id="eliminarTarea"><i class="fa-solid fa-trash-can"></i> Eliminar</button>
-                     
-                            <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-actualizarTarea"><i class="fa-regular fa-circle-xmark"></i> Cerrar</button>
-                            <button type="submit" class="btn btn-dark" form="formModificarTarea"><i class="fa-regular fa-floppy-disk"></i> Guardar Cambios</button>
+                        <button type="button" class="btn btn-danger" id="eliminarTarea"><i class="fa-solid fa-trash-can"></i> Eliminar</button>
+
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-actualizarTarea"><i class="fa-regular fa-circle-xmark"></i> Cerrar</button>
+                        <button type="submit" class="btn btn-dark" form="formModificarTarea"><i class="fa-regular fa-floppy-disk"></i> Guardar Cambios</button>
                     </div>
                 </div>
             </div>
@@ -303,7 +354,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!--Modal para modificar el proyecto-->
         <div class="modal fade" id="modificarProyectoModal" tabindex="-1" aria-labelledby="modificarProyectoModalLabel" aria-hidden="true">
             <div class="modal-dialog">
@@ -321,7 +372,7 @@
                                 <input type="text" class="form-control" id="proyectoEdit" name="proyecto" value="${proyecto.proyecto}">
                                 <span class="text-danger" id="proyectoEditVal"></span>
                             </div>
-                                <div class="mb-3">
+                            <div class="mb-3">
                                 <label class="form-label" for="proyectoDescripcion">Descripcion</label>
                                 <input type="text" class="form-control" id="proyectoDescripcion" name="descripcion" value="${proyecto.descripcion}">
                                 <span class="text-danger" id="gitVal"></span>
@@ -334,14 +385,40 @@
                         </form>
                     </div>
                     <div class="modal-footer">
+                         <button type="button" class="btn btn-danger" id="eliminarProyecto"><i class="fa-solid fa-trash-can"></i> Eliminar</button>
                         <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-modificarProyecto">Cerrar</button>
                         <button type="submit" class="btn btn-dark" form="formModificarProyecto">Modificar Proyecto</button>
                     </div>
                 </div>
             </div>
         </div>
-        <!--Modal para mostrar los detalles y modificar los datos del proyecto-->
         
+         <!--Modal para agregar usuarios al grupo-->
+        <div class="modal fade" id="agregarUsuarioModal" tabindex="-1" aria-labelledby="AgregarUsuarioModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="AgregarUsuarioModalLabel">Proyecto</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div> 
+                    <div class="modal-body">
+                        <form id="formAgregarUsuario">
+                            <input type="reset" hidden id="btnLimpiar-agregarUsuario">
+                            <div class="mb-3">
+                                <label class="form-label" for="correo">Ingresa el correo electronico del usuario que deseas agregar</label>
+                                <input type="text" class="form-control" id="insertUserEmail" name="email">
+                                <span class="text-danger" id="proyectoEditVal"></span>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-agregarMiembro">Cerrar</button>
+                        <button type="submit" class="btn btn-dark" form="formAgregarUsuario">AgregarUsuario</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Popovers -->
 
         <div id="contenido-popover" style="display:none;">
@@ -433,4 +510,3 @@
         </script>
     </body>
 </html>
- 

@@ -7,8 +7,6 @@
 
 <!DOCTYPE html>
 <html>
-    <link href="com.grupo5.utilidades/principal.css" rel="stylesheet" type="text/css"/>
-    <script src="com.grupo5.utilidades/principal.js" type="text/javascript"></script>
 <head>
     
     <meta charset="utf-8">
@@ -27,6 +25,9 @@
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet"> 
+    
+     <link href="com.grupo5.utilidades/principal.css" rel="stylesheet" type="text/css"/>
+    <script src="com.grupo5.utilidades/principal.js" type="text/javascript"></script>
 </head>
 <body>
     <c:set var="usuario" value="${requestScope.usuarios}" />

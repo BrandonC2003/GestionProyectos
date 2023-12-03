@@ -1,9 +1,11 @@
 package com.grupo5.Datos;
 
 import com.grupo5.config.Conexion;
+import com.grupo5.modelo.Estados;
 import com.grupo5.modelo.Proyectos;
 import com.grupo5.modelo.Usuarios;
 import com.grupo5.modelo.Grupos;
+import com.grupo5.modelo.Tareas;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,39 +18,56 @@ import java.sql.Date;
 
 public class GruposDAO {
 
-    private final String LISTAR = "select g.IdGrupos, p.IdProyectos AS p.Proyecto,u.IdUsuario AS Nombre"
-            + "CONCAT(u.Nombre,' ',u.Apellido) AS NombreUsuario, "
-            + "t.Realizada from Grupos g "
-            + "INNER JOIN grupos p ON e.IdGrupos = p.IdGrupos "
-            + "LEFT JOIN usuario_grupo ut ON ut.IdUsuario = t.IdUsuario "
-            + "LEFT JOIN usuarios u on u.IdUsuario = ut.IdUsuario "
-            + "WHERE g.IdGrupo = ? "
-            + "group BY g.IdGrupo, p.IdProyecto "
-            + "ORDER BY u.Nombre, p.grupo ASC";
-    private final String BUCAR_POR_ID = "SELECT IdProyecto, Proyecto, Descripcion, Git, UsuarioInserta, FechaInserta  FROM proyectos WHERE IdProyecto=?";
-    private final String INSERTAR = "INSERT INTO grupos(IdGrupo, IdUsuario, IdProyecto,Rol) VALUES (?, ? , ?, ?)";
-    private final String ACTUALIZAR = "UPDATE proyectos SET grupos=?, IdUsuario=?, IdProyecto = ? WHERE IdGrupo = ?";
-    private final String ELIMINAR = "DELETE FROM grupos WHERE IdGrupo = ?";
+    private final String LISTAR = "select \n"
+            + "	g.IdGrupo,\n"
+            + "    g.IdProyecto,\n"
+            + "    u.IdUsuario,\n"
+            + "    g.Rol,\n"
+            + "    p.Proyecto,\n"
+            + "    u.Nombre,\n"
+            + "    u.Apellido,\n"
+            + "    u.Email\n"
+            + "FROM\n"
+            + "	grupos g \n"
+            + "    JOIN usuarios u ON g.IdUsuario = u.IdUsuario\n"
+            + "    JOIN proyectos p ON g.IdProyecto = p.IdProyecto\n"
+            + "WHERE p.IdProyecto = ?";
+    private final String INSERTAR = "INSERT INTO grupos(IdUsuario, IdProyecto,Rol) VALUES (? , ?, ?)";
+    private final String ACTUALIZAR = "UPDATE grupos SET Rol=? WHERE IdUsuario = ? AND IdProyecto = ?";
+    private final String ELIMINAR = "DELETE FROM grupos WHERE IdUsuario = ? AND IdProyecto = ?";
+    private final String BUSCAR = "SELECT * FROM grupos WHERE IdUsuario = ? AND IdProyecto = ?";
+    private final String ENCONTRAR_USUARIO = "SELECT IdUsuario,Nombre,Apellido FROM usuarios WHERE Email = ?";
 
-    public Grupos Teams(int idGrupos, int idProyecto, int idUsuario, String rol) {
+
+    public Proyectos ObtenerGrupos(int idProyecto) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
-
-        Grupos teams = new Grupos();
-
-        String sql = "select * from usuario where IdGrupo=?";
-
+        List<Grupos> gruposList = new ArrayList<>();
+        //aqui se almacenaran los id de estados, para que no se repitan los datos.
+        Proyectos proyecto = new Proyectos();
+        
         try {
             conn = Conexion.conectarse();
-            stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, idGrupos);
+            stmt = conn.prepareStatement(LISTAR);
+            stmt.setInt(1, idProyecto);
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                teams.setIdGrupo(rs.getInt("IdGrupos"));
-
+                Grupos grupo = new Grupos();
+                Usuarios usuario = new Usuarios();
+                usuario.setIdUsuario(rs.getInt("IdUsuario"));
+                usuario.setNombre(rs.getString("Nombre"));
+                usuario.setApellido(rs.getString("Apellido"));
+                usuario.setEmail(rs.getString("Email"));
+                grupo.setUsuario(usuario);
+                grupo.setRol(rs.getString("Rol"));
+                gruposList.add(grupo);
             }
+
+            proyecto.setProyectoGrupo(gruposList);
+            proyecto.setIdProyecto(idProyecto);
+
         } catch (SQLException e) {
             e.printStackTrace(System.out);
         } finally {
@@ -56,112 +75,37 @@ public class GruposDAO {
             Conexion.close(stmt);
             Conexion.close(rs);
         }
-
-        return teams;
+        return proyecto;
     }
 
-    public List<Grupos> ObtenerGrupos() {
-        Grupos grupo;
-        Usuarios usuario = new Usuarios();
-        Proyectos proyecto = new Proyectos();
-
-        Connection conexion = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        //Creamos una lista de la clase Grupos
-        List<Grupos> grupos;
-        grupos = new ArrayList<>();
-
-        try {
-            conexion = Conexion.conectarse();
-            ps = conexion.prepareStatement(LISTAR);//preparamos la consulta y invocamos la variable
-            rs = ps.executeQuery(); //Ejecutamos el query
-
-            while (rs.next()) {
-                grupo = new Grupos();
-                grupo.setIdGrupo(rs.getInt("IdGrupo"));
-                proyecto.setProyecto("Proyectos");
-                usuario.setEmail(rs.getString("Email"));
-                grupo.setRol(rs.getString("Rol"));
-                grupo.setProyecto(proyecto);
-                grupos.add(grupo);
-            }
-        } catch (Exception ex) {
-            System.out.println("Error " + ex);
-        } finally {
-            Conexion.close(conexion);
-            Conexion.close(ps);
-            Conexion.close(rs);
-            return grupos;
-        }
-    }
-
-    public Grupos BuscarPorId(int idGrupo) {
+    public String AgregarGrupo(int idUsuario, int idProyecto, String rol) {
         Grupos grupo = new Grupos();
-        Usuarios usuario = new Usuarios();
-        Proyectos proyecto = new Proyectos();
 
         Connection conexion = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-
-        //Creamos una lista de la clase Grupos
-        List<Grupos> grupos;
-        grupos = new ArrayList<>();
-
-        try {
-            //Logica del metodo
-            conexion = Conexion.conectarse();
-            ps = conexion.prepareStatement(BUCAR_POR_ID);
-            ps.setInt(1, idGrupo);//Obtenemos el Id
-            rs = ps.executeQuery();
-            rs.next();
-
-            grupo.setIdGrupo(rs.getInt("IdGrupo"));
-            proyecto.setProyecto("Proyectos");
-            usuario.setEmail(rs.getString("Email"));
-            grupo.setRol(rs.getString("Rol"));
-            grupo.setProyecto(proyecto);
-            grupos.add(grupo);
-        } catch (Exception ex) {
-            System.out.println("Error " + ex);
-        } finally {
-            Conexion.close(conexion);
-            Conexion.close(ps);
-            Conexion.close(rs);
-        }
-        return grupo;
-    }
-
-    public void AgregarGrupo(Grupos grupos) {
-        Grupos grupo = new Grupos();
-        Usuarios usuario = new Usuarios();
-        Proyectos proyecto = grupo.getProyecto();
-
-        Connection conexion = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
+        
         try {
             conexion = Conexion.conectarse();
             ps = conexion.prepareStatement(INSERTAR);
-            ps.setString(2,proyecto.getProyecto());
-            ps.setString(3,grupo.getRol());
+            ps.setInt(1, idUsuario);
+            ps.setInt(2, idProyecto);
+            ps.setString(3, rol);
             ps.execute();
+            
+            return null;
         } catch (Exception ex) {
-            System.out.println("Error " + ex);
-        }finally {
+            System.out.println("Error " + ex.getMessage());
+            return ex.getMessage();
+        } finally {
             Conexion.close(conexion);
             Conexion.close(ps);
-            Conexion.close(rs);
+            //Conexion.close(rs);
         }
     }
-    
-    public void ActualizarGrupo(Grupos grupos) {
+
+    public String ActualizarGrupo(int idUsuario, int idProyecto, String rol) {
         Grupos grupo = new Grupos();
-        Usuarios usuario = new Usuarios();
-        Proyectos proyecto = grupo.getProyecto();
 
         Connection conexion = null;
         PreparedStatement ps = null;
@@ -170,35 +114,86 @@ public class GruposDAO {
         try {
             conexion = Conexion.conectarse();
             ps = conexion.prepareStatement(ACTUALIZAR);
-            ps.setInt(1,grupo.getIdGrupo());
-            ps.setString(2,proyecto.getProyecto());
-            ps.setString(3,grupo.getRol());
+            ps.setString(1, rol);
+            ps.setInt(2, idUsuario);
+            ps.setInt(3, idProyecto);
             ps.execute();
+            return null;
         } catch (Exception ex) {
             System.out.println("Error " + ex);
-        }finally {
+            return ex.getMessage();
+        } finally {
             Conexion.close(conexion);
             Conexion.close(ps);
             Conexion.close(rs);
         }
     }
-      public void EliminarrGrupo(int idGrupo) {
-        Grupos grupo = new Grupos();
-        Usuarios usuario = new Usuarios();
-        Proyectos proyecto = grupo.getProyecto();
 
+    public boolean EliminarGrupo(int idUsuario, int idProyecto) {
+        Connection conexion = null;
+        PreparedStatement ps = null;
+
+        try {
+            conexion = Conexion.conectarse();
+            ps = conexion.prepareStatement(ELIMINAR);
+            ps.setInt(1,idUsuario);
+            ps.setInt(2,idProyecto);
+            ps.execute();
+            return true;
+        } catch (Exception ex) {
+            System.out.println("Error " + ex);
+            return false;
+        } finally {
+            Conexion.close(conexion);
+            Conexion.close(ps);
+        }
+    }
+    
+    private boolean exist(int idUsuario, int idProyecto){
         Connection conexion = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
 
         try {
             conexion = Conexion.conectarse();
-            ps = conexion.prepareStatement(ELIMINAR);
-            ps.setInt(1,grupo.getIdGrupo());
-            ps.execute();
+            ps = conexion.prepareStatement(BUSCAR);
+            ps.setInt(1,idUsuario);
+            ps.setInt(2,idProyecto);
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return true;
+            }
+            return false;
         } catch (Exception ex) {
             System.out.println("Error " + ex);
-        }finally {
+            return true;
+        } finally {
+            Conexion.close(conexion);
+            Conexion.close(ps);
+            Conexion.close(rs);
+        }
+    }
+    
+    public Usuarios encontrarUsuario(String email){
+        Connection conexion = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Usuarios usuario = new Usuarios();
+        try {
+            conexion = Conexion.conectarse();
+            ps = conexion.prepareStatement(ENCONTRAR_USUARIO);
+            ps.setString(1,email);
+            rs = ps.executeQuery();
+            rs.next();
+            
+            usuario.setIdUsuario(rs.getInt("IdUsuario"));
+            usuario.setNombre(rs.getString("Nombre"));
+            usuario.setApellido(rs.getString("Apellido"));
+            return usuario;
+        } catch (Exception ex) {
+            System.out.println("Error " + ex);
+            return usuario;
+        } finally {
             Conexion.close(conexion);
             Conexion.close(ps);
             Conexion.close(rs);

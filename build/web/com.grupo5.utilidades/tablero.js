@@ -4,6 +4,14 @@ $(document).ready(function () {
     var antIndexEstado = 0;
     var idProyecto = $("#hIdProyecto").attr("id-proyecto");
     var selectedTarea;
+    
+    var tablaEquipo = $("#miTabla").DataTable({
+        columns:[
+            {data:'Usuario'},
+            {data:'Rol'},
+            {data:'Opciones'}
+        ]
+    });
     // Metodo para hacer los elementos sortables
     function agregarSortables() {
         $("#board").sortable({
@@ -348,11 +356,10 @@ $(document).ready(function () {
             </div>
             </div>`;
                     var tareaList = `<tr>
-                            <td><input type="checkbox"></td>
                             <td>${datos.tarea}</td>
                             <td>${datos.fechaFin}</td>
-                            <td></td>
                             <td class="">${textEstado}</td>
+                            <td><button class="btn btn-outline-dark " id-tarea="${datos.idTarea}"><i class="fa-solid fa-pen-to-square"></i></button></td>
                             </tr>`;
                     var ultimaTarea = $(`#${data.estado}`).find('.task:last');
                     var tablero = $('.table tbody').eq(-1);
@@ -391,23 +398,23 @@ $(document).ready(function () {
             datos[key] = value;
         }
         $.ajax({
-            url: "TareasControlador?accion=actualizar",  
-                type: "POST", 
-                data: formData, 
-                dataType: "json", 
-                success: function (data) {
-                    let tarea = $(`.task-content[id-tarea=${datos.idTarea}]`);
-                    tarea.text(datos.tarea);
-                    $('#cerrarModal-actualizarTarea').click();
-                },
-                error: function(){
-                     Swal.fire("Error", "Ocurrio un error al agregar la modificar la tarea", "error");
-                }
+            url: "TareasControlador?accion=actualizar",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function (data) {
+                let tarea = $(`.task-content[id-tarea=${datos.idTarea}]`);
+                tarea.text(datos.tarea);
+                $('#cerrarModal-actualizarTarea').click();
+            },
+            error: function () {
+                Swal.fire("Error", "Ocurrio un error al agregar la modificar la tarea", "error");
+            }
         });
     });
-    
+
     //evento para eliminar las tareas
-    $(document).on("click","#eliminarTarea",function(){
+    $(document).on("click", "#eliminarTarea", function () {
         Swal.fire({
             title: "¿Estás seguro?",
             text: "Una vez eliminada no la podrás recuperar.",
@@ -437,12 +444,11 @@ $(document).ready(function () {
             }
         });
     });
-    
-    
-    //Eventos para las tareas
-    
+
+
+
     //Evento para modificar las tareas
-    $(document).on("submit","#formModificarProyecto", function(e){
+    $(document).on("submit", "#formModificarProyecto", function (e) {
         e.preventDefault();
 
         var formData = $(this).serialize();
@@ -454,19 +460,143 @@ $(document).ready(function () {
             datos[key] = value;
         }
         $.ajax({
-            url: "ProyectosControlador?accion=modificar",  
-                type: "POST", 
-                data: formData, 
-                dataType: "json", 
-                success: function (data) {
-                    $("#cerrarModal-modificarProyecto").click();
-                },
-                error: function(){
-                     Swal.fire("Error", "Ocurrio un error al agregar la modificar el proyecto", "error");
+            url: "ProyectosControlador?accion=modificar",
+            type: "POST",
+            data: formData,
+            dataType: "json",
+            success: function (data) {
+                $("#cerrarModal-modificarProyecto").click();
+            },
+            error: function () {
+                Swal.fire("Error", "Ocurrio un error al modificar el proyecto", "error");
+            }
+        });
+    });
+
+    //Eventos para el grupo -------------------------------------------------------------
+    //Evento para agregar usuarios al grupo
+    $(document).on("submit", "#formAgregarUsuario", function (e) {
+        e.preventDefault();
+
+        let email = $("#insertUserEmail").val();
+
+        $.ajax({
+            url: "GruposControlador?accion=insertar",
+            type: "POST",
+            data: "email=" + email + "&idProyecto=" + idProyecto,
+            dataType: "json",
+            success: function (data) {
+                if (data.mensaje === "") {
+                    $("#cerrarModal-agregarMiembro").click();
+                    $("#btnLimpiar-agregarUsuario").click();
+
+                    
+                    let nuevoUsuario = {
+                        Usuario: data.Nombre,
+                        Rol: `<select class="form-control" id="select-update-rol" id-usuario="${data.IdUsuario}">
+                                        <option value="Administrador" selected>Administrador</option>
+                                        <option value="Miembro" selected>Miembro</option>
+                                    </select>`,
+                        Opciones: `<td><button id-usuario="${data.IdUsuario}" class="btn btn-outline-danger btn-eliminar-grupo"><i class="fa-solid fa-trash-can"></i></button></td>`
+                    };
+                    
+                    tablaEquipo.row.add(nuevoUsuario).draw();
+                    
+                } else {
+                    Swal.fire("Error", data.mensaje, "error");
                 }
+            },
+            error: function () {
+                Swal.fire("Error", "Ocurrio un error al agregar usuario", "error");
+            }
+        });
+
+    });
+
+    //Evento para modificar el rol del usuario
+    $(document).on("change", "#select-update-rol", function () {
+
+        let idUsuario = $(this).attr("id-usuario");
+        let rol = $(this).val();
+        $.ajax({
+            url: "GruposControlador?accion=modificar",
+            type: "POST",
+            data: "idUsuario=" + idUsuario + "&idProyecto=" + idProyecto + "&rol=" + rol,
+            dataType: "json",
+            success: function () {
+
+            },
+            error: function () {
+
+            }
+        });
+    });
+
+    //Evento para eliminar a un usuario del grupo.
+    $(document).on("click", ".btn-eliminar-grupo", function () {
+        let idUsuario = $(this).attr("id-usuario");
+        let botonAt = $(this);
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Si eliminas a este usuario ya no tendrá acceso al grupo.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, eliminarlo",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: "GruposControlador?accion=eliminar",
+                    type: "POST",
+                    data: "idUsuario=" + idUsuario + "&idProyecto=" + idProyecto,
+                    dataType: "json",
+                    success: function () {
+                        var miTabla = $("#miTabla").DataTable();
+                        var fila = miTabla.row(botonAt.parents('tr'));
+                        fila.remove().draw();
+                    },
+                    error: function () {
+                        Swal.fire("Error", "Ocurrio un error al eliminar el usuario", "error");
+                    }
+                });
+            }
         });
     });
     
+    
+    //Evento para eliminar un proyecto 
+    $(document).on("click","#eliminarProyecto", function(){
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "Si eliminas este proyecto ya no podras recuperarlo.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, eliminarlo",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                    url: "ProyectosControlador?accion=eliminar",
+                    type: "POST",
+                    data:"idProyecto=" + idProyecto,
+                    dataType: "json",
+                    success: function () {
+                        location.href = "GestionProyectos/PrincipalControlador?accion=login";
+                        location.reload();
+                    },
+                    error: function () {
+                        Swal.fire("Error", "Ocurrio un error al eliminar el proyecto", "error");
+                    }
+                });
+            }
+        });
+    });
 });
 
 

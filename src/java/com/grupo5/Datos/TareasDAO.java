@@ -8,6 +8,7 @@ import com.grupo5.config.Conexion;
 import com.grupo5.config.ErrorPersonalizado;
 import com.grupo5.modelo.Tareas;
 import com.grupo5.modelo.Estados;
+import com.grupo5.modelo.MisTareas;
 import com.grupo5.modelo.Proyectos;
 import java.sql.Connection;
 import java.sql.Date;
@@ -40,7 +41,17 @@ public class TareasDAO {
     private final String ELIMINAR = "DELETE FROM tareas WHERE IdTarea = ?";
 
     private final String OBTENER_ULTIMO_INDICE = "SELECT Indice FROM tareas WHERE IdEstado = ? ORDER BY Indice DESC LIMIT 1";
+    private final String ASIGNAR_TAREA ="INSERT INTO usuario_tarea(IdUsuario, IdTarea) VALUES(?, ?)";
+    private final String ELIMINAR_ASIGNACION = "DELTE FROM usuario_tarea WHRER IdTarea = ?";
 
+    
+    //Esto vas a usar Gerson
+    private final String OBTENER_MIS_TAREAS = "SELECT ut.IdUsuario, t.Tarea, t.FechaInicio, t.FechaFin, e.Estado, p.Proyecto\n" +
+"FROM usuario_tarea ut \n" +
+"JOIN tareas t ON t.IdTarea = ut.IdTarea \n" +
+"JOIN estados e ON e.IdEstado = t.IdEstado\n" +
+"JOIN proyectos p ON p.IdProyecto = e.IdProyecto\n" +
+"WHERE ut.IdUsuario = ?";
     /**
      * Metodo para buscar una tarea especifica por su ID
      *
@@ -139,7 +150,7 @@ public class TareasDAO {
      * @param tarea
      * @return id generado si esta todo bien | 0 si hubo algun inconveniente
      */
-    public int insertarTarea(Tareas tarea) {
+    public int insertarTarea(Tareas tarea, int idUsuario) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -173,6 +184,10 @@ public class TareasDAO {
             if (rs.next()) {
                 idGenerado = rs.getInt(1);
             }
+            
+            if(idUsuario != 0){
+                asignarTarea(idGenerado,idUsuario);
+            }
             return idGenerado;
         } catch (SQLException | ErrorPersonalizado e) {
             return 0;
@@ -189,7 +204,7 @@ public class TareasDAO {
      * @return mensaje de nulo si esta todo bien | mensaje de error si hubo
      * algun inconveniente
      */
-    public String actualizarTarea(Tareas tarea) {
+    public String actualizarTarea(Tareas tarea, int idUsuario) {
         Connection conn = null;
         PreparedStatement stmt = null;
 
@@ -207,6 +222,10 @@ public class TareasDAO {
             stmt.setInt(8, tarea.getIdTarea());
 
             stmt.execute();
+            if(idUsuario != 0){
+                 eliminarAsignacion(tarea.getIdTarea());
+                asignarTarea(tarea.getIdTarea(), idUsuario);
+            }
             return null;
         } catch (SQLException e) {
             return e.getMessage();
@@ -281,5 +300,71 @@ public class TareasDAO {
      */
     public boolean desplazarIndices(Tareas tarea) {
         return false;
+    }
+    
+    public void asignarTarea(int idTarea, int idUsuario){
+        Connection conexion = null;
+        PreparedStatement ps = null;
+        try {
+            conexion = Conexion.conectarse();
+            ps = conexion.prepareStatement(ASIGNAR_TAREA);
+            ps.setInt(1, idUsuario);
+            ps.setInt(2, idTarea);
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        } finally {
+            Conexion.close(conexion);
+            Conexion.close(ps);
+        }
+    }
+    
+    public void eliminarAsignacion(int idTarea){
+        Connection conexion = null;
+        PreparedStatement ps = null;
+        try {
+            conexion = Conexion.conectarse();
+            ps = conexion.prepareStatement(ELIMINAR_ASIGNACION);
+            ps.setInt(1, idTarea);
+            ps.execute();
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        } finally {
+            Conexion.close(conexion);
+            Conexion.close(ps);
+        }
+    }
+    
+    //Este metodo vas a usar gerson --------------------------------------------
+     public List<MisTareas> obtenerMisTareas(int idUsuario){
+         Connection conexion = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<MisTareas> listTareas = new ArrayList<>();
+        try {
+            conexion = Conexion.conectarse();
+            ps = conexion.prepareStatement(OBTENER_MIS_TAREAS);
+            ps.setInt(1, idUsuario);
+            rs = ps.executeQuery();
+
+            while(rs.next()){
+                MisTareas misTareas = new MisTareas();
+                misTareas.setIdUsuario(rs.getInt("IdUsuario"));
+                misTareas.setTarea(rs.getString("Tarea"));
+                misTareas.setFechaInicio(rs.getString("FechaInicio"));
+                misTareas.setFechaFin(rs.getString("FechaFin"));
+                misTareas.setEstado(rs.getString("Estado"));
+                misTareas.setProyecto(rs.getString("Proyecto"));
+                
+                listTareas.add(misTareas);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        } finally {
+            Conexion.close(conexion);
+            Conexion.close(ps);
+            Conexion.close(rs);
+        }
+        return listTareas;
     }
 }

@@ -18,7 +18,7 @@ public class Proyectos {
     private String Git;
     private String UsuarioInserta;
     private Date FechaInserta;
-    private List<Usuarios> ProyectoGrupo;
+    private List<Grupos> ProyectoGrupo;
     private List<Estados> estados;
 
     
@@ -71,11 +71,11 @@ public class Proyectos {
         this.FechaInserta = FechaInserta;
     }
 
-    public List<Usuarios> getProyectoGrupo() {
+    public List<Grupos> getProyectoGrupo() {
         return ProyectoGrupo;
     }
 
-    public void setProyectoGrupo(List<Usuarios> proyectoGrupo) {
+    public void setProyectoGrupo(List<Grupos> proyectoGrupo) {
         this.ProyectoGrupo = proyectoGrupo;
     }
 

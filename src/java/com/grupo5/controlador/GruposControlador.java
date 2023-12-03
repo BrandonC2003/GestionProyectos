@@ -4,8 +4,16 @@
  */
 package com.grupo5.controlador;
 
+import com.grupo5.Datos.GruposDAO;
+import com.grupo5.Datos.ProyectosDAO;
+import com.grupo5.modelo.Proyectos;
+import com.grupo5.modelo.Usuarios;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -61,6 +69,94 @@ public class GruposControlador extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
+        
+        //Obtengo el parametro que contiene la accion.
+        String accion = request.getParameter("accion");
+        
+        //Objetos y variables a utilizar.
+        Proyectos proyecto = new Proyectos();
+        GruposDAO grupoDao = new GruposDAO();
+        Usuarios usuario = new Usuarios();
+         JsonObjectBuilder builder = Json.createObjectBuilder();
+        JsonObject jsonObject;
+        int idUsuario;
+        int idProyecto;
+        String mensaje;
+        String rol;
+        String email;
+        
+        switch(accion){
+            case "insertar":
+                email = request.getParameter("email");
+                idProyecto = Integer.parseInt(request.getParameter("idProyecto"));
+                rol = request.getParameter("rol");
+                rol = "Miembro";
+                usuario = grupoDao.encontrarUsuario(email);
+                
+                if(usuario.getIdUsuario() != 0){
+                    idUsuario = usuario.getIdUsuario();
+                    
+                    mensaje = grupoDao.AgregarGrupo(idUsuario, idProyecto, rol);
+                }else{
+                    mensaje = "El usuario que intentas agregar no está registrado en la base de datos.";
+                }
+                
+                if(mensaje == null){
+                    response.setStatus(HttpServletResponse.SC_OK);
+                }else{
+                    response.setStatus(200);
+                }
+                builder.add("mensaje", mensaje == null ? "" : mensaje);
+                builder.add("Nombre", usuario.getIdUsuario() == 0 ? "" : usuario.getNombre()+" "+usuario.getApellido());
+                builder.add("IdUsuario", usuario.getIdUsuario());
+                jsonObject = builder.build();
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                
+                response.getWriter().write(jsonObject.toString());
+                
+                break;
+            case "modificar":
+                idUsuario= Integer.parseInt(request.getParameter("idUsuario"));
+                idProyecto = Integer.parseInt(request.getParameter("idProyecto"));
+                rol = request.getParameter("rol");
+                
+                mensaje = grupoDao.ActualizarGrupo(idUsuario, idProyecto, rol);
+                
+                if(mensaje == null){
+                    response.setStatus(HttpServletResponse.SC_OK);
+                }else{
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                builder.add("mensaje", mensaje == null ? "" : mensaje);
+                jsonObject = builder.build();
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                
+                response.getWriter().write(jsonObject.toString());
+                
+                break;
+            case "eliminar":
+                idUsuario= Integer.parseInt(request.getParameter("idUsuario"));
+                idProyecto = Integer.parseInt(request.getParameter("idProyecto"));
+                
+                if(grupoDao.EliminarGrupo(idUsuario, idProyecto)){
+                    response.setStatus(HttpServletResponse.SC_OK);
+                }else{
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                builder.add("mensaje", "No se pudo eliminar el usuario del grupo.");
+                jsonObject = builder.build();
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+                
+                response.getWriter().write(jsonObject.toString());
+                
+                break;
+        }
     }
 
     /**

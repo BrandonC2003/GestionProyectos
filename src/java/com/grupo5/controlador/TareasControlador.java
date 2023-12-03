@@ -14,6 +14,7 @@ import com.grupo5.Datos.TareasDAO;
 import com.grupo5.modelo.Estados;
 import com.grupo5.modelo.Tareas;
 import com.grupo5.Datos.EstadosDAO;
+import com.grupo5.modelo.MisTareas;
 import java.math.BigDecimal;
 import java.sql.Date;
 import javax.json.Json;
@@ -132,7 +133,7 @@ public class TareasControlador extends HttpServlet {
         TareasDAO tareasDao = new TareasDAO();
         JsonObject jsonObject;
         String message;
-
+        int idUsuario;
         switch (accion) {
             case "insertar":
 
@@ -143,8 +144,8 @@ public class TareasControlador extends HttpServlet {
                 tarea.setFechaInicio(Date.valueOf(request.getParameter("fechaInicio")));
                 tarea.setFechaFin(Date.valueOf(request.getParameter("fechaFin")));
                 tarea.setUsuarioInserta("");
-
-                tarea.setIdTarea(tareasDao.insertarTarea(tarea));
+                idUsuario = Integer.parseInt(request.getParameter("IdUsuario"));
+                tarea.setIdTarea(tareasDao.insertarTarea(tarea,idUsuario));
 
                 if (tarea.getIdTarea() != 0) {
                     response.setStatus(HttpServletResponse.SC_CREATED);
@@ -168,8 +169,8 @@ public class TareasControlador extends HttpServlet {
                 tarea.setFechaInicio(Date.valueOf(request.getParameter("fechaInicio")));
                 tarea.setFechaFin(Date.valueOf(request.getParameter("fechaFin")));
                 tarea.setUsuarioInserta("");
-
-                message = tareasDao.actualizarTarea(tarea);
+                idUsuario = Integer.parseInt(request.getParameter("IdUsuario"));
+                message = tareasDao.actualizarTarea(tarea, idUsuario);
 
                 if (message == null) {
                     response.setStatus(HttpServletResponse.SC_CREATED);

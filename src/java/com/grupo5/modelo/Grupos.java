@@ -4,6 +4,8 @@
  */
 package com.grupo5.modelo;
 
+import java.util.List;
+
 /**
  *
  * @author brand
@@ -11,7 +13,7 @@ package com.grupo5.modelo;
 public class Grupos {
     private int IdGrupo;
     private Usuarios usuario;
-    private Proyectos proyecto;
+    private Proyectos proyectos;
     private String Rol;
 
     public int getIdGrupo() {
@@ -30,12 +32,12 @@ public class Grupos {
         this.usuario = usuario;
     }
 
-    public Proyectos getProyecto() {
-        return proyecto;
+    public Proyectos getProyectos() {
+        return proyectos;
     }
 
-    public void setProyecto(Proyectos proyecto) {
-        this.proyecto = proyecto;
+    public void setProyectos(Proyectos proyecto) {
+        this.proyectos = proyecto;
     }
 
     public String getRol() {

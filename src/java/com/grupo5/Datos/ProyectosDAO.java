@@ -40,7 +40,7 @@ public class ProyectosDAO {
     private final String BUCAR_POR_ID = "SELECT IdProyecto, Proyecto, Descripcion, Git, UsuarioInserta, FechaInserta  FROM proyectos WHERE IdProyecto=?";
     private final String INSERTAR = "INSERT INTO proyectos(Proyecto, Descripcion, Git, UsuarioInserta, FechaInserta) VALUES (?, ? , ?, ?, NOW())";
     private final String ACTUALIZAR = "UPDATE proyectos SET Proyecto=?, Descripcion=?, Git = ? WHERE IdProyecto = ?";
-    private final String ELIMINAR = "DELETE FROM proyectos WHERE IdProyeto = ?";
+    private final String ELIMINAR = "DELETE FROM proyectos WHERE IdProyecto = ?";
 
     public List<Proyectos> listarProyectos() {
         Connection conn = null;
@@ -225,7 +225,7 @@ public class ProyectosDAO {
                 tarea.setFechaFin(fechaFin);
                 tarea.setUsuarioInserta(proyecto.getUsuarioInserta());
 
-                tareaDao.insertarTarea(tarea);
+                tareaDao.insertarTarea(tarea, 0);
                 //Segundo estado
                 estado = new Estados();
                 estado.setProyecto(proyecto);
@@ -242,7 +242,7 @@ public class ProyectosDAO {
                 tarea.setFechaFin(fechaFin);
                 tarea.setUsuarioInserta(proyecto.getUsuarioInserta());
 
-                tareaDao.insertarTarea(tarea);
+                tareaDao.insertarTarea(tarea, 0);
                 //Tercer estado
                 estado = new Estados();
                 estado.setProyecto(proyecto);
@@ -259,7 +259,7 @@ public class ProyectosDAO {
                 tarea.setFechaFin(fechaFin);
                 tarea.setUsuarioInserta(proyecto.getUsuarioInserta());
 
-                tareaDao.insertarTarea(tarea);
+                tareaDao.insertarTarea(tarea, 0);
             }
 
             return rs.getInt(1);
@@ -308,6 +308,21 @@ public class ProyectosDAO {
      * @return true si se elimino | false si ocurrio un error
      */
     public boolean eliminarProyecto(int idProyecto) {
-        return false;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = Conexion.conectarse();
+            stmt = conn.prepareStatement(ELIMINAR);
+            stmt.setInt(1, idProyecto);
+
+            stmt.execute();
+            return true;
+        } catch (SQLException e) {
+            return false;
+        } finally {
+            Conexion.close(conn);
+            Conexion.close(stmt);
+        }
     }
 }

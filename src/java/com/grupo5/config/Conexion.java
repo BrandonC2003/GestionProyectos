@@ -10,7 +10,7 @@ public class Conexion {
     // Variables a utilizar
     private static final String USUARIO = "root";
     private static final String PASS = "";
-    private static final String URL = "jdbc:mysql://localhost:3306/gestionproyectos?useServerTimezone=true&serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://localhost:3307/gestionproyectos?useServerTimezone=true&serverTimezone=UTC";
     // variable para gestionar la conexion
     private static Connection conexion = null;
     

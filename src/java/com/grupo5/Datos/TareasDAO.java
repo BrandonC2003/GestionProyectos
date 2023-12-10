@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.grupo5.Datos;
 
 import com.grupo5.config.Conexion;
@@ -41,17 +37,30 @@ public class TareasDAO {
     private final String ELIMINAR = "DELETE FROM tareas WHERE IdTarea = ?";
 
     private final String OBTENER_ULTIMO_INDICE = "SELECT Indice FROM tareas WHERE IdEstado = ? ORDER BY Indice DESC LIMIT 1";
-    private final String ASIGNAR_TAREA ="INSERT INTO usuario_tarea(IdUsuario, IdTarea) VALUES(?, ?)";
+    private final String ASIGNAR_TAREA = "INSERT INTO usuario_tarea(IdUsuario, IdTarea) VALUES(?, ?)";
     private final String ELIMINAR_ASIGNACION = "DELTE FROM usuario_tarea WHRER IdTarea = ?";
 
-    
-  
-    private final String OBTENER_MIS_TAREAS = "SELECT ut.IdUsuario, t.Tarea, t.FechaInicio, t.FechaFin, e.Estado, p.Proyecto\n" +
-"FROM usuario_tarea ut \n" +
-"JOIN tareas t ON t.IdTarea = ut.IdTarea \n" +
-"JOIN estados e ON e.IdEstado = t.IdEstado\n" +
-"JOIN proyectos p ON p.IdProyecto = e.IdProyecto\n" +
-"WHERE ut.IdUsuario = ?";
+    private final String OBTENER_MIS_TAREAS = "SELECT ut.IdUsuario, t.Tarea, t.FechaInicio, t.FechaFin, e.Estado, p.Proyecto\n"
+            + "FROM usuario_tarea ut \n"
+            + "JOIN tareas t ON t.IdTarea = ut.IdTarea \n"
+            + "JOIN estados e ON e.IdEstado = t.IdEstado\n"
+            + "JOIN proyectos p ON p.IdProyecto = e.IdProyecto\n"
+            + "WHERE ut.IdUsuario = ?";
+
+    //Consultas para la movilidad de las tareas
+    //Consulta para cuando se elimine una tarea o salga del estado en el cual se encuentra
+    private final String AJUSTAR_INDICES_SALIDA = "UPDATE tareas SET Indice = Indice - 1 WHERE IdEstado = ? AND Indice > ?";
+    private final String AJUSTAR_INDICES_ENTRADA = "UPDATE tareas SET Indice = Indice + 1 WHERE IdEstado = ? AND Indice >= ? AND IdTarea != ?";
+
+    //consulta para actualizar el indice de la tarea
+    private final String ACTUALIZAR_INDICE = "UPDATE tareas set Indice = ? where IdTarea = ?";
+    //Cuando el indice actual es menor que el incide anterior, primero ira el indice actual y luego el anterior.
+    private final String MOVER_INDICE_MENOR = "UPDATE tareas set Indice = Indice+1 WHERE IdEstado = ? AND Indice >= ? AND Indice<= ? AND IdTarea != ?";
+    //Cuando el indice actual es mayor que el indice anterior, primero ira el indice anterior y luego el indice actual.
+    private final String MOVER_INDICE_MAYOR = "UPDATE tareas set Indice = Indice-1 WHERE IdEstado = ? AND Indice >= ? AND Indice<= ? AND IdTarea != ?";
+    //Consulta para cambiar el estado de la tarea
+    private final String UPDATE_ESTADO = "UPDATE tareas SET IdEstado = ? WHERE IdTarea = ?";
+
     /**
      * Metodo para buscar una tarea especifica por su ID
      *
@@ -184,9 +193,9 @@ public class TareasDAO {
             if (rs.next()) {
                 idGenerado = rs.getInt(1);
             }
-            
-            if(idUsuario != 0){
-                asignarTarea(idGenerado,idUsuario);
+
+            if (idUsuario != 0) {
+                asignarTarea(idGenerado, idUsuario);
             }
             return idGenerado;
         } catch (SQLException | ErrorPersonalizado e) {
@@ -222,8 +231,8 @@ public class TareasDAO {
             stmt.setInt(8, tarea.getIdTarea());
 
             stmt.execute();
-            if(idUsuario != 0){
-                 eliminarAsignacion(tarea.getIdTarea());
+            if (idUsuario != 0) {
+                eliminarAsignacion(tarea.getIdTarea());
                 asignarTarea(tarea.getIdTarea(), idUsuario);
             }
             return null;
@@ -301,8 +310,8 @@ public class TareasDAO {
     public boolean desplazarIndices(Tareas tarea) {
         return false;
     }
-    
-    public void asignarTarea(int idTarea, int idUsuario){
+
+    public void asignarTarea(int idTarea, int idUsuario) {
         Connection conexion = null;
         PreparedStatement ps = null;
         try {
@@ -318,8 +327,8 @@ public class TareasDAO {
             Conexion.close(ps);
         }
     }
-    
-    public void eliminarAsignacion(int idTarea){
+
+    public void eliminarAsignacion(int idTarea) {
         Connection conexion = null;
         PreparedStatement ps = null;
         try {
@@ -334,10 +343,10 @@ public class TareasDAO {
             Conexion.close(ps);
         }
     }
-    
+
     //Este metodo vas a usar gerson --------------------------------------------
-     public List<MisTareas> obtenerMisTareas(int idUsuario){
-         Connection conexion = null;
+    public List<MisTareas> obtenerMisTareas(int idUsuario) {
+        Connection conexion = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<MisTareas> listTareas = new ArrayList<>();
@@ -347,7 +356,7 @@ public class TareasDAO {
             ps.setInt(1, idUsuario);
             rs = ps.executeQuery();
 
-            while(rs.next()){
+            while (rs.next()) {
                 MisTareas misTareas = new MisTareas();
                 misTareas.setIdUsuario(rs.getInt("IdUsuario"));
                 misTareas.setTarea(rs.getString("Tarea"));
@@ -355,7 +364,7 @@ public class TareasDAO {
                 misTareas.setFechaFin(rs.getString("FechaFin"));
                 misTareas.setEstado(rs.getString("Estado"));
                 misTareas.setProyecto(rs.getString("Proyecto"));
-                
+
                 listTareas.add(misTareas);
             }
         } catch (SQLException e) {
@@ -366,5 +375,78 @@ public class TareasDAO {
             Conexion.close(rs);
         }
         return listTareas;
+    }
+
+    /**
+     * Metodo para desplazar indices cuando se mueva una tarea en la posicion
+     * dentro de su estado o hacia otro estado, se recibira el estado actual, el
+     * estado anterior, el indice actual, el indice anterior y la tarea.
+     *
+     * @param idTarea
+     * @param idEstadoAnterior
+     * @param idEstadoActual
+     * @param indiceAnterior
+     * @param indiceActual
+     * @return true si todo esta bien | false si ocurre algun error
+     */
+    public boolean desplazarIndices(int idTarea, int idEstadoAnterior, int idEstadoActual, int indiceAnterior, int indiceActual) {
+        Connection conexion = null;
+        PreparedStatement ps = null;
+
+        try {
+            conexion = Conexion.conectarse();
+
+            //Actualizar el indice de la tarea
+            ps = conexion.prepareStatement(ACTUALIZAR_INDICE);
+            ps.setInt(1, indiceActual);
+            ps.setInt(2, idTarea);
+            ps.execute();
+
+            //Validar si el estado actual y el anterior son distintos
+            if (idEstadoActual != idEstadoAnterior) {
+                //Actualiza el estado
+                ps = conexion.prepareStatement(UPDATE_ESTADO);
+                ps.setInt(1, idEstadoActual);
+                ps.setInt(2, idTarea);
+                ps.execute();
+
+                //Ajusta los indices en el estado del cual sale la tarea.
+                ps = conexion.prepareStatement(AJUSTAR_INDICES_SALIDA);
+                ps.setInt(1, idEstadoAnterior);
+                ps.setInt(2, indiceAnterior);
+                ps.execute();
+
+                //Ajusta los indices en el estado al cual llega la tarea.
+                ps = conexion.prepareStatement(AJUSTAR_INDICES_ENTRADA);
+                ps.setInt(1, idEstadoActual);
+                ps.setInt(2, indiceActual);
+                ps.setInt(3, idTarea);
+                ps.execute();
+            } else {
+                //validar si el indice actual es menor que el indice anterior o biceversa.
+                if (indiceActual <= indiceAnterior) {
+                    ps = conexion.prepareStatement(MOVER_INDICE_MENOR);
+                    ps.setInt(1, idEstadoActual);
+                    ps.setInt(2, indiceActual);
+                    ps.setInt(3, indiceAnterior);
+                    ps.setInt(4, idTarea);
+                    ps.execute();
+                } else {
+                    ps = conexion.prepareStatement(MOVER_INDICE_MAYOR);
+                    ps.setInt(1, idEstadoActual);
+                    ps.setInt(2, indiceAnterior);
+                    ps.setInt(3, indiceActual);
+                    ps.setInt(4, idTarea);
+                    ps.execute();
+                }
+            }
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+            return false;
+        } finally {
+            Conexion.close(conexion);
+            Conexion.close(ps);
+        }
     }
 }

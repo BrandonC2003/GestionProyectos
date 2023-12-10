@@ -4,11 +4,10 @@
     Author     : brand
 --%>
 
-<%@page import="com.grupo5.config.Conexion"%>
-<%@page import="java.sql.ResultSet"%>
-<%@page import="java.sql.PreparedStatement"%>
-<%@page import="com.grupo5.modelo.Proyectos"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
     <link href="com.grupo5.utilidades/principal.css" rel="stylesheet" type="text/css"/>
@@ -26,137 +25,48 @@
         <!-- comment -->
         <title>Inicio</title>
 
-        <!-- Custom fonts for this template-->
-        <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-        <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet" type="text/css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
 
-        <!-- Custom styles for this template-->
-        <link href="css/sb-admin-2.min.css" rel="stylesheet"> 
+
+        <link href="com.grupo5.utilidades/stylesProyecto.css" rel="stylesheet" type="text/css"/>
+
+        <!-- Agrega DataTables CSS -->
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+        <link href="com.grupo5.utilidades/principal.css" rel="stylesheet" type="text/css"/>
+
+        <!-- agregar sweetAlert2 -->
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     </head>
 
     <body >
+        <section>
+            <div class="container mt-5">
+                <h1>Tus proyectos</h1>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-2 justify-content-center">
 
-        <!-- Begin Page Content -->
-        <div class="container-fluid">
-
-            <div class="row">
-
-                <!-- Area Chart -->
-                <div class="col-xl-8 col-lg-7">
-                    <div class="card shadow mb-4">
-                        <!-- Card Header - Dropdown -->
-                        <div
-                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Tareas Encontradas</h6>
-                            <div class="dropdown no-arrow">
-                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                     aria-labelledby="dropdownMenuLink">
-                                    <div class="dropdown-header">Dropdown Header:</div>
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Something else here</a>
+                    <c:set var="proyectos" value="${requestScope.proyectos}" />
+                    <c:forEach var="proyecto" items="${proyectos}">
+                        <a href="PrincipalControlador?accion=proyectos&idProyecto=${proyecto.idProyecto}" target="myFrame">
+                            <div class="col mb-5">
+                                <div class="card h-100">
+                                    <!-- Product image-->
+                                    <img class="card-img-top" src="https://th.bing.com/th/id/R.fdca197814bf261e5a1c2956b5f2b262?rik=3EMYzFwcaHhPXg&riu=http%3a%2f%2fwww.solofondos.com%2fwp-content%2fuploads%2f2015%2f11%2ffondo_001.jpg&ehk=FuptxqWbECsXf%2fWwKzrA99hHUEXkn0ib4%2fqjNJlTTMs%3d&risl=&pid=ImgRaw&r=0" alt="..." />
+                                    <!-- Product details-->
+                                    <div class="card-body p-4">
+                                        <div class="text-center">
+                                            <!-- Product name-->
+                                            <h5 class="fw-bolder">${proyecto.proyecto}</h5>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
+                    </c:forEach>
 
-                    </div>
-                </div>
-
-                <!-- Pie Chart -->
-                <div class="col-xl-4 col-lg-5">
-                    <div class="card shadow mb-4">
-                        <!-- Card Header - Dropdown -->
-                        <div
-                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                            <h6 class="m-0 font-weight-bold text-primary">Estados</h6>
-                            <div class="dropdown no-arrow">
-                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-                                     aria-labelledby="dropdownMenuLink">
-                                    <div class="dropdown-header">Dropdown Header:</div>
-                                    <a class="dropdown-item" href="#">Action</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Card Body -->
-                        <div class="card-body">
-                            <div class="chart-pie pt-4 pb-2">
-                                <canvas id="myPieChart"></canvas>
-                            </div>
-                            <div class="mt-4 text-center small">
-                                <span class="mr-2">
-                                    <i class="fas fa-circle text-primary"></i> Disponibles
-                                </span>
-                                <span class="mr-2">
-                                    <i class="fas fa-circle text-success"></i> En Proceso
-                                </span>
-                                <span class="mr-2">
-                                    <i class="fas fa-circle text-info"></i> Finalizada
-                                </span>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
-
-            <!-- Content Row -->
-            <div class="row">
-                <style>
-                    .tareas{
-                        position: relative;
-                        bottom: 380px;
-                    }
-                </style>
-                <!-- Content Column -->
-                <div class="col-lg-6 mb-4">
-                    <div class="tareas">
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Proyectos disponibles</h6>
-                            </div>
-                            <% Proyectos proyecto = new Proyectos();
-                                Conexion conexion = new Conexion();
-                                PreparedStatement ps = null;
-                                ResultSet rs = null;
-
-                                ps = Conexion.conectarse().prepareStatement("Select Proyecto from Proyectos");
-                                rs = ps.executeQuery();
-
-                                while (rs.next()) {
-                            %>
-                            <div class="card-body">
-                                <h4 class="small font-weight-bold"><%= rs.getString("Proyecto")%></h4>
-                                <div class="progress mb-4">
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 20%"
-                                         aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-
-                                <%
-
-                                                  }%>
-                            </div>
-                        </div>
-
-
-                    </div>                    
-                </div>
-            </div>
-
-
-            <script src="com.grupo5.utilidades/graficos.js" type="text/javascript"></script>
+        </section>
     </body>
 </html>

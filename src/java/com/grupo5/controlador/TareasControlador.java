@@ -67,19 +67,18 @@ public class TareasControlador extends HttpServlet {
         JsonArrayBuilder builderArray = Json.createArrayBuilder();
         int idProyecto;
         int id;
-        
-        
-        switch(accion){
+
+        switch (accion) {
             case "encontrar":
                 id = Integer.parseInt(request.getParameter("idTarea"));
                 idProyecto = Integer.parseInt(request.getParameter("idProyecto"));
-                
+
                 tarea = tareaDao.buscarPorId(id);
                 estado = tarea.getEstado();
-                
-                if(tarea.getIdTarea() > 0){
+
+                if (tarea.getIdTarea() > 0) {
                     response.setStatus(HttpServletResponse.SC_ACCEPTED);
-                }else{
+                } else {
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 }
                 //Tengo que modificar la consulta para que me muestre todos los usuarios pertenecientes a la tarea. 
@@ -89,18 +88,18 @@ public class TareasControlador extends HttpServlet {
                 builder.add("fechaInicio", tarea.getFechaInicio().toString());
                 builder.add("fechaFin", tarea.getFechaFin().toString());
                 builder.add("realizada", tarea.isRealizada());
-                builder.add("idEstado",estado.getIdEstado());
-                
+                builder.add("idEstado", estado.getIdEstado());
+
                 estados = estadosDao.buscarPorProyecto(idProyecto);
-                
-                for(Estados est : estados){
+
+                for (Estados est : estados) {
                     JsonObjectBuilder builder2 = Json.createObjectBuilder()
-                            .add("idEstado",est.getIdEstado())
-                            .add("estado",est.getEstado());
-                    
+                            .add("idEstado", est.getIdEstado())
+                            .add("estado", est.getEstado());
+
                     builderArray.add(builder2);
                 }
-                
+
                 builder.add("estados", builderArray);
                 jsonObject = builder.build();
 
@@ -108,10 +107,10 @@ public class TareasControlador extends HttpServlet {
                 response.setCharacterEncoding("UTF-8");
 
                 response.getWriter().write(jsonObject.toString());
-                
+
                 //Me falta obtener la lista de usuarios asociados a la tarea
                 break;
-     
+
         }
     }
 
@@ -135,6 +134,13 @@ public class TareasControlador extends HttpServlet {
         JsonObject jsonObject;
         String message;
         int idUsuario;
+
+        int idTarea;
+        int idEstadoAnterior;
+        int idEstadoActual;
+        int indiceActual;
+        int indiceAnterior;
+
         switch (accion) {
             case "insertar":
 
@@ -146,7 +152,7 @@ public class TareasControlador extends HttpServlet {
                 tarea.setFechaFin(Date.valueOf(request.getParameter("fechaFin")));
                 tarea.setUsuarioInserta("");
                 idUsuario = Integer.parseInt(request.getParameter("IdUsuario"));
-                tarea.setIdTarea(tareasDao.insertarTarea(tarea,idUsuario));
+                tarea.setIdTarea(tareasDao.insertarTarea(tarea, idUsuario));
 
                 if (tarea.getIdTarea() != 0) {
                     response.setStatus(HttpServletResponse.SC_CREATED);
@@ -158,7 +164,7 @@ public class TareasControlador extends HttpServlet {
 
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-                
+
                 response.getWriter().write(jsonObject.toString());
                 break;
             case "actualizar":
@@ -183,15 +189,15 @@ public class TareasControlador extends HttpServlet {
 
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
-                
+
                 response.getWriter().write(jsonObject.toString());
                 break;
             case "eliminar":
                 tarea.setIdTarea(Integer.parseInt(request.getParameter("idTarea")));
-                
-                if(tareasDao.eliminarTarea(tarea.getIdTarea())){
+
+                if (tareasDao.eliminarTarea(tarea.getIdTarea())) {
                     response.setStatus(HttpServletResponse.SC_CREATED);
-                }else{
+                } else {
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 }
                 builder.add("idTarea", tarea.getIdTarea());
@@ -199,7 +205,29 @@ public class TareasControlador extends HttpServlet {
 
                 response.setContentType("application/json");
                 response.setCharacterEncoding("UTF-8");
+
+                response.getWriter().write(jsonObject.toString());
+                break;
+            case "desplazarIndices":
                 
+                idTarea = Integer.parseInt(request.getParameter("idTarea"));
+                idEstadoActual = Integer.parseInt(request.getParameter("idEstadoActual"));
+                idEstadoAnterior = Integer.parseInt(request.getParameter("idEstadoAnterior"));
+                indiceActual = Integer.parseInt(request.getParameter("indiceActual"));
+                indiceAnterior = Integer.parseInt(request.getParameter("indiceAnterior"));
+                
+                
+                if (tareasDao.desplazarIndices(idTarea, idEstadoAnterior, idEstadoActual, indiceAnterior, indiceActual)) {
+                    response.setStatus(HttpServletResponse.SC_CREATED);
+                } else {
+                    response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                }
+                builder.add("idTarea", idTarea);
+                jsonObject = builder.build();
+
+                response.setContentType("application/json");
+                response.setCharacterEncoding("UTF-8");
+
                 response.getWriter().write(jsonObject.toString());
                 break;
         }

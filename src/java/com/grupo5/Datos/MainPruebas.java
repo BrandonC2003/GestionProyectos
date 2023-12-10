@@ -15,7 +15,7 @@ import java.util.List;
 public class MainPruebas {
     public static void main(String[] args) {
         
-        List<Proyectos> proyectos = new ProyectosDAO().listarProyectos();
+        List<Proyectos> proyectos = new ProyectosDAO().listarProyectos(1);
         
         for(Proyectos proy : proyectos){
             System.out.println("id="+proy.getIdProyecto());

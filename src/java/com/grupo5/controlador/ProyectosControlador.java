@@ -63,14 +63,18 @@ public class ProyectosControlador extends HttpServlet {
         Proyectos proyecto = new Proyectos();
         Estados estado = new Estados();
         Tareas tarea = new Tareas();
+        HttpSession session = request.getSession(false);
 
         ProyectosDAO proyectoDao = new ProyectosDAO();
         GruposDAO grupoDao = new GruposDAO();
         switch (accion) {
             case "listar":
+                int idUsuario = (int) session.getAttribute("idUsuario");
                 proyecto = proyectoDao.obtenerProyecto(idProyecto);
                 request.setAttribute("proyecto", proyecto);
 
+                String rol = proyectoDao.obtenerRol(idUsuario, idProyecto);
+                request.setAttribute("rol", rol);
                 //Este objeto sirve para obtener todos los usuarios asociados al proyecto
                 Proyectos grupo = new Proyectos();
                 grupo = grupoDao.ObtenerGrupos(idProyecto);

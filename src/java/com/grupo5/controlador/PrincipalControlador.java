@@ -56,13 +56,15 @@ public class PrincipalControlador extends HttpServlet {
         request.setAttribute("mail",mail);
         TareasDAO tareasDao = new TareasDAO();
         List<MisTareas> listMisTareas = new ArrayList<>();
+        
         switch(accion){
             case "proyectos":
                 int idProyecto = Integer.parseInt(request.getParameter("idProyecto"));
                 response.sendRedirect("ProyectosControlador?accion=listar&idProyecto="+idProyecto);
                 break;
             case "login":
-                List<Proyectos> proyectos = new ProyectosDAO().listarProyectos();
+                int idUsuario2 = (int) session.getAttribute("idUsuario");
+                List<Proyectos> proyectos = new ProyectosDAO().listarProyectos(idUsuario2);
                 
                 request.setAttribute("proyectos",proyectos);
                 
@@ -77,6 +79,12 @@ public class PrincipalControlador extends HttpServlet {
                 // Redirigir a la página de edición de perfil
                 request.getRequestDispatcher("com.grupo5.vistas/misTareas.jsp").forward(request, response);
                }
+                break;
+            case "inicio":
+                int idUsuario3 = (int) session.getAttribute("idUsuario");
+                List<Proyectos> proyects = new ProyectosDAO().listarProyectos(idUsuario3);
+                request.setAttribute("proyectos",proyects);
+                request.getRequestDispatcher("com.grupo5.vistas/inicio.jsp").forward(request, response);
                 break;
             default:
                 request.getRequestDispatcher("com.grupo5.vistas/"+accion+".jsp").forward(request, response);

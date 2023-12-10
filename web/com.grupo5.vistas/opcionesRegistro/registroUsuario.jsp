@@ -67,9 +67,6 @@
                                 <input type="submit" name="Insertar" value="insertar" class="btn btn-primary btn-user btn-block">
                             <hr>
                             <div class="text-center">
-                                <a class="small" href="http://localhost:8080/GestionProyectos/com.grupo5.vistas/opcionesRegistro/recuperarCuenta.jsp">Olvido su contaseña?</a>
-                            </div>
-                            <div class="text-center">
                                 <a class="small" href="http://localhost:8080/GestionProyectos/">Si ya tiene cuenta inicie aqui!</a>
                             </div>
                         </div>

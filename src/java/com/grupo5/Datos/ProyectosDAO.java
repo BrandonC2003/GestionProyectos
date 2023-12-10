@@ -26,7 +26,7 @@ import java.sql.Date;
 public class ProyectosDAO {
 
     //Declarar variables para las consultas
-    private final String LISTAR_PROYECTOS = "SELECT IdProyecto, Proyecto FROM proyectos";
+    private final String LISTAR_PROYECTOS = "SELECT p.IdProyecto, p.Proyecto FROM proyectos p INNER JOIN grupos g ON g.IdProyecto = p.IdProyecto WHERE g.IdUsuario = ?";
     private final String LISTAR = "select p.IdProyecto, p.Proyecto, p.Descripcion, p.Git, e.IdEstado,e.Estado, e.Color, e.Indice AS IndiceEstado, "
             + "t.IdTarea,t.Tarea, t.Indice as IndiceTarea, t.FechaFin, CONCAT(u.Nombre,' ',u.Apellido) AS NombreUsuario, "
             + "t.Realizada from Proyectos p "
@@ -41,8 +41,11 @@ public class ProyectosDAO {
     private final String INSERTAR = "INSERT INTO proyectos(Proyecto, Descripcion, Git, UsuarioInserta, FechaInserta) VALUES (?, ? , ?, ?, NOW())";
     private final String ACTUALIZAR = "UPDATE proyectos SET Proyecto=?, Descripcion=?, Git = ? WHERE IdProyecto = ?";
     private final String ELIMINAR = "DELETE FROM proyectos WHERE IdProyecto = ?";
+    
+    //consulta para obtener el rol del usuario  dentro del proyecto.
+    private final String OBTENER_ROL = "SELECT ROL FROM grupos WHERE IdUsuario = ? AND IdProyecto=?";
 
-    public List<Proyectos> listarProyectos() {
+    public List<Proyectos> listarProyectos(int idUsuario) {
         Connection conn = null;
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -52,6 +55,7 @@ public class ProyectosDAO {
         try {
             conn = Conexion.conectarse();
             stmt = conn.prepareStatement(LISTAR_PROYECTOS);
+            stmt.setInt(1, idUsuario);
 
             rs = stmt.executeQuery();
 
@@ -74,6 +78,33 @@ public class ProyectosDAO {
         return listProyectos;
     }
 
+    public String obtenerRol(int idUsuario, int idProyecto){
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        String rol = null;
+        try {
+            conn = Conexion.conectarse();
+            stmt = conn.prepareStatement(OBTENER_ROL);
+            stmt.setInt(1, idUsuario);
+            stmt.setInt(2, idProyecto);
+
+            rs = stmt.executeQuery();
+
+            rs.next();
+            
+            rol = rs.getString("Rol");
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+            rol = null;
+        } finally {
+            Conexion.close(conn);
+            Conexion.close(stmt);
+            Conexion.close(rs);
+        }
+        return  rol;
+    }
     /**
      * Este metodo consulta a la base de datos todos los elementos
      * pertenecientes a un proyecto especifico.

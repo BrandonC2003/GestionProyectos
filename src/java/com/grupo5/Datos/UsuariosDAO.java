@@ -15,7 +15,8 @@ public class UsuariosDAO {
     //private final String ACTUALIZAR = "UPDATE usuarios SET Nombre = ?, Apellido = ? Email = ?, Clave = ? WHERE IdUsuario = ?";
     private final String ACTUALIZAR = "UPDATE usuarios SET Nombre = ?, Apellido = ? WHERE IdUsuario = ?";
     private final String OBTENER_USUARIO = "SELECT IdUsuario, Nombre, Apellido, Email, Clave FROM usuarios WHERE IdUsuario = ?";
-    private final String CAMBIAR_CLAVE = "UPDATE usuario SET Clave=? WHERE IdUsuario = ?";
+    private final String CAMBIAR_CLAVE = "UPDATE usuarios SET Clave=? WHERE IdUsuario = ?";
+    private final String OBTENER_CLAVE = "SELECT IdUsuario, Clave FROM usuarios WHERE IdUsuario = ?";
     Connection conn = null;
     PreparedStatement stmt = null;
     ResultSet rs = null;
@@ -138,4 +139,58 @@ public class UsuariosDAO {
         return us;
     }
     
+    public Usuarios obtenerClave(int idUsuario) {
+        Usuarios us = new Usuarios();
+        Connection conexion = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        
+        try {
+            conexion = Conexion.conectarse();
+            ps = conexion.prepareStatement(OBTENER_CLAVE);
+            ps.setInt(1, idUsuario);
+            rs = ps.executeQuery();
+            
+            if (rs.next()) {
+                us = new Usuarios();
+                // Datos de usuario
+                us.setIdUsuario(rs.getInt("IdUsuario"));    
+                us.setClave(rs.getString("Clave"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+            
+        } finally {
+            Conexion.close(conexion);
+            Conexion.close(ps);
+            Conexion.close(rs);
+        }
+        return us;
+    }
+    
+    public boolean clave(Usuarios uss){
+         Usuarios us = new Usuarios();
+        //String sql = "UPDATE usuarios SET Clave = ? WHERE IdUsuario = ?";
+       try{
+            conn = Conexion.conectarse();
+            stmt = conn.prepareStatement(CAMBIAR_CLAVE);
+            stmt.setString(1, uss.getClave());  
+            stmt.setInt(2, uss.getIdUsuario());    
+            stmt.executeUpdate();
+            
+            return true;
+       }
+       catch(Exception e)
+       {
+           return false;
+       }finally {
+        // Cerrar la conexión y el statement en el bloque finally
+        try {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            //e.printStackTrace(); 
+        }
+        }      
+    }
 }

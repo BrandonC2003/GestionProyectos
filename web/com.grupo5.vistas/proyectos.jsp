@@ -29,6 +29,12 @@
     <body>
         <c:set var="proyecto" value="${requestScope.proyecto}" />
         <c:set var="grupo" value="${requestScope.grupo}" />
+        <c:set var="rol" value="${requestScope.rol}" />
+        
+        <c:if test="${rol eq 'Miembro'}">
+            <c:set var="validation" value="hidden" />
+        </c:if>
+       
         <div class="row">
             <h1 id="hIdProyecto" id-proyecto="${proyecto.idProyecto}">
                 <i class="fa-solid fa-circle-info" id="infoProyect" style="cursor:pointer;" data-bs-toggle="modal" data-bs-target="#modificarProyectoModal"></i>
@@ -44,7 +50,7 @@
                 <li class="nav-link">
                     <a href="#lista" class="nav-link text-secondary icon-link" id="lista-list" role="tab"  data-bs-toggle="list" aria-controls="lista"><i class="fa-solid fa-table"></i>Lista</a>
                 </li>
-                <li class="nav-link">
+                <li class="nav-link" ${validation}>
                     <a href="#equipo" class="nav-link text-secondary icon-link" id="lista-equipo" role="tab"  data-bs-toggle="list" aria-controls="equipo"><i class="fa-solid fa-table"></i>Equipo</a>
                 </li>
             </ul>
@@ -385,7 +391,7 @@
                         </form>
                     </div>
                     <div class="modal-footer">
-                         <button type="button" class="btn btn-danger" id="eliminarProyecto"><i class="fa-solid fa-trash-can"></i> Eliminar</button>
+                         <button type="button" class="btn btn-danger" id="eliminarProyecto" ${validation}><i class="fa-solid fa-trash-can"></i> Eliminar</button>
                         <button type="button" class="btn btn-warning" data-bs-dismiss="modal" id="cerrarModal-modificarProyecto">Cerrar</button>
                         <button type="submit" class="btn btn-dark" form="formModificarProyecto">Modificar Proyecto</button>
                     </div>
@@ -446,7 +452,7 @@
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-        <script src="com.grupo5.utilidades/tablero.js" type="text/javascript"></script>
+        <script src="com.grupo5.utilidades/tabler.js" type="text/javascript"></script>
 
         <!-- Agrega DataTables JS -->
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>

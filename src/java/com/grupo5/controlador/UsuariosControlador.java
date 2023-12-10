@@ -80,6 +80,17 @@ public class UsuariosControlador extends HttpServlet {
                 request.getRequestDispatcher("com.grupo5.vistas/opcionesRegistro/editarPerfil.jsp").forward(request, response);
                }
                 break;
+            case "clave":
+               
+               if(session != null){
+                int idUsuario = (int) session.getAttribute("idUsuario");
+                usuario = usuarioDao.obtenerClave(idUsuario);//obtenerUsuario(idUsuario);
+               //establecer los atributos
+                request.setAttribute("usuario", usuario);
+                // Redirigir a la página de edición de perfil
+                request.getRequestDispatcher("com.grupo5.vistas/opcionesRegistro/cambiarpassword.jsp").forward(request, response);
+                break;
+             }
         }
         
     }
@@ -131,12 +142,38 @@ public class UsuariosControlador extends HttpServlet {
                 response.sendRedirect("PrincipalControlador?accion=login");
                 break;
             case "clave":
-                UsuariosDAO contra = new UsuariosDAO();
+                int idUsuario = (int) sesion.getAttribute("idUsuario");
+                    Usuarios usua = new Usuarios();
+                    UsuariosDAO usuarioDao = new UsuariosDAO();
+                    usua = (Usuarios) request.getAttribute("usuarios");
+                    //usua = (Usuarios) request.getAttribute("users");
+                    // Obtener datos del formulario
+                                       
+                    String claveActual = request.getParameter("Clave");
+                    String nuevaClave = request.getParameter("nueva");
+                    String confirmacionClave = request.getParameter("confir"); 
+                    Usuarios usuar = usuarioDao.obtenerClave(idUsuario);
+                    if (claveActual.equals(usuar.getClave())) {
+                        if (nuevaClave.trim().equals(confirmacionClave.trim())) {
+                            this.us.setClave(nuevaClave);
+                            this.us.setIdUsuario(idUsuario);
+                            boolean resultado = usuarioDao.clave(this.us);
 
-                String clave = request.getParameter("txtClave");
+                            if (resultado) {
+                                request.setAttribute("mensaje", "La contraseña se actualizó correctamente.");
+                            } else {
+                                request.setAttribute("mensaje", "Hubo un problema al actualizar la contraseña.");
+                            }
+                            response.sendRedirect("PrincipalControlador?accion=login");
+                        } else {
+                            request.setAttribute("mensaje", "Las nuevas contraseñas no coinciden.");
+                            response.sendRedirect("com.grupo5.vistas/opcionesRegistro/cambiarpassword.jsp");
+                        }
+                    } else {
+                        request.setAttribute("mensaje", "La contraseña actual no es correcta.");
+                        response.sendRedirect("com.grupo5.vistas/opcionesRegistro/cambiarpassword.jsp");
+                    }
 
-                contra.clave(clave, Integer.parseInt(request.getParameter("IdUsuario")));
-                response.sendRedirect("PrincipalControlador?accion=login");
                 break;
             case "insertar":
                 UsuariosDAO dao = new UsuariosDAO();
@@ -152,7 +189,7 @@ public class UsuariosControlador extends HttpServlet {
                 response.sendRedirect("PrincipalControlador?accion=login");
                 
                 break;
-
+            
             default:
                 request.getRequestDispatcher("index.jsp").forward(request, response);
 

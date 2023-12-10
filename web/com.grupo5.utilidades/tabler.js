@@ -4,7 +4,8 @@ $(document).ready(function () {
     var antIndexEstado = 0;
     var idProyecto = $("#hIdProyecto").attr("id-proyecto");
     var selectedTarea;
-    
+    var idEstadoAnterior = 0;
+    var antIndexTarea = 0;
     var tablaEquipo = $("#miTabla").DataTable({
         columns:[
             {data:'Usuario'},
@@ -46,18 +47,35 @@ $(document).ready(function () {
             connectWith: ".swim-lane-content",
             start: function (event, ui) {
                 ui.item.addClass("is-dragging");
+                idEstadoAnterior = ui.item.closest('.swim-lane-content').attr('id');
+                antIndexTarea = ui.item.index() + 1;
             },
             stop: function (event, ui) {
                 ui.item.removeClass("is-dragging");
+                let idEstadoActual = ui.item.closest('.swim-lane-content').attr('id');
+                let actIndexTarea = ui.item.index() + 1;
+                let idTarea = ui.item.find('.task-content').attr('id-tarea');
+                console.log("Estado actual:"+idEstadoActual);
+                console.log("Estado anterior:"+idEstadoAnterior);
+                console.log("indice actual:"+actIndexTarea);
+                console.log("indice anterior:"+antIndexTarea);
+                
+                if (idEstadoAnterior!==idEstadoActual || actIndexTarea !== antIndexTarea) { //validar para que no se ejecute sin un proposito
+                    $.ajax({
+                        url: "TareasControlador?accion=desplazarIndices",
+                        type: "POST",
+                        data: "idTarea=" + idTarea + "&idEstadoActual=" + idEstadoActual + "&idEstadoAnterior=" + idEstadoAnterior + "&indiceActual=" + actIndexTarea + "&indiceAnterior=" + antIndexTarea,
+                        dataType: "json",
+                        success: function () {
+                        }
+                    });
+                }
             },
             receive: function (event, ui) {
                 var estado = $(this).attr("id");
 
                 //colocamos el estado al que se mueve
                 ui.item.attr("estado", estado);
-
-                //TODO:
-                //actualizar el tablero  // <------- esto voy a hacer
 
             },
             items: ">div"

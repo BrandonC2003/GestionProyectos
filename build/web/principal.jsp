@@ -46,7 +46,7 @@
                     <a class="nav-link" href="PrincipalControlador?accion=inicio" target="myFrame">
                         <i class="fa-solid fa-thumbtack"></i>
                         <span>Inicio</span></a>
-                    <a class="nav-link" href="PrincipalControlador?accion=misTareas" target="myFrame">
+                    <a class="nav-link" href="PrincipalControlador?accion=obtenerTareas" target="myFrame">
                         <i class="fa-solid fa-list-check"></i>
                         <span>Mis Tareas</span></a>
                 </li>
@@ -73,20 +73,6 @@
                 </li>
 
 
-                <!-- Divider -->
-                <hr class="sidebar-divider">
-
-
-
-                <!-- Nav Item - Pages equipos -->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="PrincipalControlador?accion=equipos" aria-controls="collapsePages" target="myFrame">
-                        <i class="fa-solid fa-people-group"></i>
-                        <span>Equipos</span>
-                    </a>
-                </li>
-                <!-- Divider -->
-                <hr class="sidebar-divider d-none d-md-block">
 
                 <!-- Sidebar Toggler (Sidebar) -->
                 <div class="text-center d-none d-md-inline">
@@ -117,9 +103,9 @@
                             <li class="nav-item dropdown no-arrow">
                                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small"><!--Nombre del usuario-->usuario</span>
-                                    <img class="img-profile rounded-circle"
-                                         src="">
+                                    <c:set var="mail" value="${requestScope.mail}" />
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">${mail}</span>
+                                    <i class="fa-solid fa-gear"></i>
                                 </a>
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -181,7 +167,7 @@
                         <div class="modal-body">Selecciona "Cerrar Sesión" si deseas cerrar tu sesión actual.</div>
                         <div class="modal-footer">
                             <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancelar</button>
-                            <a class="btn btn-primary" href="login.html">Cerrar Sesión</a>
+                            <a class="btn btn-primary" href="index.jsp">Cerrar Sesión</a>
                         </div>
                     </div>
                 </div>

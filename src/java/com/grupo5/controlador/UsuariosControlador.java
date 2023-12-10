@@ -5,9 +5,13 @@
  */
 package com.grupo5.controlador;
 
+import com.grupo5.Datos.TareasDAO;
 import com.grupo5.Datos.UsuariosDAO;
+import com.grupo5.modelo.MisTareas;
 import com.grupo5.modelo.Usuarios;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
@@ -63,7 +67,7 @@ public class UsuariosControlador extends HttpServlet {
          HttpSession session = request.getSession(false);
         
         Usuarios usuario = new Usuarios();
-        UsuariosDAO usuarioDao = new UsuariosDAO();          
+        UsuariosDAO usuarioDao = new UsuariosDAO();
         
         switch(accion){
             case "modificar":
@@ -77,6 +81,7 @@ public class UsuariosControlador extends HttpServlet {
                }
                 break;
         }
+        
     }
 
     /**
@@ -101,7 +106,7 @@ public class UsuariosControlador extends HttpServlet {
                 String user = request.getParameter("txtEmail");
                 String pass = request.getParameter("txtPass");
                 us = udao.validar(user, pass);
-                if (us != null) {
+                if (us.getIdUsuario() != 0) {
                     response.sendRedirect("PrincipalControlador?accion=login");
                     
                     sesion.setAttribute("idUsuario", us.getIdUsuario());

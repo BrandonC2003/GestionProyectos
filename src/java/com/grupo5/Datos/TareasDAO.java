@@ -45,7 +45,7 @@ public class TareasDAO {
     private final String ELIMINAR_ASIGNACION = "DELTE FROM usuario_tarea WHRER IdTarea = ?";
 
     
-    //Esto vas a usar Gerson
+  
     private final String OBTENER_MIS_TAREAS = "SELECT ut.IdUsuario, t.Tarea, t.FechaInicio, t.FechaFin, e.Estado, p.Proyecto\n" +
 "FROM usuario_tarea ut \n" +
 "JOIN tareas t ON t.IdTarea = ut.IdTarea \n" +

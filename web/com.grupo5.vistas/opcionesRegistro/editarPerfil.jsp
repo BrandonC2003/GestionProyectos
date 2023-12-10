@@ -49,11 +49,11 @@
                                     <div class="col-sm-6 mb-3 mb-sm-0">
                                         <input type="hidden" id="idUsuario" name="idUsuario" value="${usuario.idUsuario}"> 
                                         <input type="text" name="Nombre" value="${usuario.nombre}" class="form-control form-control-user" id="exampleFirstName"
-                                            placeholder="Nombres">
+                                            placeholder="Nombres" required>
                                     </div>
                                     <div class="col-sm-6">
                                         <input type="text" name="Apellido" value="${usuario.apellido}" class="form-control form-control-user" id="exampleLastName"
-                                            placeholder="Apellidos">
+                                            placeholder="Apellidos" required>
                                     </div>
                                 </div>                               
                                

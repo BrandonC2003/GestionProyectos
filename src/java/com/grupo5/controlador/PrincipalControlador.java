@@ -11,8 +11,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.grupo5.Datos.ProyectosDAO;
+import com.grupo5.Datos.TareasDAO;
+import com.grupo5.modelo.MisTareas;
 import com.grupo5.modelo.Proyectos;
+import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 /**
  *
  * @author brand
@@ -47,7 +51,11 @@ public class PrincipalControlador extends HttpServlet {
             throws ServletException, IOException {
         processRequest(request, response);
         String accion = request.getParameter("accion");
-        
+        HttpSession session = request.getSession(false);
+        String mail = (String) session.getAttribute("mail");
+        request.setAttribute("mail",mail);
+        TareasDAO tareasDao = new TareasDAO();
+        List<MisTareas> listMisTareas = new ArrayList<>();
         switch(accion){
             case "proyectos":
                 int idProyecto = Integer.parseInt(request.getParameter("idProyecto"));
@@ -60,9 +68,20 @@ public class PrincipalControlador extends HttpServlet {
                 
                 request.getRequestDispatcher("principal.jsp").forward(request,response);
                 break;
+            case "obtenerTareas":
+               if(session != null){
+                  int idUsuario = (int) session.getAttribute("idUsuario");
+                listMisTareas = tareasDao.obtenerMisTareas(idUsuario);
+               //establecer los atributos
+                request.setAttribute("listTareas", listMisTareas);
+                // Redirigir a la página de edición de perfil
+                request.getRequestDispatcher("com.grupo5.vistas/misTareas.jsp").forward(request, response);
+               }
+                break;
             default:
                 request.getRequestDispatcher("com.grupo5.vistas/"+accion+".jsp").forward(request, response);
                 break;
+            
         }
     }
 

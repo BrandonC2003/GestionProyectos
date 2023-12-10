@@ -57,11 +57,11 @@ El index será el login
                                         <div class="form-group">
                                             <input type="email" name="txtEmail" class="form-control form-control-user"
                                                 id="exampleInputEmail" aria-describedby="emailHelp"
-                                                placeholder="Ingrese su email">
+                                                placeholder="Ingrese su email" required>
                                         </div>
                                         <div class="form-group">
                                             <input type="password" name="txtPass" class="form-control form-control-user"
-                                                id="exampleInputPassword" placeholder="contraseña">
+                                                id="exampleInputPassword" placeholder="contraseña" required>
                                         </div>         
                                         <input type="submit" name="inicio" value="ingresar" class="btn btn-primary btn-user btn-block">  
                                     <hr>
